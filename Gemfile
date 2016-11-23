@@ -14,7 +14,7 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
-gem 'figaro'
+
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -29,6 +29,9 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem "figaro"
 gem 'rails_12factor', group: :production
+group :development, :test do
+  gem 'rspec-rails', '~>3.5'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
