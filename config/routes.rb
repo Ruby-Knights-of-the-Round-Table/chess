@@ -8,6 +8,15 @@ Rails.application.routes.draw do
   root "menus#index"
 
   resources :players, only: :show
+
+  resources :pieces
+  resources :bishops, controller: :pieces
+  resources :kings, controller: :pieces
+  resources :knights, controller: :pieces
+  resources :pawns, controller: :pieces
+  resources :queens, controller: :pieces
+  resources :rooks, controller: :pieces
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
