@@ -1,9 +1,0 @@
-<% if player_signed_in? %>
-  <%= link_to 'My profile', player_path(current_player) %>
-  <%= link_to 'Sign out', destroy_player_session_path, method: :delete %>
-<% else %>
-  <%= link_to 'Sign in', new_player_session_path %>
-  <%= link_to 'Sign up', new_player_registration_path %>
-<% end %>
-
-<h1> YAAAAASSSSSSS </h1>
