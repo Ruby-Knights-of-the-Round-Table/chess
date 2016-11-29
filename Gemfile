@@ -33,6 +33,7 @@ gem 'spring',        group: :development
 gem 'devise'
 gem 'figaro'
 gem 'rails_12factor', group: :production
+gem 'simple_form'
 group :development, :test do
   gem 'rspec-rails', '~>3.5'
 end
