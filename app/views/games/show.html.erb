@@ -1,1 +1,11 @@
 <h1> Game id <%= @game.id %> </h1>
+
+<table id='board'>
+  <% 8.times do |row| %>
+    <%= '<tr>'.html_safe %>
+      <% 8.times do |cell| %>
+        <%= '<td></td>'.html_safe %>
+      <% end %>
+    <%= '</tr>'.html_safe %>
+  <% end %>
+</table>
