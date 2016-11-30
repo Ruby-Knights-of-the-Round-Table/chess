@@ -3,13 +3,12 @@
 
 <!-- Creates a game -->
 <%= simple_form_for @game do |f| %>
-    <%= f.input   :game_name %>
-    <%= f.input :id ,:as => :hidden %>
+    <%= f.input  :game_name %>
     <%= f.input  :white_player_id, :as => :hidden %>
     <%= f.input  :black_player_id, :as => :hidden %>
     <%= f.input  :winner_id, :as => :hidden %>
-    <%= f.input   :turn, :as => :hidden %>
+    <%= f.input  :turn, :as => :hidden %>
     <!-- , :as => :hidden -->
   <%= f.submit "Start"%>
-  
+
 <% end %>

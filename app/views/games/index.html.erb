@@ -10,7 +10,7 @@
     </tr>
   </thead>
 
-  
+
     <% @games.each do |game| %>
       <tr>
 
@@ -22,9 +22,9 @@
     <% end %>
 
 
-  
+
 </table>
 
-    <%= link_to 'New Game', new_game_path %>
-    <br/>
-    <%= link_to 'Back', root_path %>
+<%= link_to 'New Game', new_game_path %>
+<br/>
+<%= link_to 'Back', :back %>

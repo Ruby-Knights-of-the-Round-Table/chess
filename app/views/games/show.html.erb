@@ -1,3 +1,11 @@
 <h1> Game id <%= @game.id %> </h1>
 
-<%= link_to 'Main Menu', games_path, method: :get %>
+<table id='board'>
+  <% 8.times do |row| %>
+    <%= '<tr>'.html_safe %>
+      <% 8.times do |cell| %>
+        <%= '<td></td>'.html_safe %>
+      <% end %>
+    <%= '</tr>'.html_safe %>
+  <% end %>
+</table>
