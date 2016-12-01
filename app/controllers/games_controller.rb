@@ -19,6 +19,7 @@ class GamesController < ApplicationController
 
     def create
         @game = Game.create(game_params)
+        @game.place_pieces_in_database(current_player.id, Player.find(9000).id)
         redirect_to( game_path(@game))
     end
 
