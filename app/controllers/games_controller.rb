@@ -6,11 +6,6 @@ class GamesController < ApplicationController
 
     def new
         @game = Game.new
-        # setting up fields
-        @game.white_player_id = current_player.id
-        @game.black_player_id = 9000 # <-- NEEDS a fix and be working with devise 2 player feature!
-        @game.winner_id = 0
-        @game.turn = 0
     end
 
     def show
@@ -18,7 +13,12 @@ class GamesController < ApplicationController
     end
 
     def create
+        # setting up fields
+        @game.white_player_id = current_player.id
+        @game.black_player_id = 9000 # <-- NEEDS a fix and be working with devise 2 player feature!
+
         @game = Game.create(game_params)
+        @game.place_pieces_in_database(current_player.id, Player.find(9000).id)
         redirect_to( game_path(@game))
     end
 
