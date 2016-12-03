@@ -3,6 +3,7 @@ class GamesController < ApplicationController
 
     def index
         @games = Game.where(white_player_id: current_player.id) + Game.where(black_player_id: current_player.id)
+        @open_games = Game.where(black_player_id: nil)
     end
 
     def new
