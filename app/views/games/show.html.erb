@@ -25,14 +25,14 @@ var tracker = 0
 var previous_div = ""
 function select(div, tracker){
   if (tracker % 2 === 0){
-  
+
   for (var i = 0; i < 64; i++){
     current_div = document.getElementById(i.toString())
     // piece logic should somehow be used here
     if (current_div.innerHTML.length >= 2 && current_div.id !== div.id){
       current_div.disabled = true
     }
-    else{    
+    else{
       current_div.disabled = false
       current_div.className = "glowing-border"
     }
@@ -56,29 +56,27 @@ function move_to(previous_div, div){
     if (current_div.innerHTML.length >= 2){
       current_div.disabled = false
     }
-    else{    
+    else{
       current_div.disabled = true
     }
   }
 
     return
   }
-  
+
   //moves piece
-  var keepID = previous_div.id
   var keepInner = previous_div.innerHTML
 
-  previous_div.id = div.id
   previous_div.innerHTML = div.innerHTML
-  div.id = keepID
   div.innerHTML = keepInner
+
   for (var i = 0; i < 64; i++){
     current_div = document.getElementById(i.toString())
     current_div.className = ""
     if (current_div.innerHTML.length >= 2){
       current_div.disabled = false
     }
-    else{    
+    else{
       current_div.disabled = true
     }
   }
@@ -89,6 +87,3 @@ function move_to(previous_div, div){
 
 
 </script>
-
-
-
