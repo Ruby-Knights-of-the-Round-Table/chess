@@ -3,28 +3,34 @@
 <table>
 
   <thead>
-
     <tr>
       <th> <u><h2> Name </h2></u> </th>
       <th colspan="3"></th>
     </tr>
   </thead>
 
-
     <% @games.each do |game| %>
       <tr>
-
         <td><h3><%= game.game_name %></h3></td>
         <td><button><%= link_to 'Play', game_path(game) %></button></td>
         <td><button><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
-
       </tr>
     <% end %>
 
-
-
 </table>
 
+<br />
 <%= link_to 'New Game', new_game_path %>
 <br/>
 <%= link_to 'Back', :back %>
+
+<h1> Open Games For: <%= current_player.email %></h1>
+
+    <% @open_games.each do |game| %>
+      <% if game.white_player_id != current_player.id %>
+        <tr>
+          <td><h3><%= game.game_name %></h3></td>
+          <td><button><%= link_to 'Join', '#' %></button></td>
+        </tr>
+      <% end %>
+    <% end %>
