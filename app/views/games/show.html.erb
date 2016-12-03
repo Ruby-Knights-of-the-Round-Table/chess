@@ -1,0 +1,26 @@
+<h1> Game id <%= @game.id %> </h1>
+<table id='board'>
+  <% 8.times do |row| %>
+    <%= '<tr>'.html_safe %>
+      <% 8.times do |cell| %>
+      
+          <% piece = Piece.find_by(game_id: @game.id, x_position: cell, y_position: row) %>
+          <% if piece != nil %>
+                <td id="<% "#{8*row + cell}" %>"> <%= "#{piece.color}".html_safe %> </td>
+         <% else %>
+                <td id="<% "#{8*row + cell}" %>"> </td>
+         <% end %>
+
+       <% end %>
+    <%= '</tr>'.html_safe %>
+  <% end %>
+</table>
+
+
+<!-- ("(#{cell},#{row})") -->
+
+<script >
+    
+
+
+</script>

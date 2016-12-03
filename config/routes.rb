@@ -1,9 +1,22 @@
 Rails.application.routes.draw do
+  devise_for :players
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
+  root "static_pages#index"
+
+  resources :games, only: [:index, :new, :create, :show, :destroy]
+  resources :players, only: :show
+
+  resources :pieces
+  resources :bishops, controller: :pieces
+  resources :kings, controller: :pieces
+  resources :knights, controller: :pieces
+  resources :pawns, controller: :pieces
+  resources :queens, controller: :pieces
+  resources :rooks, controller: :pieces
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
