@@ -19,3 +19,14 @@
 #board tr:nth-child(odd) td:nth-child(even), #board tr:nth-child(even) td:nth-child(odd) {
   background: #bf7930; //Darker color (bottom left corner)
 }
+
+.glowing-border {
+    border: 2px solid green;
+    border-radius: 7px;
+}
+
+.glowing-border:focus { 
+    outline: none;
+    border-color: green;
+    box-shadow: 0 0 10px #9ecaed;
+}
