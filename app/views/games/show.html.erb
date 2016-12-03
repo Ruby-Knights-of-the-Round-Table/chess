@@ -49,8 +49,22 @@ else{
 
 function move_to(previous_div, div){
   if (previous_div.id === div.id) {
+    //delects piece
+    for (var i = 0; i < 64; i++){
+    current_div = document.getElementById(i.toString())
+    current_div.className = ""
+    if (current_div.innerHTML.length >= 2){
+      current_div.disabled = false
+    }
+    else{    
+      current_div.disabled = true
+    }
+  }
+
     return
   }
+  
+  //moves piece
   var keepID = previous_div.id
   var keepInner = previous_div.innerHTML
 
