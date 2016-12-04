@@ -30,7 +30,7 @@
       <% if game.white_player_id != current_player.id %>
         <tr>
           <td><h3><%= game.game_name %></h3></td>
-          <td><button><%= link_to 'Join', '#' %></button></td>
+          <td><button><%= link_to "Join Game", game_path(game) %></button></td>
         </tr>
       <% end %>
     <% end %>
