@@ -34,8 +34,6 @@ class GamesController < ApplicationController
         @game.update_attributes(place_params)
           if @game.valid?
             redirect_to root_path
-            else
-            render :edit, status: :unprocessable_entity
           end
     end
 
