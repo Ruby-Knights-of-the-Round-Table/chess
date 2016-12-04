@@ -28,6 +28,17 @@ class GamesController < ApplicationController
         redirect_to(games_path)
     end
 
+    def update
+        @game = Game.find(params[:id])
+
+        @game.update_attributes(place_params)
+          if @game.valid?
+            redirect_to root_path
+            else
+            render :edit, status: :unprocessable_entity
+          end
+    end
+
 
     private
 
