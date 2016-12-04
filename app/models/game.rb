@@ -2,6 +2,8 @@ class Game < ActiveRecord::Base
   belongs_to :player
   has_many :pieces
 
+  scope :available, -> { where(black_player_id: nil) }
+
   def place_pieces_in_database(player1, player2)
 
     #white backrow pieces
