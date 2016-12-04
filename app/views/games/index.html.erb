@@ -26,7 +26,7 @@
 
 <h1> Open Games For: <%= current_player.email %></h1>
 
-    <% @open_games.each do |game| %>
+    <% @all_games.available.each do |game| %>
       <% if game.white_player_id != current_player.id %>
         <tr>
           <td><h3><%= game.game_name %></h3></td>
