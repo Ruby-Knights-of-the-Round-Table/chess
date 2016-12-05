@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :games, only: [:index, :new, :create, :show, :destroy]
   resources :players, only: :show
 
-  resources :pieces
+  resources :pieces 
   resources :bishops, controller: :pieces
   resources :kings, controller: :pieces
   resources :knights, controller: :pieces
