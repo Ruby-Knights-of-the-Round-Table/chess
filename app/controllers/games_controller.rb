@@ -28,6 +28,8 @@ class GamesController < ApplicationController
         redirect_to(games_path)
     end
 
+    
+
 
     private
 
