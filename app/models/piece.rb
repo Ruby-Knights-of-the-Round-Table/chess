@@ -3,4 +3,5 @@ class Piece < ActiveRecord::Base
 
   scope :selected, -> { where(selected: true) }
 
+
 end

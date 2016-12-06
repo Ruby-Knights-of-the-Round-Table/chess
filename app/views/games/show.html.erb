@@ -9,7 +9,7 @@
           <!-- square has a piece and piece is selected -->
           <% if piece != nil && piece.selected %>
             <td id="selected">
-              <%= link_to piece_path(piece.id), method: :put do %>
+              <%= link_to select_piece_path(piece.id), method: :put do %>   
                 <%= "#{piece.color}".html_safe %>
               <% end %>
             </td>
@@ -17,7 +17,7 @@
           <!-- square has a piece and piece belongs to current player (can hover over piece)-->
           <% elsif piece != nil && piece.player_id == current_player.id %>
             <td id="selectable">
-              <%= link_to piece_path(piece.id), method: :put do %>
+              <%= link_to select_piece_path(piece.id), method: :put do %>
                 <%= "#{piece.color}".html_safe %>
               <% end %>
             </td>
@@ -25,7 +25,7 @@
           <!-- square has a piece but piece does not belong to current player (can't hover over piece) -->
           <% elsif piece != nil %>
               <td id="not-selectable">
-                <%= link_to piece_path(piece.id), method: :put do %>
+                <%= link_to select_piece_path(piece.id), method: :put do %>
                   <%= "#{piece.color}".html_safe %>
                 <% end %>
               </td>
