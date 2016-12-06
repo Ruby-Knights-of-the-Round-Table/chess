@@ -5,11 +5,13 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     @game = @piece.game
 
-    @piece.selected ? @piece.update_attributes(selected: false) : @piece.update_attributes(selected: true)
+    if @piece.player_id == current_player.id
+      @piece.selected ? @piece.update_attributes(selected: false) : @piece.update_attributes(selected: true)
 
-    @game.pieces.each do |piece|
-      if piece != @piece && piece.game_id == @game.id
-        piece.update_attributes(selected: false)
+      @game.pieces.each do |piece|
+        if piece != @piece && piece.game_id == @game.id
+          piece.update_attributes(selected: false)
+        end
       end
     end
 
