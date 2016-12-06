@@ -2,7 +2,7 @@ class Game < ActiveRecord::Base
   belongs_to :white_player, class_name: 'Player', foreign_key: 'white_player_id'
   belongs_to :black_player, class_name: 'Player', foreign_key: 'black_player_id'
 
-  has_many :pieces, foreign_key: 'game_id'
+  has_many :pieces
 
   scope :available, -> { where(black_player_id: nil) }
 

@@ -28,6 +28,16 @@ class GamesController < ApplicationController
         redirect_to(games_path)
     end
 
+    def join
+        @game = Game.find(params[:id])
+        if @game.white_player_id == current_player.id
+        else @game.black_player_id = current_player.id
+        end
+        @game.save
+        redirect_to(game_path(@game))
+
+    end
+
 
     private
 

@@ -7,14 +7,17 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root "static_pages#index"
 
+
   resources :games, only: [:index, :new, :create, :show, :destroy]
+  get "games/:id/join" ,:to=>"games#join", :as =>:game_join
+
   resources :players, only: :show
 
   resources :pieces do
     member do
       put :select
     end
-  end  
+  end
   resources :bishops, controller: :pieces
   resources :kings, controller: :pieces
   resources :knights, controller: :pieces
