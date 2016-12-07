@@ -30,12 +30,14 @@ class GamesController < ApplicationController
 
     def join
         @game = Game.find(params[:id])
-        if @game.white_player_id == current_player.id
-        else @game.black_player_id = current_player.id
-        end
-        @game.save
-        redirect_to(game_path(@game))
+        if @game.white_player_id != nil && current_player != @game.white_player_id
+          @game.black_player_id = current_player.id
+          @game.save
 
+          @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
+
+          redirect_to(game_path(@game))
+        end
     end
 
 

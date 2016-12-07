@@ -1,21 +1,25 @@
 <h1><%= @game.game_name %></h1>
 <!-- style="padding: 0; border: none; background: none;" -->
+
+
 <table id='board'>
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
       <% 8.times do |cell| %>
 
+
           <% piece = Piece.find_by(game_id: @game.id, x_position: cell, y_position: row) %>
+
           <!-- square has a piece and piece is selected -->
           <% if piece != nil && piece.selected %>
             <td id="selected">
-              <%= link_to select_piece_path(piece.id), method: :put do %>   
+              <%= link_to select_piece_path(piece.id), method: :put do %>
                 <%= "#{piece.color}".html_safe %>
               <% end %>
             </td>
 
           <!-- square has a piece and piece belongs to current player (can hover over piece)-->
-          <% elsif piece != nil && piece.player_id == current_player.id %>
+          <% elsif piece != nil && current_player.id == piece.player_id %>
             <td id="selectable">
               <%= link_to select_piece_path(piece.id), method: :put do %>
                 <%= "#{piece.color}".html_safe %>
