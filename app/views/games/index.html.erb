@@ -30,7 +30,7 @@
       <% if game.white_player_id != current_player.id %>
         <tr>
           <td><h3><%= game.game_name %></h3></td>
-          <td><button><%= link_to 'Join game', "/games/#{game.id}/join" %></button></td>
+          <td><button><%= link_to 'Join game', join_game_path(game), method: :patch %></button></td>
         </tr>
       <% end %>
     <% end %>
