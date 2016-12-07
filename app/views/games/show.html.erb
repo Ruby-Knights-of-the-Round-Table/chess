@@ -16,27 +16,30 @@
               <% end %>
               <% next %>
             </td>
+          <% end %>
 
           <!-- square has a piece and piece belongs to current player (can hover over piece)-->
-          <% elsif piece != nil && current_player.id == piece.player_id %>
+          <% if piece != nil && current_player.id == piece.player_id %>
             <td id="selectable">
               <%= link_to select_piece_path(piece.id), method: :put do %>
                 <%= "#{piece.color}".html_safe %>
               <% end %>
               <% next %>
             </td>
+          <% end %>
 
           <!-- square has a piece but piece does not belong to current player (can't hover over piece) -->
-          <% elsif piece != nil %>
+          <% if piece != nil %>
               <td id="not-selectable">
                 <%= link_to select_piece_path(piece.id), method: :put do %>
                   <%= "#{piece.color}".html_safe %>
                 <% end %>
                 <% next %>
               </td>
+          <% end %>
 
           <!-- square does not have a piece -->
-          <% else %>
+          <% if piece == nil %>
             <td id="empty">
               <%= link_to 'x', '#' %>
             </td>
