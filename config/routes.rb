@@ -8,8 +8,12 @@ Rails.application.routes.draw do
   root "static_pages#index"
 
 
-  resources :games, only: [:index, :new, :create, :show, :destroy]
-  get "games/:id/join" ,:to=>"games#join", :as =>:game_join
+  resources :games, only: [:index, :new, :create, :show, :destroy] do
+    member do
+      patch:join
+    end
+  end
+
 
   resources :players, only: :show
 
