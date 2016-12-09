@@ -1,87 +1,73 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
- @phagmann
- Unwatch 5
-  Star 0
- Fork 0 Ruby-Knights-of-the-Round-Table/chess
- Code  Issues 0  Pull requests 2  Projects 0  Wiki  Pulse  Graphs  Settings
-Branch: master Find file Copy pathchess/app/views/games/show.html.erb
-104659a  20 minutes ago
-@phagmann phagmann Can move a piece to an open space
-3 contributors @phagmann @lalalilu @chiyingleung1
-RawBlameHistory     
-78 lines (64 sloc)  1.92 KB
-<h1><%= @game.game_name %></h1>
+
 <!-- style="padding: 0; border: none; background: none;" -->
+<!-- use @board array to make this faster -->
+<!-- piece.game.white_player_id  -->
+<% all_pieces = @game.pieces.all.order(y_position: :asc, x_position: :asc) %>
+<% piece_trace = 0%>
+<% selected_piece_id = @game.pieces.find_by(selected: true) || 0 %>
 <table id='board'>
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
       <% 8.times do |cell| %>
 
-          <% piece = Piece.find_by(game_id: @game.id, x_position: cell, y_position: row) %>
-          <% if piece != nil %>
-                <td ><button id="<%= "#{8*row + cell}" %>"  onclick="select(this,tracker);tracker++;" style="height:100%;width:100%;padding: 0; background: none;"> <%= "#{piece.color}".html_safe %></button></td>
-         <% else %>
-                <td > <button id="<%= "#{8*row + cell}" %>" onclick="select(this,tracker);tracker++;" style="height:100%;width:100%; padding: 0; background: none;" disabled> </button></td>
-         <% end %>
+          <!-- square has a piece and piece is selected -->
+          <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
+            <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
+              <td id="selected">
+                <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= link_to select_piece_path(piece.id), method: :put do %>
+                  <%= "#{piece.color}".html_safe %>
+                <% end %>
+                <% next %>
+              </td>
+            <% end %>
+          <% end %>
 
+          <!-- square has a piece and piece belongs to current player (can hover over piece)-->
+          <!-- Note: s -->
+          <% if @board[row][cell] != 0 && current_player.id == @board[row][cell] %>
+            <td id="selectable">
+              <% piece = all_pieces[piece_trace] %>
+              <% piece_trace += 1 %>
+              
+              <%= link_to select_piece_path(piece.id), method: :put do %>
+                <%= "#{piece.color}".html_safe %>
+              <% end %>
+
+              <% next %>
+            </td>
+          <% end %>
+
+          <!-- square has a piece but piece does not belong to current player (can't hover over piece) -->
+          <% if @board[row][cell] != 0 && current_player.id != @board[row][cell] %>
+              <td id="not-selectable">
+              <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= link_to select_piece_path(piece.id), method: :put do %>
+                  <%= "#{piece.color}".html_safe %>
+                <% end %>
+                <% next %>
+              </td>
+          <% end %>
+
+          <!-- square does not have a piece -->
+          <% if @board[row][cell] == 0 %>
+            <% if selected_piece_id == 0 %>
+              <td id="empty" >
+                <%= link_to '' %>
+              </td>
+            <% else %>
+            <td id="empty" >
+              <%= link_to 'x', piece_path(selected_piece_id, x_position: row, y_position: cell), method: :put %>
+            </td>
+            <% end %>
+          <% end %>
        <% end %>
+
     <%= '</tr>'.html_safe %>
   <% end %>
 </table>
 
-
 <!-- ("(#{cell},#{row})") -->
 
-<script >
-var tracker = 0
-var previous_div = ""
-function select(div, tracker){
-  if (tracker % 2 === 0){
-  
-  for (var i = 0; i < 64; i++){
-    current_div = document.getElementById(i.toString())
-    // piece logic should somehow be used here
-    if (current_div.innerHTML.length >= 2 && current_div.id !== div.id){
-      current_div.disabled = true
-    }
-    else{    
-      current_div.disabled = false
-      current_div.className = "glowing-border"
-    }
-  }
-  previous_div = div
-  return
-}
-else{
-  move_to(previous_div, div)
-  return
-}
-}
-function move_to(previous_div, div){
-  if (previous_div.id === div.id) {
-    return
-  }
-  var keepID = previous_div.id
-  var keepInner = previous_div.innerHTML
-  previous_div.id = div.id
-  previous_div.innerHTML = div.innerHTML
-  div.id = keepID
-  div.innerHTML = keepInner
-  for (var i = 0; i < 64; i++){
-    current_div = document.getElementById(i.toString())
-    current_div.className = ""
-    if (current_div.innerHTML.length >= 2){
-      current_div.disabled = false
-    }
-    else{    
-      current_div.disabled = true
-    }
-  }
-  return
-}
-</script>

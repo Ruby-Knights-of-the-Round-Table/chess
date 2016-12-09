@@ -7,10 +7,20 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root "static_pages#index"
 
-  resources :games, only: [:index, :new, :create, :show, :destroy]
-  resources :players, only: :show
 
-  resources :pieces
+  resources :games, only: [:index, :new, :create, :show, :destroy] do
+    member do
+      patch:join
+    end
+  end
+
+
+  resources :players, only: :show
+  resources :pieces do
+    member do
+      put :select
+    end
+  end
   resources :bishops, controller: :pieces
   resources :kings, controller: :pieces
   resources :knights, controller: :pieces
