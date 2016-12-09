@@ -16,7 +16,6 @@ Rails.application.routes.draw do
 
 
   resources :players, only: :show
-
   resources :pieces do
     member do
       put :select
