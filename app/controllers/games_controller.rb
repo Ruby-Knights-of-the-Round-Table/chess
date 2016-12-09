@@ -1,6 +1,5 @@
 class GamesController < ApplicationController
     before_action :authenticate_player!
-
     def index
         @games = Game.where(white_player_id: current_player.id) + Game.where(black_player_id: current_player.id)
         @all_games = Game.all
@@ -11,7 +10,9 @@ class GamesController < ApplicationController
     end
 
     def show
+
         @game = Game.find(params[:id])
+        @board = @game.pieces_as_array
     end
 
     def create

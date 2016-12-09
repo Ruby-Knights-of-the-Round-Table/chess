@@ -1,26 +1,33 @@
 <h1><%= @game.game_name %></h1>
-
-<% selected_piece_id = @game.pieces.where(selected: true).first || 0 %>
+<!-- use @board array to make this faster -->
+<!-- piece.game.white_player_id  -->
+<% all_pieces = @game.pieces.all.order(y_position: :asc, x_position: :asc) %>
+<% piece_trace = 0%>
+<% selected_piece_id = @game.pieces.find_by(selected: true) || 0 %>
 <table id='board'>
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
       <% 8.times do |cell| %>
 
-          <% piece = @game.pieces.where(x_position: cell, y_position: row).first %>
-
           <!-- square has a piece and piece is selected -->
-          <% if piece != nil && piece.selected %>
-            <td id="selected">
-              <%= link_to select_piece_path(piece.id), method: :put do %>
-                <%= "#{piece.color}".html_safe %>
-              <% end %>
-              <% next %>
-            </td>
+          <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
+            <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
+              <td id="selected">
+                <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= link_to select_piece_path(piece.id), method: :put do %>
+                  <%= "#{piece.color}".html_safe %>
+                <% end %>
+                <% next %>
+              </td>
+            <% end %>
           <% end %>
 
           <!-- square has a piece and piece belongs to current player (can hover over piece)-->
-          <% if piece != nil && current_player.id == piece.player_id %>
+          <% if @board[row][cell] != 0 && current_player.id == @board[row][cell] %>
             <td id="selectable">
+              <% piece = all_pieces[piece_trace] %>
+              <% piece_trace += 1 %>
               <%= link_to select_piece_path(piece.id), method: :put do %>
                 <%= "#{piece.color}".html_safe %>
               <% end %>
@@ -29,8 +36,10 @@
           <% end %>
 
           <!-- square has a piece but piece does not belong to current player (can't hover over piece) -->
-          <% if piece != nil %>
+          <% if @board[row][cell] != 0 && current_player.id != @board[row][cell] %>
               <td id="not-selectable">
+              <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
                 <%= link_to select_piece_path(piece.id), method: :put do %>
                   <%= "#{piece.color}".html_safe %>
                 <% end %>
@@ -39,7 +48,7 @@
           <% end %>
 
           <!-- square does not have a piece -->
-          <% if piece == nil %>
+          <% if @board[row][cell] == 0 %>
             <% if selected_piece_id == 0 %>
               <td id="empty" >
                 <%= link_to '' %>
