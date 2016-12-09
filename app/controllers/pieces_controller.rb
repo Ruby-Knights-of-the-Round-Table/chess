@@ -21,8 +21,8 @@ class PiecesController < ApplicationController
 
   def update
     @piece = Piece.find(params[:id])
-    row = params[:y_position].to_i
-    cell = params[:x_position].to_i
+    row = params[:y_position]
+    cell = params[:x_position]
 
     @piece.move_to!(row, cell)
     redirect_to game_path(@piece.game)
