@@ -24,6 +24,7 @@
           <% end %>
 
           <!-- square has a piece and piece belongs to current player (can hover over piece)-->
+          <!-- Note: s -->
           <% if @board[row][cell] != 0 && current_player.id == @board[row][cell] %>
             <td id="selectable">
               <% piece = all_pieces[piece_trace] %>
