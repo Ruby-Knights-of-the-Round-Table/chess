@@ -1,3 +1,4 @@
+require 'pry'
 class PiecesController < ApplicationController
   before_action :authenticate_player!
 
@@ -9,7 +10,7 @@ class PiecesController < ApplicationController
       @piece.selected ? @piece.update_attributes(selected: false) : @piece.update_attributes(selected: true)
 
       @game.pieces.each do |piece|
-        if piece != @piece && piece.game_id == @game.id
+        if piece != @piece
           piece.update_attributes(selected: false)
         end
       end
@@ -17,6 +18,17 @@ class PiecesController < ApplicationController
 
     redirect_to game_path(@game)
   end
+
+  def update
+    @piece = Piece.find(params[:id])
+    row = params[:y_position]
+    cell = params[:x_position]
+
+    @piece.move_to!(row, cell)
+    redirect_to game_path(@piece.game)
+
+  end
+
 
   private
 
