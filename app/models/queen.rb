@@ -7,18 +7,10 @@ class Queen < Piece
       final_spots = []
       queen_move_shape = []
 
-      # horizontal moves
+      # horizontal, vertical, and diagonal moves
       ((-7..7).to_a - [0]).each do |i|
         queen_move_shape << [i,0]
-      end
-
-      # vertical moves
-      ((-7..7).to_a - [0]).each do |i|
         queen_move_shape << [0,i]
-      end
-
-      # diagonal moves
-      ((-7..7).to_a - [0]).each do |i|
         queen_move_shape << [i,i]
         queen_move_shape << [i,-i]
       end
