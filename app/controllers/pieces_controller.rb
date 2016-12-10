@@ -7,7 +7,7 @@ class PiecesController < ApplicationController
       if @piece.selected != true then @piece.selected = true else @piece.selected = false end
 
       old_selected_piece = @piece.game.pieces.find_by(selected: true) || 0
-        if old_selected_piece != 0
+      if old_selected_piece != 0
         old_selected_piece.selected = false
         old_selected_piece.update_attributes(selected: old_selected_piece.selected)
       end
