@@ -1,5 +1,4 @@
-
-<!-- style="padding: 0; border: none; background: none;" -->
+<h1><%= @game.game_name %></h1>
 <!-- use @board array to make this faster -->
 <!-- piece.game.white_player_id  -->
 <% all_pieces = @game.pieces.all.order(y_position: :asc, x_position: :asc) %>
@@ -52,10 +51,8 @@
           <% end %>
 
           <!-- square does not have a piece -->
-
           <% if @board[row][cell] == 0 %>
             <% if selected_piece_id == 0 %>
-
               <td id="empty" >
                 <%= link_to '' %>
               </td>
@@ -66,10 +63,8 @@
                 <td id="empty" >
                    <%= link_to '' %>
                 </td>
-
             <% else %>
             <td id="empty" >
-             <!-- NOTE: piece should also have logic to see if i can move there. prob have it as else if -->
               <%= link_to 'x', piece_path(selected_piece_id, x_position: row, y_position: cell), method: :put %>
             </td>
             <% end %>
@@ -81,4 +76,3 @@
 </table>
 
 <!-- ("(#{cell},#{row})") -->
-
