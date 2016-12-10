@@ -56,6 +56,13 @@
               <td id="empty" >
                 <%= link_to '' %>
               </td>
+
+           
+            <% elsif !selected_piece_id.piece_can_move_to(@board).include?([cell,row]) %>
+
+                <td id="empty" >
+                   <%= link_to '' %>
+                </td>
             <% else %>
             <td id="empty" >
               <%= link_to 'x', piece_path(selected_piece_id, x_position: row, y_position: cell), method: :put %>
