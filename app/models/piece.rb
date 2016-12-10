@@ -6,7 +6,6 @@ class Piece < ActiveRecord::Base
   def move_to!(new_x, new_y)
     self.update_attributes(x_position: new_x, y_position: new_y)
   end
-
   # In a world where every piece moves like knights!
   def piece_can_move_to(board)
         final_spots = []
