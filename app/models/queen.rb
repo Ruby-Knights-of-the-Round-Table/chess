@@ -17,6 +17,12 @@ class Queen < Piece
         queen_move_shape << [0,i]
       end
 
+      # diagonal moves
+      ((-7..7).to_a - [0]).each do |i|
+        queen_move_shape << [i,i]
+        queen_move_shape << [i,-i]
+      end
+
       curr_x  = self.x_position
       curr_y = self.y_position
       queen_move_shape.each do |spot|
