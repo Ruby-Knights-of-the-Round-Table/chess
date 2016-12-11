@@ -43,6 +43,4 @@ class Pawn < Piece
         # such that they match this piece's logic: [[3,4] ,[5,7], [0,1]...]
 
     # end
-
->>>>>>> d03b54e89e238ba1cd0547e696053690c316c980
 end
