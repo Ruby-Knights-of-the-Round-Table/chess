@@ -16,7 +16,7 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= link_to select_piece_path(piece.id), method: :put do %>
-                  <%= "#{piece.color}".html_safe %>
+                  <%= "#{piece.symbol}".html_safe %>
                 <% end %>
                 <% next %>
               </td>
@@ -31,7 +31,7 @@
               <% piece_trace += 1 %>
               
               <%= link_to select_piece_path(piece.id), method: :put do %>
-                <%= "#{piece.color}".html_safe %>
+                <%= "#{piece.symbol}".html_safe %>
               <% end %>
 
               <% next %>
@@ -44,7 +44,7 @@
               <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= link_to select_piece_path(piece.id), method: :put do %>
-                  <%= "#{piece.color}".html_safe %>
+                  <%= "#{piece.symbol}".html_safe %>
                 <% end %>
                 <% next %>
               </td>
