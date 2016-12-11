@@ -1,7 +1,7 @@
 class Rook < Piece
-    def color
-        if Game.find(self.game_id).white_player_id === self.player_id then return "&#9814;" else return "&#9820;" end
-    end
+  def symbol
+      if self.game.white_player_id == self.player_id then return "&#9814;" else return "&#9820;" end
+  end
 
     def piece_can_move_to(board)
         final_spots = []
@@ -15,7 +15,7 @@ class Rook < Piece
 
         curr_x  = self.x_position
         curr_y = self.y_position
-        rook_move_shape.each do |spot|
+        queen_move_shape.each do |spot|
             x = spot[0]
             y = spot[1]
             possible_x = curr_x + x
