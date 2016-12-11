@@ -29,9 +29,9 @@
             <td id="selectable">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
-              
+
               <%= link_to select_piece_path(piece.id), method: :put do %>
-                <%= "#{piece.color}".html_safe %>
+                 <%= "#{piece.color}".html_safe %>
               <% end %>
 
               <% next %>
@@ -57,15 +57,16 @@
                 <%= link_to '' %>
               </td>
 
-           
-            <% elsif !selected_piece_id.piece_can_move_to(@board).include?([cell,row]) %>
+            <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
 
                 <td id="empty" >
                    <%= link_to '' %>
+
                 </td>
             <% else %>
             <td id="empty" >
               <%= link_to 'x', piece_path(selected_piece_id, x_position: row, y_position: cell), method: :put %>
+
             </td>
             <% end %>
           <% end %>
