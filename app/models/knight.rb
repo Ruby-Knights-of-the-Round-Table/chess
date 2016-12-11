@@ -1,6 +1,6 @@
 class Knight < Piece
-    def color
-        if Game.find(self.game_id).white_player_id === self.player_id then return "&#9816;" else return "&#9822;" end
+    def symbol
+      game.white_player_id == player_id ? "&#9816;" : "&#9822;"
     end
 
     def piece_can_move_to(board)

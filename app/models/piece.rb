@@ -7,6 +7,10 @@ class Piece < ActiveRecord::Base
     self.update_attributes(x_position: new_x, y_position: new_y)
   end
 
+  def symbol
+    '?'
+  end
+
   # placeholder only ... remove after all piece logic is completed
   def piece_can_move_to(board)
     final_spots = []
