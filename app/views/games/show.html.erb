@@ -65,7 +65,7 @@
                 </td>
             <% else %>
             <td id="empty" >
-              <%= link_to 'x', piece_path(selected_piece_id, x_position: row, y_position: cell), method: :put %>
+              <%= link_to 'x', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put %>
 
             </td>
             <% end %>
