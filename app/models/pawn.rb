@@ -11,6 +11,7 @@ class Pawn < Piece
             return [[self.x_position, self.y_position-1], [self.x_position, self.y_position-2]]if self.y_position == 6
             return [[self.x_position, self.y_position-1]]
         end
+        
     end
     
 
