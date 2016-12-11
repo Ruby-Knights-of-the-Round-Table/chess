@@ -7,6 +7,4 @@ testing patrick
 
 test first commit - DZ - third try
 
-testing codeship
-
 abc
