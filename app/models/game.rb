@@ -45,4 +45,24 @@ class Game < ActiveRecord::Base
     end
 
   end
+
+  #down the road, we will need a mcuh faster way to easily access piece data thats not through the database
+  def pieces_as_array
+    pieces = self.pieces
+    piece_array = [
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0],
+                    [0,0,0,0,0,0,0,0]
+                  ]
+    pieces.each do |piece|
+      if piece.game.white_player_id === piece.player_id then color = piece.game.white_player_id  else color = piece.game.black_player_id  end
+      piece_array[piece.y_position][piece.x_position] = color
+    end
+    return piece_array
+  end
 end
