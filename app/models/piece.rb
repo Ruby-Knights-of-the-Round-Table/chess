@@ -3,8 +3,8 @@ class Piece < ActiveRecord::Base
 
   scope :selected, -> { where(selected: true) }
 
-  def move_to!(new_x, new_y)
-    self.update_attributes(x_position: new_x, y_position: new_y)
+  def move_to!(new_y, new_x)
+    self.update_attributes(y_position: new_y, x_position: new_x)
   end
 
   # placeholder only ... remove after all piece logic is completed
