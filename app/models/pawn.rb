@@ -8,11 +8,11 @@ class Pawn < Piece
 
     def piece_can_move_to(board)
         if self.game.white_player_id == self.player_id
-            return [[self.x_position, self.y_position+1], [self.x_position, self.y_position+2]]if self.y_position == 1
-            return [[self.x_position, self.y_position+1]]
+            return [[self.y_position+1, self.x_position], [self.y_position+2, self.x_position]]if self.y_position == 1
+            return [[self.y_position+1, self.x_position]]
         else
-            return [[self.x_position, self.y_position-1], [self.x_position, self.y_position-2]]if self.y_position == 6
-            return [[self.x_position, self.y_position-1]]
+            return [[self.y_position-1, self.x_position], [self.y_position-2, self.y_position]]if self.y_position == 6
+            return [[self.y_position-1, self.x_position]]
         end
         
     end
@@ -43,6 +43,4 @@ class Pawn < Piece
         # such that they match this piece's logic: [[3,4] ,[5,7], [0,1]...]
 
     # end
-
->>>>>>> d03b54e89e238ba1cd0547e696053690c316c980
 end
