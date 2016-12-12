@@ -34,11 +34,13 @@ gem 'devise'
 gem 'figaro'
 gem 'rails_12factor', group: :production
 gem 'simple_form'
+
 group :development, :test do
   gem 'rspec-rails', '~>3.5'
+  gem "factory_girl_rails", "~> 4.0"
 end
+
 gem 'rubocop', '~> 0.45.0', require: false
-gem 'simple_form'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

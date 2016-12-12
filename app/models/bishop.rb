@@ -1,6 +1,6 @@
 class Bishop < Piece
     def symbol
-        if self.game.white_player_id == self.player_id then return "&#9813;" else return "&#9819;" end
+        if self.game.white_player_id == self.player_id then return "&#9815;" else return "&#9821;" end
     end
 
     def piece_can_move_to(board)
@@ -23,8 +23,8 @@ class Bishop < Piece
            final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
            # figure out if position is in bounds of board AND no pieces are there
       end
-      return final_spots
-    end
+        return final_spots
+      end
 
 end
 

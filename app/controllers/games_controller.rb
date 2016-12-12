@@ -1,7 +1,8 @@
 class GamesController < ApplicationController
-
+    before_action :authenticate_player!
     def index
-        @games = Game.where( white_player_id: current_player.id ) + Game.where(black_player_id: current_player.id )
+        @games = Game.where(white_player_id: current_player.id) + Game.where(black_player_id: current_player.id)
+        @all_games = Game.all
     end
 
     def new
@@ -10,10 +11,11 @@ class GamesController < ApplicationController
 
     def show
         @game = Game.find(params[:id])
+        @board = @game.pieces_as_array
+        p @board
     end
 
     def create
-        # setting up fields
         @game = Game.create(game_params)
         @game.white_player_id = current_player.id
         @game.save
@@ -27,9 +29,19 @@ class GamesController < ApplicationController
         redirect_to(games_path)
     end
 
+    def join
+        @game = Game.find(params[:id])
+        if @game.white_player_id != nil && current_player.id != @game.white_player_id
+          @game.black_player_id = current_player.id
+          @game.save
+          @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
 
-     private
+          redirect_to(game_path(@game))
+        end
+    end
 
+
+    private
 
     def game_params
       params.require(:game).permit(:game_name, :white_player_id, :black_player_id, :winner_id, :turn  )

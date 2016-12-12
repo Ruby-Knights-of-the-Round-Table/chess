@@ -1,26 +1,79 @@
-<h1> Game id <%= @game.id %> </h1>
+<h1><%= @game.game_name %></h1>
+<!-- use @board array to make this faster -->
+<!-- piece.game.white_player_id  -->
+<% all_pieces = @game.pieces.all.order(y_position: :asc, x_position: :asc) %>
+<% piece_trace = 0%>
+<% selected_piece_id = @game.pieces.find_by(selected: true) || 0 %>
 <table id='board'>
   <% 8.times do |row| %>
     <%= '<tr>'.html_safe %>
       <% 8.times do |cell| %>
-      
-          <% piece = Piece.find_by(game_id: @game.id, x_position: cell, y_position: row) %>
-          <% if piece != nil %>
-                <td id="<% "#{8*row + cell}" %>"> <%= "#{piece.color}".html_safe %> </td>
-         <% else %>
-                <td id="<% "#{8*row + cell}" %>"> </td>
-         <% end %>
 
+          <!-- square has a piece and piece is selected -->
+          <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
+            <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
+              <td id="selected">
+                <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= link_to select_piece_path(piece.id), method: :put do %>
+                  <%= "#{piece.symbol}".html_safe %>
+                <% end %>
+                <% next %>
+              </td>
+            <% end %>
+          <% end %>
+
+          <!-- square has a piece and piece belongs to current player (can hover over piece)-->
+          <!-- Note: s -->
+          <% if @board[row][cell] != 0 && current_player.id == @board[row][cell] %>
+            <td id="selectable">
+              <% piece = all_pieces[piece_trace] %>
+              <% piece_trace += 1 %>
+
+              <%= link_to select_piece_path(piece.id), method: :put do %>
+                <%= "#{piece.symbol}".html_safe %>
+              <% end %>
+
+              <% next %>
+            </td>
+          <% end %>
+
+          <!-- square has a piece but piece does not belong to current player (can't hover over piece) -->
+          <% if @board[row][cell] != 0 && current_player.id != @board[row][cell] %>
+              <td id="not-selectable">
+              <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= link_to select_piece_path(piece.id), method: :put do %>
+                  <%= "#{piece.symbol}".html_safe %>
+                <% end %>
+                <% next %>
+              </td>
+          <% end %>
+
+          <!-- square does not have a piece -->
+          <% if @board[row][cell] == 0 %>
+            <% if selected_piece_id == 0 %>
+              <td id="empty" >
+                <%= link_to '' %>
+              </td>
+
+            <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
+
+                <td id="empty" >
+                   <%= link_to '' %>
+
+                </td>
+            <% else %>
+            <td id="empty" >
+              <%= link_to 'x', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put %>
+
+            </td>
+            <% end %>
+          <% end %>
        <% end %>
+
     <%= '</tr>'.html_safe %>
   <% end %>
 </table>
 
-
 <!-- ("(#{cell},#{row})") -->
-
-<script >
-    
-
-
-</script>
