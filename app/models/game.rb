@@ -65,4 +65,5 @@ class Game < ActiveRecord::Base
     end
     return piece_array
   end
+
 end

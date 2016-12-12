@@ -14,15 +14,20 @@ class Piece < ActiveRecord::Base
     curr_y = self.y_position
     curr_x  = self.x_position
     piece_move_shape.each do |spot|
-        y = spot[0]
-        x = spot[1]
-        possible_y = curr_y + y
-        possible_x = curr_x + x
+      y = spot[0]
+      x = spot[1]
+      possible_y = curr_y + y
+      possible_x = curr_x + x
 
-        final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
-        # figure out if position is in bounds of board AND no pieces are there
+      if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7) && board[possible_y][possible_x] == 0
+        final_spots << [possible_y,possible_x]
+      end
+      # figure out if position is in bounds of board AND no pieces are there
+
     end
+
     return final_spots
   end
+
 
 end
