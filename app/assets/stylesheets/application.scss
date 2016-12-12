@@ -13,3 +13,133 @@
  *= require_tree .
  *= require_self
  */
+/* Banner Hero Image */
+.hero {
+    width: 100%;
+    /*background-image: url('http://www.delwinvriend.com/examples/hero/hero.jpg');*/
+    background-size: auto 100%;
+    background-position: center top; 
+    background-repeat: no-repeat;
+
+}
+.hero_spacer {
+   width: 100%;
+   max-width: 100%; 
+   margin: 0 auto;
+
+}
+.hero_spacer img {
+    width: 100%;
+}
+
+.hero2 {
+	margin-top: -25px;
+}
+
+/* About Section */
+.about {
+  margin-top: 30px;
+  margin-bottom: -30px;
+}
+
+.abouttitle {
+  font-size: 3.1em;
+  font-family: arial black;
+}
+.aboutdescription {
+  font-size: 1.5em;
+  font-family: arial;
+}
+
+/* CODE Section */
+.code {
+  margin-top: 75px;
+  background-color: #cfcfd1;
+}
+.breakdown {
+  margin-top: -10px;
+}
+/* SNIPPETS SECTION 1*/
+.codebox {
+  border-width: 5px;
+  border-color: black;
+  border-style: solid;
+  height: 400px;
+}
+.codesnippet {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 395px;
+  background-color: #272822;
+}
+.codesnippetright {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 395px;
+  background-color: #51d6ff;
+}
+.snippettitle {
+  font-family: arial black;
+  font-size: 3em;
+  color: black;
+}
+.snippetdescription {
+  font-family: arial;
+  font-size: 2em;
+  color: white;
+}
+/* SNIPPETS SECTION 2*/
+.codebox2 {
+  border-width: 5px;
+  border-color: black;
+  border-style: solid;
+  height: 700px;
+}
+.codesnippet2 {
+  border-width: 10px;
+  border-color: #e24700;
+  border-style: solid;
+  height: 700px;
+  background-color: #e24700;
+}
+.codesnippet3 {
+  border-width: 10px;
+  border-color: #e24700;
+  border-style: solid;
+  height: 700px;
+  background-color: #272822;
+}
+/* SNIPPETS SECTION 3 */
+.codesnippet4 {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 700px;
+  background-color: #51d6ff;
+}
+.codesnippet5 {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 700px;
+  background-color: #272822;
+}
+
+/* Tools Section */
+.skills {
+  color: black;
+}
+
+
+/* FOOTER TEAM SECTION */
+.team {
+  padding-bottom: 25px;
+  background-color: #51d6ff;
+}
+.footer {
+  padding-top: 5px;
+  height: 75px;
+  background-color: white;
+}
