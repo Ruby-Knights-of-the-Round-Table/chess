@@ -25,7 +25,9 @@ class Piece < ActiveRecord::Base
       end
     end
 
+
     #horizontal
+
     horizontalmax = 7 - x_position
     horizontalmin = x_position
     (-horizontalmin..horizontalmax).each do |i|
@@ -40,6 +42,7 @@ class Piece < ActiveRecord::Base
 
       end
     end
+
 
 
     # diagonal
@@ -68,6 +71,7 @@ class Piece < ActiveRecord::Base
 
 
     return final_spots
+
   end
 
   # placeholder only ... remove after all piece logic is completed
