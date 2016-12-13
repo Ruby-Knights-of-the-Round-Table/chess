@@ -24,6 +24,10 @@ class Piece < ActiveRecord::Base
 
       end
     end
+
+
+    #horizontal
+
     horizontalmax = 7 - x_position
     horizontalmin = x_position
     (-horizontalmin..horizontalmax).each do |i|
@@ -39,7 +43,34 @@ class Piece < ActiveRecord::Base
       end
     end
 
-      return final_spots
+
+
+    # diagonal
+    (-min..max).each do |i|
+      if board[y_position+i][x_position+i] != nil && board[y_position+i][x_position+i] > 0 && (y_position+i) >= 0 && (y_position+i) <= 7 && (x_position+i) >= 0 && (x_position+i) <= 7
+        if i > 0
+          final_spots.delete_if { |coord| coord[0] > (y_position+i) && coord[1] > (x_position+i) }
+          next
+        elsif i < 0
+          final_spots.delete_if { |coord| coord[0] < (y_position+i) && coord[1] < (x_position+i) }
+        end
+
+      end
+    end
+    (-min..max).each do |i|
+      if board[y_position+i][x_position-i] != nil && board[y_position+i][x_position-i] > 0 && (y_position+i) >= 0 && (y_position+i) <= 7 && (x_position-i) >= 0 && (x_position-i) <= 7
+        if i > 0
+          final_spots.delete_if { |coord| coord[0] > (y_position+i) && coord[1] < (x_position-i) }
+          next
+        elsif i < 0
+          final_spots.delete_if { |coord| coord[0] < (y_position+i) && coord[1] > (x_position-i) }
+        end
+
+      end
+    end
+
+
+    return final_spots
 
   end
 
