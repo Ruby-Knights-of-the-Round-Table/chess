@@ -23,18 +23,6 @@ class Bishop < Piece
            final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
            # figure out if position is in bounds of board AND no pieces are there
       end
-        return final_spots
-      end
-
+      return is_obstructed?(curr_y,curr_x,board,final_spots)
+    end
 end
-
-# curr_x  = self.x_position
-# curr_y = self.y_position
-# queen_move_shape.each do |spot|
-#      x = spot[0]
-#      y = spot[1]
-#      possible_x = curr_x + x
-#      possible_y = curr_y + y
-#      final_spots << [possible_x,possible_y] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
-#      # figure out if position is in bounds of board AND no pieces are there
-# end
