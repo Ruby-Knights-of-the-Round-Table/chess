@@ -7,19 +7,19 @@ class Piece < ActiveRecord::Base
     self.update_attributes(y_position: new_y, x_position: new_x)
   end
 
-  def is_obstructed?(y,x,board,final_spots)
-    # OBSTRUCTION: figure out if selected piece is obstructed
+  def not_obstructed(board,final_spots)
+    # returns an array that selected piece can move to, given obstructions
     # vertical
-      max = 7 - y
-      min = y
+      max = 7 - y_position
+      min = y_position
       (-min..max).each do |i|
-        if board[y+i][x] > 0 && (y+i) >= 0 && (y+i) <= 7
+        if board[y_position+i][x_position] > 0 && (y_position+i) >= 0 && (y_position+i) <= 7
 
           if i > 0
-            final_spots.delete_if { |coord| coord[0] > (y+i) && coord[1] == x }
+            final_spots.delete_if { |coord| coord[0] > (y_position+i) && coord[1] == x_position }
             next
           elsif i < 0
-            final_spots.delete_if { |coord| coord[0] < (y+i) && coord[1] == x }
+            final_spots.delete_if { |coord| coord[0] < (y_position+i) && coord[1] == x_position }
           end
 
         end
