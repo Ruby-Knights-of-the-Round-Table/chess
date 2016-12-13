@@ -42,7 +42,7 @@ class Piece < ActiveRecord::Base
     # max = 7 - y_position
     # min = y_position
     (-min..max).each do |i|
-      if board[y_position+i][x_position-i] != nil && board[y_position+i][x_position-i] > 0 && (y_position+i) >= 0 && (y_position+i) <= 7 && (x_position+i) >= 0 && (x_position+i) <= 7
+      if board[y_position+i][x_position-i] != nil && board[y_position+i][x_position-i] > 0 && (y_position+i) >= 0 && (y_position+i) <= 7 && (x_position-i) >= 0 && (x_position-i) <= 7
         if i > 0
           final_spots.delete_if { |coord| coord[0] > (y_position+i) && coord[1] > (x_position-i) }
           next
