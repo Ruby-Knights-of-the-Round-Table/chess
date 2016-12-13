@@ -23,7 +23,6 @@ class Bishop < Piece
            final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
            # figure out if position is in bounds of board AND no pieces are there
       end
-        return is_obstructed?(curr_y,curr_x,board,final_spots)
-      end
-
+      return is_obstructed?(curr_y,curr_x,board,final_spots)
+    end
 end
