@@ -22,31 +22,10 @@ class Queen < Piece
         x = spot[1]
         possible_y = curr_y + y
         possible_x = curr_x + x
-
         # figure out if position is in bounds of board AND no pieces are there
-        if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] == 0
-           final_spots << [possible_y,possible_x]
-        end
+        final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
       end
-
-        # OBSTRUCTION: figure out if selected piece is obstructed
-        # vertical
-          max = 7 - curr_y
-          min = curr_y
-          (-min..max).each do |i|
-            if board[curr_y+i][curr_x] > 0 && (curr_y+i) >= 0 && (curr_y+i) <= 7
-
-              if i > 0
-                final_spots.delete_if { |coord| coord[0] > (curr_y+i) && coord[1] == curr_x }
-                next
-              elsif i < 0
-                final_spots.delete_if { |coord| coord[0] < (curr_y+i) && coord[1] == curr_x }
-              end
-
-            end
-          end
-
-      return final_spots
+      return is_obstructed?(curr_y,curr_x,board,final_spots)
     end
 
 end
