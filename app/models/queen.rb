@@ -1,6 +1,6 @@
 class Queen < Piece
     def symbol
-        if self.game.white_player_id == self.player_id then return "&#9813;" else return "&#9819;" end
+        if game.white_player_id == player_id then return "&#9813;" else return "&#9819;" end
     end
 
     def piece_can_move_to(board)
@@ -25,7 +25,7 @@ class Queen < Piece
         # figure out if position is in bounds of board AND no pieces are there
         final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] === 0
       end
-      return is_obstructed?(curr_y,curr_x,board,final_spots)
+      return not_obstructed(board,final_spots)
     end
 
 end

@@ -1,26 +1,26 @@
 class Pawn < Piece
     def symbol
-        if self.game.white_player_id == self.player_id then return "&#9817;" else return "&#9823;" end
+        if game.white_player_id == player_id then return "&#9817;" else return "&#9823;" end
     end
-
-
-
 
     def piece_can_move_to(board)
-        if self.game.white_player_id == self.player_id
-            return [[self.y_position+1, self.x_position], [self.y_position+2, self.x_position]]if self.y_position == 1
-            return [[self.y_position+1, self.x_position]]
+        final_spots = []
+        if game.white_player_id == player_id
+            final_spots << [y_position+2, x_position] if y_position == 1
+            final_spots << [y_position+1, x_position]
+            return not_obstructed(board,final_spots)
         else
-            return [[self.y_position-1, self.x_position], [self.y_position-2, self.x_position]]if self.y_position == 6
-            return [[self.y_position-1, self.x_position]]
+            final_spots << [y_position-2, x_position] if y_position == 6
+            final_spots << [y_position-1, x_position]
+            return not_obstructed(board,final_spots)
         end
-        
+
     end
-    
+
 
     # def piece_can_move_to(board)
 
-        # piece logic goes inside this method 
+        # piece logic goes inside this method
 
         # you are already given a 'board' which is a 2D array. It mimics the actual database board,
         # 0 represents an empty space and the particular number matchs such that:
