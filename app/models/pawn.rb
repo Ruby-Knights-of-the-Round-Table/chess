@@ -8,7 +8,7 @@ class Pawn < Piece
         if game.white_player_id == player_id
             final_spots << [y_position+2, x_position] if y_position == 1
             final_spots << [y_position+1, x_position]
-            return is_obstructed?(board,final_spots)
+            return not_obstructed(board,final_spots)
         else
             final_spots << [y_position-2, x_position] if y_position == 6
             final_spots << [y_position-1, x_position]
