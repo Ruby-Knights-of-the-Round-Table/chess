@@ -3,7 +3,7 @@ class PiecesController < ApplicationController
 
   def select
     @piece = Piece.find(params[:id])
-    if @piece.player_id == current_player.id
+    if @piece.player_id == current_player.id && @piece.player_id == @piece.game.turn
       if @piece.selected != true then @piece.selected = true else @piece.selected = false end
 
       old_selected_piece = @piece.game.pieces.find_by(selected: true) || 0
@@ -14,14 +14,6 @@ class PiecesController < ApplicationController
     end
 
     @piece.update_attributes(selected: @piece.selected)
-
-    # @game = @piece.game
-    # @piece.selected ? @piece.update_attributes(selected: false) : @piece.update_attributes(selected: true)
-    # @game.pieces.each do |piece|
-    #   if piece != @piece
-    #     piece.update_attributes(selected: false)
-    #   end
-    # end
     redirect_to game_path(@piece.game_id)
   end
 
@@ -30,7 +22,6 @@ class PiecesController < ApplicationController
     row = params[:y_position]
     cell = params[:x_position]
     @piece.move_to!(row, cell)
-    @piece.update_attributes(selected: false)
     redirect_to game_path(@piece.game_id)
 
   end

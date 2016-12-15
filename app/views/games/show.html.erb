@@ -1,4 +1,15 @@
-<h1><%= @game.game_name %></h1>
+<h2><%= @game.game_name %></h2>
+
+<div class="text-center">
+  <% if @game.turn == 1  %>
+    <h4>white player's turn:</h4>
+    <h5><%= @game.white_player.email %></h5>
+  <% else %>
+    <h4>black player's turn:</h4>
+    <h5><%= @game.black_player.email %></h5>
+  <% end %>
+</div>
+
 <!-- use @board array to make this faster -->
 <!-- piece.game.white_player_id  -->
 <% all_pieces = @game.pieces.all.order(y_position: :asc, x_position: :asc) %>
@@ -23,9 +34,9 @@
             <% end %>
           <% end %>
 
-          <!-- square has a piece and piece belongs to current player (can hover over piece)-->
+          <!-- square has a piece and it's signed-in player's turn (can hover over piece)-->
           <!-- Note: s -->
-          <% if @board[row][cell] != 0 && current_player.id == @board[row][cell] %>
+          <% if @board[row][cell] != 0 && @board[row][cell] == @game.turn && current_player.id == @game.turn %>
             <td id="selectable">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
@@ -38,8 +49,8 @@
             </td>
           <% end %>
 
-          <!-- square has a piece but piece does not belong to current player (can't hover over piece) -->
-          <% if @board[row][cell] != 0 && current_player.id != @board[row][cell] %>
+          <!-- square has a piece but it's not signed-in player's turn (can't hover over piece) -->
+          <% if @board[row][cell] != 0 %>
               <td id="not-selectable">
               <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>

@@ -4,7 +4,13 @@ class Piece < ActiveRecord::Base
   scope :selected, -> { where(selected: true) }
 
   def move_to!(new_y, new_x)
-    self.update_attributes(y_position: new_y, x_position: new_x)
+    Piece.transaction do
+      self.x_position = new_x
+      self.y_position = new_y
+      self.selected = false
+      self.save
+      game.change_turn
+    end
   end
 
   def not_obstructed(board,final_spots)
