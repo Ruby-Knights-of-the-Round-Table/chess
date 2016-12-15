@@ -1,4 +1,14 @@
 class Game < ActiveRecord::Base
+
+  def change_turn
+    if turn == white_player_id
+      self.turn = black_player_id
+    else
+      self.turn = white_player_id
+    end
+      save
+  end
+
   belongs_to :white_player, class_name: 'Player', foreign_key: 'white_player_id'
   belongs_to :black_player, class_name: 'Player', foreign_key: 'black_player_id'
 
