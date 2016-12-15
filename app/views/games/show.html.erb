@@ -1,13 +1,13 @@
 <h2><%= @game.game_name %></h2>
 
 <div class="text-center">
-  <% if @game.turn == 1  %>
+  <% if @game.turn == @game.white_player.id  %>
     <h4>white player's turn:</h4>
     <h5><%= @game.white_player.email %></h5>
-  <% elsif @game.black_player != nil %>
+  <% elsif @game.black_player != nil && @game.turn == @game.black_player.id %>
     <h4>black player's turn:</h4>
     <h5><%= @game.black_player.email %></h5>
-    <% elsif @game.black_player == nil %>
+  <% elsif @game.black_player == nil %>
       <h4>Waiting for second player to join ... </h4>
   <% end %>
 </div>
