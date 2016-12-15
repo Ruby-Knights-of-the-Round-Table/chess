@@ -4,7 +4,7 @@
   <% if @game.turn == 1  %>
     <h4>white player's turn:</h4>
     <h5><%= @game.white_player.email %></h5>
-  <% else %>
+  <% elsif @game.black_player != nil %>
     <h4>black player's turn:</h4>
     <h5><%= @game.black_player.email %></h5>
   <% end %>
