@@ -18,7 +18,6 @@ class GamesController < ApplicationController
     def create
         @game = Game.create(game_params)
         @game.white_player_id = current_player.id
-        @game.turn = current_player.id
         @game.save
         @game.place_pieces_in_database(current_player.id, nil)
         redirect_to( game_path(@game) )
@@ -34,7 +33,7 @@ class GamesController < ApplicationController
         @game = Game.find(params[:id])
         if @game.white_player_id != nil && current_player.id != @game.white_player_id
           @game.black_player_id = current_player.id
-          @game.turn = current_player.id          
+          @game.turn = @game.white_player_id
           @game.save
           @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
 

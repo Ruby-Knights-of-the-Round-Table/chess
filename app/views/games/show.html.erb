@@ -7,6 +7,8 @@
   <% elsif @game.black_player != nil %>
     <h4>black player's turn:</h4>
     <h5><%= @game.black_player.email %></h5>
+    <% elsif @game.black_player == nil %>
+      <h4>Waiting for second player to join ... </h4>
   <% end %>
 </div>
 
