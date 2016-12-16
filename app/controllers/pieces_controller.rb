@@ -21,7 +21,8 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     row = params[:y_position]
     cell = params[:x_position]
-    @piece.move_to!(row, cell)
+    @board = @piece.game.pieces_as_array
+    @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
     redirect_to game_path(@piece.game_id)
 
   end
