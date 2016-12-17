@@ -31,7 +31,7 @@ class PiecesController < ApplicationController
   private
 
   def piece_params
-    params.require(:piece).permit(:selected, :x_position, :y_position)
+    params.require(:piece).permit(:selected, :x_position, :y_position, :captured_piece)
   end
 
 

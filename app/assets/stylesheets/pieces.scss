@@ -1,3 +1,11 @@
 // Place all the styles related to the pieces controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#highlighted {
+  border: 4px solid green;
+  border-radius: 7px;
+}
+
+#highlighted button {
+  width: 100px;
+}

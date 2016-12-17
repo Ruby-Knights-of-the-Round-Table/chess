@@ -66,21 +66,42 @@
           <% if @board[row][cell] == 0 %>
             <% if selected_piece_id == 0 %>
               <td id="empty" >
-                <%= link_to '' %>
+
               </td>
 
             <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
 
-                <td id="empty" >
-                   <%= link_to '' %>
+              <td id="empty" >
 
-                </td>
+              </td>
+
             <% else %>
-            <td id="empty" >
-              <%= link_to 'x', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put %>
+            <td id="highlighted" >
+              <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, style: "width: 100%" %>
 
             </td>
             <% end %>
+          <% end %>
+
+          <!-- square has a piece
+                current issue: capturing destination doesn't get called because identical if statement
+                getting called on line 55-->
+          <% if @board[row][cell] != 0 %>
+            <% if selected_piece_id == 0 %>
+              <td id="empty" >
+
+              </td>
+
+            <% elsif selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
+              <td id="highlighted" >
+                <%= p "lskdjflskjd" %>
+                <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= button_to "#{piece.symbol}", piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, style: "width: 100%" %>
+
+              </td>
+            <% end %>
+
           <% end %>
        <% end %>
 
