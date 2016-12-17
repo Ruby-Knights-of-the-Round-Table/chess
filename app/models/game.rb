@@ -76,4 +76,9 @@ class Game < ActiveRecord::Base
     return piece_array
   end
 
+  def occupied_space?(y, x)
+    pieces = self.pieces
+    pieces.onboard.where(y_position: y, x_position: x).any?
+  end
+
 end

@@ -36,6 +36,8 @@
             <% end %>
           <% end %>
 
+
+
           <!-- square has a piece and it's signed-in player's turn (can hover over piece)-->
           <!-- Note: s -->
           <% if @board[row][cell] != 0 && @board[row][cell] == @game.turn && current_player.id == @game.turn %>
@@ -51,6 +53,56 @@
             </td>
           <% end %>
 
+          
+
+          <!-- square does not have a piece -->
+          <% if @board[row][cell] == 0 %>
+            <% if selected_piece_id == 0 %>
+              <td id="empty" >
+
+              </td>
+
+            <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
+
+              <td id="empty" >
+
+              </td>
+
+            <% else %>
+            <td id="highlighted" >
+              <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, style: "width: 100%" %>
+
+            </td>
+            <% end %>
+            <% next %>
+          <% end %>
+
+          <!-- square has a piece that can be captured
+                current issue: capturing destination doesn't get called because identical if statement
+                getting called on line 55-->
+          <% if @board[row][cell] != current_player.id && @board[row][cell] != 0 && selected_piece_id != 0%>
+
+
+            <% if selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
+              <td id="highlighted" >
+                <% piece = all_pieces[piece_trace] %>
+                <% piece_trace += 1 %>
+                <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, style: "width: 100%" %>
+
+              </td>
+            <% else %>
+              <td id="not-selectable">
+              <% piece = all_pieces[piece_trace] %>
+              <% piece_trace += 1 %>
+              <%= link_to select_piece_path(piece.id), method: :put do %>
+                <%= "#{piece.symbol}".html_safe %>
+              <% end %>
+
+            </td>
+            <% end %>
+            <% next %>
+          <% end %>
+
           <!-- square has a piece but it's not signed-in player's turn (can't hover over piece) -->
           <% if @board[row][cell] != 0 %>
               <td id="not-selectable">
@@ -62,26 +114,9 @@
                 <% next %>
               </td>
           <% end %>
-          <!-- square does not have a piece -->
-          <% if @board[row][cell] == 0 %>
-            <% if selected_piece_id == 0 %>
-              <td id="empty" >
-                <%= link_to '' %>
-              </td>
+         
 
-            <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
-
-                <td id="empty" >
-                   <%= link_to '' %>
-
-                </td>
-            <% else %>
-            <td id="empty" >
-              <%= link_to 'x', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put %>
-
-            </td>
-            <% end %>
-          <% end %>
+         
        <% end %>
 
     <%= '</tr>'.html_safe %>
