@@ -20,17 +20,6 @@
   background: #bf7930; //Darker color (bottom left corner)
 }
 
-.glowing-border {
-    border: 2px solid green;
-    border-radius: 7px;
-}
-
-.glowing-border:focus {
-    outline: none;
-    border-color: green;
-    box-shadow: 0 0 10px #9ecaed;
-}
-
 #selected {
   border: 4px solid green;
   border-radius: 7px;
@@ -56,6 +45,18 @@
   text-decoration: none;
 }
 
-#empty {
+#highlighted {
+  border: 4px solid green;
+  border-radius: 7px;
+}
 
+.button_to {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  background: none;
+}
+
+.button_to:focus {
+  outline: none;
 }
