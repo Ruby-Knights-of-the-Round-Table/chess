@@ -53,7 +53,7 @@
             </td>
           <% end %>
 
-          
+
 
           <!-- square does not have a piece -->
           <% if @board[row][cell] == 0 %>
@@ -70,7 +70,7 @@
 
             <% else %>
             <td id="highlighted" >
-              <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, style: "width: 100%" %>
+              <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %>
 
             </td>
             <% end %>
@@ -87,7 +87,7 @@
               <td id="highlighted" >
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-                <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, style: "width: 100%" %>
+                <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %>
 
               </td>
             <% else %>
@@ -114,9 +114,9 @@
                 <% next %>
               </td>
           <% end %>
-         
 
-         
+
+
        <% end %>
 
     <%= '</tr>'.html_safe %>
