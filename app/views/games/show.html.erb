@@ -25,12 +25,14 @@
           <!-- square has a piece and piece is selected -->
           <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
             <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
-              <td id="selected">
+              <td class="selected">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-                <%= link_to select_piece_path(piece.id), method: :put do %>
+                <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+                <div class="selected_piece" data-piece-id="<%=piece.id%>">
                   <%= "#{piece.symbol}".html_safe %>
-                <% end %>
+                </div>
+                <!-- <% end %> -->
                 <% next %>
               </td>
             <% end %>
@@ -58,20 +60,19 @@
           <!-- square does not have a piece -->
           <% if @board[row][cell] == 0 %>
             <% if selected_piece_id == 0 %>
-              <td id="empty" >
+              <td class="empty" >
 
               </td>
 
             <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
 
-              <td id="empty" >
+              <td class="empty" >
 
               </td>
 
             <% else %>
-            <td class="highlighted" >
-              <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %>
-
+            <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>">
+                <!-- <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
             </td>
             <% end %>
             <% next %>
@@ -84,11 +85,10 @@
 
 
             <% if selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
-              <td class="highlighted" >
+              <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-                <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %>
-
+                <!-- <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
               </td>
             <% else %>
               <td id="not-selectable">
@@ -127,21 +127,36 @@
 <script>
   $(function() {
     //draggable element (selected piece)
-    $('#selected a').draggable({
+    $('.selected_piece').draggable({
       revert: 'invalid',
       containment: 'table',
       scroll: false,
     });
     //droppable elements (highlighted squares)
     $('.highlighted').droppable({
-      accept: '#selected a',
+      accept: '.selected_piece',
       drop: function(event, ui) {
-        var $this = $(this);
-        ui.draggable.position({
+
+        // 'highlighted' refers to highlighted squares (piece_can_move_to)
+        var highlighted = $(this);
+
+        // center the piece inside the highlighted square
+        var selected_piece = ui.draggable
+        selected_piece.position({
           my: "center",
           at: "center",
-          of: $this,
+          of: highlighted,
           });
+
+        // get data to update piece position
+        var piece_update = {
+          id: selected_piece.data('piece-id'),
+          y_position: highlighted.data('y-position'),
+          x_position: highlighted.data('x-position'),
+        }
+
+        
+
       }
     });
   });
