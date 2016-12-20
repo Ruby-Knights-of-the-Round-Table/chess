@@ -69,7 +69,7 @@
               </td>
 
             <% else %>
-            <td id="highlighted" >
+            <td class="highlighted" >
               <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %>
 
             </td>
@@ -84,7 +84,7 @@
 
 
             <% if selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
-              <td id="highlighted" >
+              <td class="highlighted" >
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %>
@@ -124,3 +124,25 @@
 </table>
 
 <!-- ("(#{cell},#{row})") -->
+<script>
+  $(function() {
+    //draggable element (selected piece)
+    $('#selected a').draggable({
+      revert: 'invalid',
+      containment: 'table',
+      scroll: false,
+    });
+    //droppable elements (highlighted squares)
+    $('.highlighted').droppable({
+      accept: '#selected a',
+      drop: function(event, ui) {
+        var $this = $(this);
+        ui.draggable.position({
+          my: "center",
+          at: "center",
+          of: $this,
+          });
+      }
+    });
+  });
+</script>
