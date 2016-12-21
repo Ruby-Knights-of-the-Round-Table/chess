@@ -163,7 +163,8 @@
           data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
           success: function(data) {
             highlighted.empty();
-            // highlighted.css(  );              
+            $('.highlighted').css('border', 'none');
+            $('.selected').css('border', 'none');            
           }
         });
 
