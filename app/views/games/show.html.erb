@@ -130,7 +130,6 @@
 <script>
   $(function() {
 
-
     // selectable pieces can be selected on click
     $('.selectable_piece').click(function(event) {
       // get id for selectable piece
@@ -150,6 +149,7 @@
           $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
           $(event.target).switchClass('selectable_piece', 'selected_piece');
           // event target class changes to selected piece, but need to change draggable
+          location.reload();
         }
       })
     });
