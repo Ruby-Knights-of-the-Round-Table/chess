@@ -47,9 +47,11 @@
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
 
-              <%= link_to select_piece_path(piece.id), method: :put do %>
-                <%= "#{piece.symbol}".html_safe %>
-              <% end %>
+              <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+                <div class="selectable_piece" data-piece-id="<%=piece.id%>">
+                  <%= "#{piece.symbol}".html_safe %>
+                </div>
+              <!-- <% end %> -->
 
               <% next %>
             </td>
@@ -127,6 +129,31 @@
 <!-- ("(#{cell},#{row})") -->
 <script>
   $(function() {
+
+
+    // selectable pieces can be selected on click
+    $('.selectable_piece').click(function(event) {
+      // get id for selectable piece
+      var piece_select = {
+        id: $(event.target).data('piece-id')
+      }
+
+      console.log(piece_select.id);
+
+      // select the piece, using ajax request
+      $.ajax({
+        type: 'PUT',
+        url: '/pieces/' + piece_select.id + '/select/',
+        dataType: 'json',
+        data: { id: piece_select.id },
+        success: function(data) {
+          $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
+          $(event.target).switchClass('selectable_piece', 'selected_piece');
+          // event target class changes to selected piece, but need to change draggable
+        }
+      })
+    });
+
     //draggable element (selected piece)
     $('.selected_piece').draggable({
       revert: 'invalid',
@@ -164,7 +191,7 @@
           success: function(data) {
             highlighted.empty();
             $('.highlighted').css('border', 'none');
-            $('.selected').css('border', 'none');            
+            $('.selected').css('border', 'none');
           }
         });
 

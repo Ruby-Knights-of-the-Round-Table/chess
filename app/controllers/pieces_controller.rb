@@ -14,7 +14,8 @@ class PiecesController < ApplicationController
     end
 
     @piece.update_attributes(selected: @piece.selected)
-    redirect_to game_path(@piece.game_id)
+    render json: @piece    
+    # redirect_to game_path(@piece.game_id)
   end
 
   def update
