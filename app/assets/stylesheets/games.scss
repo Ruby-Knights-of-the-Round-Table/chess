@@ -29,12 +29,12 @@
   // color: #F02424;
 }
 
-#selectable:hover{
+.selectable:hover{
   border: 2px solid green;
   // border-radius: 7px;
 }
 
-#selectable a {
+.selectable_piece {
   color: #000;
   text-decoration: none;
 }

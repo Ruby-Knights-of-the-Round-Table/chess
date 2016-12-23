@@ -25,7 +25,7 @@
           <!-- square has a piece and piece is selected -->
           <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
             <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
-              <td class="selected">
+              <td class="selected" data-y-position="<%=row%>" data-x-position="<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
@@ -43,7 +43,7 @@
           <!-- square has a piece and it's signed-in player's turn (can hover over piece)-->
           <!-- Note: s -->
           <% if @board[row][cell] != 0 && @board[row][cell] == @game.turn && current_player.id == @game.turn %>
-            <td id="selectable">
+            <td class="selectable" data-y-position="<%=row%>" data-x-position="<%=cell%>">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
 
@@ -97,9 +97,9 @@
               <td id="not-selectable">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
-              <%= link_to select_piece_path(piece.id), method: :put do %>
+              <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
                 <%= "#{piece.symbol}".html_safe %>
-              <% end %>
+              <!-- <% end %> -->
 
             </td>
             <% end %>
@@ -111,9 +111,9 @@
               <td id="not-selectable">
               <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-                <%= link_to select_piece_path(piece.id), method: :put do %>
+                <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
                   <%= "#{piece.symbol}".html_safe %>
-                <% end %>
+                <!-- <% end %> -->
                 <% next %>
               </td>
           <% end %>
@@ -130,37 +130,14 @@
 <script>
   $(function() {
 
-    // selectable pieces can be selected on click
-    $('.selectable_piece').click(function(event) {
-      // get id for selectable piece
-      var piece_select = {
-        id: $(event.target).data('piece-id')
-      }
-
-      console.log(piece_select.id);
-
-      // select the piece, using ajax request
-      $.ajax({
-        type: 'PUT',
-        url: '/pieces/' + piece_select.id + '/select/',
-        dataType: 'json',
-        data: { id: piece_select.id },
-        success: function(data) {
-          $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
-          $(event.target).switchClass('selectable_piece', 'selected_piece');
-          // event target class changes to selected piece, but need to change draggable
-          location.reload();
-        }
-      })
-    });
-
-    //draggable element (selected piece)
+    // make draggable element (selected piece)
     $('.selected_piece').draggable({
       revert: 'invalid',
       containment: 'table',
       scroll: false,
     });
-    //droppable elements (highlighted squares)
+
+    // make droppable elements (highlighted squares)
     $('.highlighted').droppable({
       accept: '.selected_piece',
       drop: function(event, ui) {
@@ -192,10 +169,45 @@
             highlighted.empty();
             $('.highlighted').css('border', 'none');
             $('.selected').css('border', 'none');
+            location.reload();
           }
         });
 
       }
     });
+
+    // selectable pieces can be selected on click
+    $('.selectable').click(function(event) {
+
+      var selectable = $(this);
+      // get id for selectable piece
+      var piece_select = {
+        id: $(event.target).data('piece-id'),
+        y_position: selectable.data('y-position'),
+        x_position: selectable.data('x-position'),
+      }
+
+      // select the piece, using ajax request
+      $.ajax({
+        type: 'PUT',
+        url: '/pieces/' + piece_select.id + '/select/',
+        dataType: 'json',
+        data: { id: piece_select.id },
+        success: function(data) {
+          // switch class for selected square
+          $('.selected').switchClass('selected', 'selectable', 250);
+          selectable.switchClass('selectable', 'selected', 250);
+
+          // switch class for selected piece
+          $('.selected_piece').switchClass('selected_piece', 'selectable_piece', 250);
+          $(event.target).switchClass('selectable_piece', 'selected_piece', 250);
+
+          // need to trigger drop and drag for selected pieces (so that page does not need to refresh using location.reload()
+          location.reload();
+        }
+      })
+    });
+
   });
+
 </script>

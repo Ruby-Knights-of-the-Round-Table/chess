@@ -11,10 +11,13 @@ class PiecesController < ApplicationController
         old_selected_piece.selected = false
         old_selected_piece.update_attributes(selected: old_selected_piece.selected)
       end
+      @piece.update_attributes(selected: @piece.selected)
+      render json: @piece
+    else
+      return render json: { error: "Can not select other player's piece" }
     end
 
-    @piece.update_attributes(selected: @piece.selected)
-    render json: @piece    
+
     # redirect_to game_path(@piece.game_id)
   end
 
