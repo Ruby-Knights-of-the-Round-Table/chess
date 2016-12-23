@@ -1,5 +1,7 @@
 <h2><%= @game.game_name %></h2>
 
+<!-- checkmoves(king, attacking_pieces, board ) -->
+
 <div class="text-center">
   <% if @game.turn == @game.white_player.id  %>
     <h4>white player's turn:</h4>
@@ -11,6 +13,10 @@
       <h4>Waiting for second player to join ... </h4>
   <% end %>
 </div>
+
+<% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
+
+<%= pieces_attacking_king = current_king.if_check?(@board) %>
 
 <!-- use @board array to make this faster -->
 <!-- piece.game.white_player_id  -->
@@ -36,6 +42,31 @@
             <% end %>
           <% end %>
 
+          <!-- empty square can't be moved to because king is in check -->
+          <% if pieces_attacking_king != [] && selected_piece_id != 0 && @board[row][cell] == 0%>
+            <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
+              <td id="empty" >
+
+              </td>
+              <% next %>
+            <% end %>
+          <% end %>
+
+          <!-- piece can't be moved to because king is in check -->
+          <% if pieces_attacking_king != [] && selected_piece_id != 0 && @board[row][cell] != 0%>
+
+            <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
+              <td id="not-selectable">
+              <% piece = all_pieces[piece_trace] %>
+              <% piece_trace += 1 %>
+              <%= link_to select_piece_path(piece.id), method: :put do %>
+                <%= "#{piece.symbol}".html_safe %>
+              <% end %>
+
+            </td>
+              <% next %>
+            <% end %>
+          <% end %>
 
 
           <!-- square has a piece and it's signed-in player's turn (can hover over piece)-->
@@ -103,7 +134,7 @@
             <% next %>
           <% end %>
 
-          <!-- square has a piece but it's not signed-in player's turn (can't hover over piece) -->
+          <!-- square has a piece but it's not signed-in player's turn (can't hover over piece) or theres a check -->
           <% if @board[row][cell] != 0 %>
               <td id="not-selectable">
               <% piece = all_pieces[piece_trace] %>

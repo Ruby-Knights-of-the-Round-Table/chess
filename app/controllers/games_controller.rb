@@ -1,5 +1,14 @@
 class GamesController < ApplicationController
     before_action :authenticate_player!
+    # if_check? ( be in kings model? ) (completed!)
+    #    iterate over each of the enemy pieces and see if their moves possible shares the kings space
+    #    maybe return the pices that do this
+    # prevent_check_moves ( TODO )
+    #    from the possible moves, see if this move can undo the check
+    #    if if_check? is null, then end this program
+    #    
+    # if_checkmate
+    #    changes database value of 'winner_id' if there is a checkmate, or if none of current_player pieces can undo check.
     def index
         @games = Game.where(white_player_id: current_player.id) + Game.where(black_player_id: current_player.id)
         @all_games = Game.all

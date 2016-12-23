@@ -94,6 +94,41 @@ class Piece < ActiveRecord::Base
     return final_spots
   end
 
+   # prevent_check_moves ( TODO )
+    #    from the possible moves, see if this move can undo the check
+    #    if if_check? is null, then end this program
+
+  def checkmoves(king, attacking_pieces, board )
+    if self == king
+      enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id)
+      king_moves = king.piece_can_move_to(board)
+      enemy_pieces.each do |enemy_piece|
+        king_moves -= enemy_piece.piece_can_move_to(board)
+      end
+      return king_moves
+    end
+
+    return [] if attacking_pieces.length > 1 # can't defend from two attacking pieces unless king is moved
+
+    current_piece = self
+    current_piece_moves_avail =  current_piece.piece_can_move_to(board)
+    enemy_piece = attacking_pieces[0] # since only one piece is attacking, we should rename this 
+    current_piece_moves_avail = current_piece_moves_avail & enemy_piece.piece_can_move_to(board) # finding the squares these pieces can both move to
+
+    prevent_check_moves = []
+    
+    current_piece_moves_avail.each do |square|
+      y = square[0]
+      x = square[1]
+      play_board = Marshal.load(Marshal.dump(board))
+      play_board[self.y_position][x_position] = 0
+      play_board[y][x] = self.player_id
+      prevent_check_moves << square if !enemy_piece.piece_can_move_to(play_board).include?([king.y_position,king.x_position])
+    end
+    return prevent_check_moves
+
+
+  end
 
 
   # def capturing_move(y, x)
