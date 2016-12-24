@@ -14,7 +14,7 @@ class PiecesController < ApplicationController
       @piece.update_attributes(selected: @piece.selected)
       render json: @piece
     else
-      return render json: { error: "Can not select other player's piece" }
+      return render json: 'failure'
     end
 
 
