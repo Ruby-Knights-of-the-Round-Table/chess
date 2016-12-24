@@ -11,10 +11,14 @@ class PiecesController < ApplicationController
         old_selected_piece.selected = false
         old_selected_piece.update_attributes(selected: old_selected_piece.selected)
       end
+      @piece.update_attributes(selected: @piece.selected)
+      render json: @piece
+    else
+      return render json: 'failure'
     end
 
-    @piece.update_attributes(selected: @piece.selected)
-    redirect_to game_path(@piece.game_id)
+
+    # redirect_to game_path(@piece.game_id)
   end
 
   def update
@@ -23,7 +27,8 @@ class PiecesController < ApplicationController
     cell = params[:x_position]
     @board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
-    redirect_to game_path(@piece.game_id)
+    render json: @piece
+    # redirect_to game_path(@piece.game_id)
 
   end
 

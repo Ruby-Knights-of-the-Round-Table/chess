@@ -13,29 +13,28 @@
   height: 60px;
   // border: 0.5px solid black;
   text-align: center; // Aligns unicode chess pieces properly
-  font-size: 25px; // Unicode character size can be adjusted here
+  font-size: 30px; // Unicode character size can be adjusted here
 }
 
 #board tr:nth-child(odd) td:nth-child(even), #board tr:nth-child(even) td:nth-child(odd) {
   background: #bf7930; //Darker color (bottom left corner)
 }
 
-#selected {
-  border: 4px solid green;
-  border-radius: 7px;
-}
-
-#selected a {
-  color: #000;
-  text-decoration: none;
-}
-
-#selectable:hover{
+.selected {
   border: 2px solid green;
-  border-radius: 7px;
+  // border-radius: 7px;
 }
 
-#selectable a {
+.selected_piece {
+  // color: #F02424;
+}
+
+.selectable:hover{
+  border: 2px solid green;
+  // border-radius: 7px;
+}
+
+.selectable_piece {
   color: #000;
   text-decoration: none;
 }
@@ -45,18 +44,18 @@
   text-decoration: none;
 }
 
-#highlighted {
+.highlighted {
   border: 4px solid green;
-  border-radius: 7px;
+  // border-radius: 7px;
 }
 
-.button_to {
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  background: none;
-}
+// .button_to {
+//   width: 100%;
+//   background-color: transparent;
+//   border: none;
+//   background: none;
+// }
 
-.button_to:focus {
-  outline: none;
-}
+// .button_to:focus {
+//   outline: none;
+// }
