@@ -1,11 +1,12 @@
+<div class="page_wrapper">
 <h1> New Game </h1>
 
-
 <!-- Creates a game -->
+<br>
 <%= simple_form_for @game do |f| %>
-  <%= f.input  :game_name %>
-  <br>
+ <%= f.input  :game_name %>
   <br>
   <%= f.submit "Start"%>
 
 <% end %>
+</div>
