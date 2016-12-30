@@ -7,12 +7,12 @@ class Pawn < Piece
       final_spots = []
       if game.white_player_id == player_id
         final_spots << [y_position+2, x_position] if y_position == 1
-        final_spots << [y_position+1, x_position]
+        final_spots << [y_position+1, x_position] if !occupied_space?(y_position+1, x_position)
         final_spots << [y_position+1, x_position+1] if occupied_space?(y_position+1,x_position+1)
         final_spots << [y_position+1, x_position-1] if occupied_space?(y_position+1,x_position-1)
       else
         final_spots << [y_position-2, x_position] if y_position == 6
-        final_spots << [y_position-1, x_position]
+        final_spots << [y_position-1, x_position] if !occupied_space?(y_position-1, x_position)
         final_spots << [y_position-1, x_position+1] if occupied_space?(y_position-1,x_position+1)
         final_spots << [y_position-1, x_position-1] if occupied_space?(y_position-1,x_position-1)
       end
