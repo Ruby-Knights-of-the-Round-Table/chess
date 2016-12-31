@@ -157,10 +157,20 @@
   <% end %>
 </table>
 
-<!-- ("(#{cell},#{row})") -->
-<script>
-  $(function() {
 
+<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBtB_3FCuqPVKmJkB_EuDkXq0gvE9DX2DM",
+    authDomain: "ruby-knights.firebaseapp.com",
+    databaseURL: "https://ruby-knights.firebaseio.com",
+    storageBucket: "ruby-knights.appspot.com",
+    messagingSenderId: "349996601563"
+  };
+  firebase.initializeApp(config);
+
+  $(function() {
     // make draggable element (selected piece)
     $('.selected_piece').draggable({
       revert: 'invalid',
@@ -214,8 +224,8 @@
       // get id for selectable piece
       var piece_select = {
         id: $(event.target).data('piece-id'),
-        y_position: selectable.data('y-position'),
-        x_position: selectable.data('x-position'),
+        // y_position: selectable.data('y-position'),
+        // x_position: selectable.data('x-position'),
       }
 
       // select the piece, using ajax request
@@ -226,12 +236,12 @@
         data: { id: piece_select.id },
         success: function(data) {
           // switch class for selected square
-          $('.selected').switchClass('selected', 'selectable', 250);
-          selectable.switchClass('selectable', 'selected', 250);
+          $('.selected').switchClass('selected', 'selectable');
+          selectable.switchClass('selectable', 'selected');
 
           // switch class for selected piece
-          $('.selected_piece').switchClass('selected_piece', 'selectable_piece', 250);
-          $(event.target).switchClass('selectable_piece', 'selected_piece', 250);
+          $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
+          $(event.target).switchClass('selectable_piece', 'selected_piece');
 
           // need to trigger drop and drag for selected pieces (so that page does not need to refresh using location.reload()
           location.reload();

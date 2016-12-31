@@ -43,6 +43,8 @@ end
 
 gem 'rubocop', '~> 0.45.0', require: false
 
+gem 'firebase'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
