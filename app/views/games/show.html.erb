@@ -236,12 +236,12 @@
         data: { id: piece_select.id },
         success: function(data) {
           // switch class for selected square
-          $('.selected').switchClass('selected', 'selectable', 250);
-          selectable.switchClass('selectable', 'selected', 250);
+          $('.selected').switchClass('selected', 'selectable');
+          selectable.switchClass('selectable', 'selected');
 
           // switch class for selected piece
-          $('.selected_piece').switchClass('selected_piece', 'selectable_piece', 250);
-          $(event.target).switchClass('selectable_piece', 'selected_piece', 250);
+          $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
+          $(event.target).switchClass('selectable_piece', 'selected_piece');
 
           // need to trigger drop and drag for selected pieces (so that page does not need to refresh using location.reload()
           location.reload();
