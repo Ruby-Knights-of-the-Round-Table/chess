@@ -12,7 +12,10 @@ class PiecesController < ApplicationController
         old_selected_piece.update_attributes(selected: old_selected_piece.selected)
       end
       @piece.update_attributes(selected: @piece.selected)
-      render json: @piece
+
+      @board = @piece.game.pieces_as_array
+      final_spots = @piece.piece_can_move_to(@board)
+      render json: {piece: @piece, final_spots: final_spots}
 
       update_firebase(pieceId: @piece.id,
                       timeStamp: Time.now)
@@ -31,7 +34,7 @@ class PiecesController < ApplicationController
     update_firebase(pieceId: @piece.id,
                     y_position: row,
                     x_position: cell,
-                    timeStamp: Time.now) 
+                    timeStamp: Time.now)
 
     # redirect_to game_path(@piece.game_id)
   end
@@ -47,6 +50,7 @@ class PiecesController < ApplicationController
     base_uri = 'https://ruby-knights.firebaseio.com'
     firebase = Firebase::Client.new(base_uri)
     response = firebase.set("#{@piece.id}", data)
+    # response = firebase.ref('pieces/' + @piece.id).set("#{@piece.id}", data)
   end
 
 end

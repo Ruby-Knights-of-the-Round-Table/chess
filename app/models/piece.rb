@@ -136,7 +136,6 @@ class Piece < ActiveRecord::Base
 
   end
 
-
   # def capturing_move(y, x)
   #   captured_piece = piece.not_obstructed(board, final_spots)
   #   captured_piece && captured_piece.player_id != player_id

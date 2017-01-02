@@ -31,7 +31,7 @@
           <!-- square has a piece and piece is selected -->
           <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
             <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
-              <td class="selected" data-y-position="<%=row%>" data-x-position="<%=cell%>">
+              <td class="selected" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
@@ -47,7 +47,7 @@
           <!-- empty square can't be moved to because king is in check -->
           <% if pieces_attacking_king != [] && selected_piece_id != 0 && @board[row][cell] == 0%>
             <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
-              <td id="empty" >
+              <td id="empty" id="square-<%=row%>-<%=cell%>">
 
               </td>
               <% next %>
@@ -58,7 +58,7 @@
           <% if pieces_attacking_king != [] && selected_piece_id != 0 && @board[row][cell] != 0%>
 
             <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
-              <td id="not-selectable">
+              <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
               <%= link_to select_piece_path(piece.id), method: :put do %>
@@ -74,7 +74,7 @@
           <!-- square has a piece and it's signed-in player's turn (can hover over piece)-->
           <!-- Note: s -->
           <% if @board[row][cell] != 0 && @board[row][cell] == @game.turn && current_player.id == @game.turn %>
-            <td class="selectable" data-y-position="<%=row%>" data-x-position="<%=cell%>">
+            <td class="selectable" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
 
@@ -93,18 +93,18 @@
           <!-- square does not have a piece -->
           <% if @board[row][cell] == 0 %>
             <% if selected_piece_id == 0 %>
-              <td class="empty" >
+              <td class="empty" id="square-<%=row%>-<%=cell%>">
 
               </td>
 
             <% elsif !selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
 
-              <td class="empty" >
+              <td class="empty" id="square-<%=row%>-<%=cell%>">
 
               </td>
 
             <% else %>
-            <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>">
+            <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
                 <!-- <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
             </td>
             <% end %>
@@ -118,14 +118,14 @@
 
 
             <% if selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
-              <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>">
+              <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= "#{piece.symbol}".html_safe %>
                 <!-- <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
               </td>
             <% else %>
-              <td id="not-selectable">
+              <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
               <% piece = all_pieces[piece_trace] %>
               <% piece_trace += 1 %>
               <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
@@ -139,7 +139,7 @@
 
           <!-- square has a piece but it's not signed-in player's turn (can't hover over piece) or theres a check -->
           <% if @board[row][cell] != 0 %>
-              <td id="not-selectable">
+              <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
               <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
@@ -170,13 +170,22 @@
   };
   firebase.initializeApp(config);
 
+var pieceSelectRef = firebase.database().ref();
+pieceSelectRef.on('value', function(snapshot) {
+  //some code goes here to get snapshot.val();
+
+});
+
+
+
   $(function() {
+
     // make draggable element (selected piece)
     $('.selected_piece').draggable({
       revert: 'invalid',
       containment: 'table',
       scroll: false,
-    });
+      });
 
     // make droppable elements (highlighted squares)
     $('.highlighted').droppable({
@@ -217,10 +226,63 @@
       }
     });
 
-    // selectable pieces can be selected on click
-    $('.selectable').click(function(event) {
+    function makeDraggable(e) {
+    e.draggable().draggable("enable");
+    e.off("draggable").draggable({
+      revert: 'invalid',
+      containment: 'table',
+      scroll: false,
+      });
+    }
 
+
+    function makeDroppable() {
+      // make droppable elements (highlighted squares)
+      $('.highlighted').off('droppable').droppable({
+        accept: '.selected_piece',
+        drop: function(event, ui) {
+
+          // 'highlighted' refers to highlighted squares (piece_can_move_to)
+          var highlighted = $(this);
+
+          // center the piece inside the highlighted square
+          var selected_piece = ui.draggable
+          selected_piece.position({
+            my: "center",
+            at: "center",
+            of: highlighted,
+            });
+
+          // get data to update piece position
+          var piece_update = {
+            id: selected_piece.data('piece-id'),
+            y_position: highlighted.data('y-position'),
+            x_position: highlighted.data('x-position'),
+          }
+
+          $.ajax({
+            type: "PUT",
+            url: '/pieces/' + piece_update.id,
+            dataType: 'json',
+            data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
+            success: function(data) {
+              highlighted.empty();
+              $('.highlighted').css('border', 'none');
+              $('.selected').css('border', 'none');
+              location.reload();
+            }
+          });
+
+        }
+      });
+
+    }
+
+    function makeClickable(event) {
+
+      // selectable square
       var selectable = $(this);
+
       // get id for selectable piece
       var piece_select = {
         id: $(event.target).data('piece-id'),
@@ -235,19 +297,39 @@
         dataType: 'json',
         data: { id: piece_select.id },
         success: function(data) {
+          console.log(data);
           // switch class for selected square
+          $('.selected').off("click").click(makeClickable);
           $('.selected').switchClass('selected', 'selectable');
           selectable.switchClass('selectable', 'selected');
 
           // switch class for selected piece
+          $('.selected_piece').draggable().draggable("disable");
+          $('.selected_piece').removeClass('ui-draggable ui-draggable-handle ui-draggable-disabled');
           $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
+
+          // switch class for droppable squares
+          $('.highlighted').addClass('empty');
+          $('.highlighted').removeClass('highlighted ui-droppable');
+
           $(event.target).switchClass('selectable_piece', 'selected_piece');
+          makeDraggable($(event.target));
+
+          $.each(data.final_spots, function(index, spot) {
+            console.log(spot);
+            $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted');
+          });
+
+          makeDroppable();
 
           // need to trigger drop and drag for selected pieces (so that page does not need to refresh using location.reload()
-          location.reload();
+          // location.reload();
         }
       })
-    });
+    }
+
+    // selectable squares can be selected on click
+    $('.selectable').click(makeClickable);
 
   });
 
