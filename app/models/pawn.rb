@@ -19,6 +19,21 @@ class Pawn < Piece
       not_obstructed(board,final_spots)
     end
 
+    def promote!
+      if self.type == "Pawn"
+        self.update_attributes(type: "Queen")
+      end
+    end
+
+    def move_to!(new_y, new_x)
+      super(new_y, new_x)
+      promote! if can_promote?
+    end
+
+    def can_promote?
+      white_player? && y_position == 7 || black_player? && y_position == 0
+    end
+
 
     # def piece_can_move_to(board)
 
