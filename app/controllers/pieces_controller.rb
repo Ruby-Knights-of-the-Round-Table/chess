@@ -17,8 +17,8 @@ class PiecesController < ApplicationController
       final_spots = @piece.piece_can_move_to(@board)
       render json: {piece: @piece, final_spots: final_spots}
 
-      update_firebase(pieceId: @piece.id,
-                      timeStamp: Time.now)
+      # update_firebase(pieceId: @piece.id,
+      #                 timeStamp: Time.now)
     end
 
     # redirect_to game_path(@piece.game_id)
@@ -31,10 +31,10 @@ class PiecesController < ApplicationController
     @board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
     render json: @piece
-    update_firebase(pieceId: @piece.id,
-                    y_position: row,
-                    x_position: cell,
-                    timeStamp: Time.now)
+    # update_firebase(pieceId: @piece.id,
+    #                 y_position: row,
+    #                 x_position: cell,
+    #                 timeStamp: Time.now)
 
     # redirect_to game_path(@piece.game_id)
   end
@@ -46,15 +46,11 @@ class PiecesController < ApplicationController
     params.require(:piece).permit(:selected, :x_position, :y_position, :captured_piece)
   end
 
-  def update_firebase(data)
-    base_uri = 'https://ruby-knights.firebaseio.com'
-    firebase = Firebase::Client.new(base_uri)
-    response = firebase.set("#{@piece.id}", data)
-    # response = firebase.ref('pieces/' + @piece.id).set("#{@piece.id}", data)
-  end
+  # def update_firebase(data)
+  #   base_uri = 'https://ruby-knights.firebaseio.com'
+  #   firebase = Firebase::Client.new(base_uri)
+  #   response = firebase.set("#{@piece.id}", data)
+  #   # response = firebase.ref('pieces/' + @piece.id).set("#{@piece.id}", data)
+  # end
 
 end
-
-# base_uri = 'https://ruby-knights.firebaseio.com'
-# firebase = Firebase::Client.new(base_uri)
-# response = firebase.set("#{@piece.id}", :created => Firebase::ServerValue::TIMESTAMP)

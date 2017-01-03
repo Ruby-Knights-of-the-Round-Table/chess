@@ -70,7 +70,6 @@
             <% end %>
           <% end %>
 
-
           <!-- square has a piece and it's signed-in player's turn (can hover over piece)-->
           <!-- Note: s -->
           <% if @board[row][cell] != 0 && @board[row][cell] == @game.turn && current_player.id == @game.turn %>
@@ -87,8 +86,6 @@
               <% next %>
             </td>
           <% end %>
-
-
 
           <!-- square does not have a piece -->
           <% if @board[row][cell] == 0 %>
@@ -148,9 +145,6 @@
                 <% next %>
               </td>
           <% end %>
-
-
-
        <% end %>
 
     <%= '</tr>'.html_safe %>
@@ -158,7 +152,7 @@
 </table>
 
 
-<script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+<!-- <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
 <script>
   // Initialize Firebase
   var config = {
@@ -174,57 +168,57 @@ var pieceSelectRef = firebase.database().ref();
 pieceSelectRef.on('value', function(snapshot) {
   //some code goes here to get snapshot.val();
 
-});
+}); -->
 
-
+<script>
 
   $(function() {
 
-    // make draggable element (selected piece)
-    $('.selected_piece').draggable({
-      revert: 'invalid',
-      containment: 'table',
-      scroll: false,
-      });
-
-    // make droppable elements (highlighted squares)
-    $('.highlighted').droppable({
-      accept: '.selected_piece',
-      drop: function(event, ui) {
-
-        // 'highlighted' refers to highlighted squares (piece_can_move_to)
-        var highlighted = $(this);
-
-        // center the piece inside the highlighted square
-        var selected_piece = ui.draggable
-        selected_piece.position({
-          my: "center",
-          at: "center",
-          of: highlighted,
-          });
-
-        // get data to update piece position
-        var piece_update = {
-          id: selected_piece.data('piece-id'),
-          y_position: highlighted.data('y-position'),
-          x_position: highlighted.data('x-position'),
-        }
-
-        $.ajax({
-          type: "PUT",
-          url: '/pieces/' + piece_update.id,
-          dataType: 'json',
-          data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
-          success: function(data) {
-            highlighted.empty();
-            $('.highlighted').css('border', 'none');
-            $('.selected').css('border', 'none');
-            location.reload();
-          }
-        });
-
-      }
-    });
+    // // make draggable element (selected piece)
+    // $('.selected_piece').draggable({
+    //   revert: 'invalid',
+    //   containment: 'table',
+    //   scroll: false,
+    //   });
+    //
+    // // make droppable elements (highlighted squares)
+    // $('.highlighted').droppable({
+    //   accept: '.selected_piece',
+    //   drop: function(event, ui) {
+    //
+    //     // 'highlighted' refers to highlighted squares (piece_can_move_to)
+    //     var highlighted = $(this);
+    //
+    //     // center the piece inside the highlighted square
+    //     var selected_piece = ui.draggable
+    //     selected_piece.position({
+    //       my: "center",
+    //       at: "center",
+    //       of: highlighted,
+    //       });
+    //
+    //     // get data to update piece position
+    //     var piece_update = {
+    //       id: selected_piece.data('piece-id'),
+    //       y_position: highlighted.data('y-position'),
+    //       x_position: highlighted.data('x-position'),
+    //     }
+    //
+    //     $.ajax({
+    //       type: "PUT",
+    //       url: '/pieces/' + piece_update.id,
+    //       dataType: 'json',
+    //       data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
+    //       success: function(data) {
+    //         highlighted.empty();
+    //         $('.highlighted').css('border', 'none');
+    //         $('.selected').css('border', 'none');
+    //         location.reload();
+    //       }
+    //     });
+    //
+    //   }
+    // });
 
     function makeDraggable(e) {
     e.draggable().draggable("enable");
@@ -234,7 +228,6 @@ pieceSelectRef.on('value', function(snapshot) {
       scroll: false,
       });
     }
-
 
     function makeDroppable() {
       // make droppable elements (highlighted squares)
@@ -266,16 +259,48 @@ pieceSelectRef.on('value', function(snapshot) {
             dataType: 'json',
             data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
             success: function(data) {
-              highlighted.empty();
+              console.log(data.id);
+              console.log(data.y_position);
+              console.log(data.x_position);
+
               $('.highlighted').css('border', 'none');
               $('.selected').css('border', 'none');
-              location.reload();
+
+              $('.highlighted').removeClass('highlighted ui-droppable');
+              $('.selected').off("click")
+              $('.selected').switchClass('selected', 'empty');
+
+              $('.selected_piece').draggable().draggable("disable");
+              $('.selected_piece').removeClass('ui-draggable ui-draggable-handle ui-draggable-disabled');
+              $('.selected_piece').switchClass('selected_piece', 'not_selectable');
+
+              highlighted.removeClass('empty');
+
+              // var piece_update = {
+              //   id: selected_piece.data('piece-id'),
+              //   y_position: highlighted.data('y-position'),
+              //   x_position: highlighted.data('x-position'),
+              // }
+
+              // // deselect the piece
+              // $.ajax({
+              //   type: 'PUT',
+              //   url: '/pieces/' + piece_update.id + '/select/',
+              //   dataType: 'json',
+              //   data: { id: piece_update.id },
+              //   success: function(data) {
+              //       console.log(piece_update.id);
+              //   }
+              //     });
+
+
+
+              // location.reload();
             }
           });
 
         }
       });
-
     }
 
     function makeClickable(event) {
@@ -321,9 +346,6 @@ pieceSelectRef.on('value', function(snapshot) {
           });
 
           makeDroppable();
-
-          // need to trigger drop and drag for selected pieces (so that page does not need to refresh using location.reload()
-          // location.reload();
         }
       })
     }

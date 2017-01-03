@@ -96,7 +96,6 @@ class Piece < ActiveRecord::Base
         end
       end
     end
-    p "#{final_spots}"
     return final_spots
   end
 

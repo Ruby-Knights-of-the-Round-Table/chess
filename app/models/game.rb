@@ -70,7 +70,7 @@ class Game < ActiveRecord::Base
                     [0,0,0,0,0,0,0,0]
                   ]
     pieces.each do |piece|
-      if piece.game.white_player_id === piece.player_id then color = piece.game.white_player_id  else color = piece.game.black_player_id  end
+      if piece.game.white_player_id == piece.player_id then color = piece.game.white_player_id  else color = piece.game.black_player_id  end
       piece_array[piece.y_position][piece.x_position] = color
     end
     return piece_array
