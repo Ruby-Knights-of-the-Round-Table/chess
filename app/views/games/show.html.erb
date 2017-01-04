@@ -266,7 +266,7 @@ pieceSelectRef.on('value', function(snapshot) {
         data: { id: piece_select.id },
         success: function(data) {
 
-          // deselect square
+          // deselect squares
           $('.selected').off("click").click(makeClickable);
           $('.selected').switchClass('selected', 'selectable');
           disableDroppable();
@@ -286,6 +286,7 @@ pieceSelectRef.on('value', function(snapshot) {
             $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted').attr('data-y-position', spot[0]).attr('data-x-position', spot[1]);
           });
 
+          // make new final spots droppable
           makeDroppable($('.highlighted'));
 
         }
