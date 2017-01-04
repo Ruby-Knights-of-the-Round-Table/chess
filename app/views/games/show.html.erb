@@ -222,24 +222,25 @@ pieceSelectRef.on('value', function(snapshot) {
 
     function makeDraggable(e) {
     e.draggable().draggable("enable");
-    e.off("draggable").draggable({
+    e.draggable({
       revert: 'invalid',
       containment: 'table',
       scroll: false,
       });
     }
 
-    function makeDroppable() {
+    function makeDroppable(e) {
       // make droppable elements (highlighted squares)
-      $('.highlighted').off('droppable').droppable({
+      e.droppable().droppable("enable");
+      e.droppable({
         accept: '.selected_piece',
         drop: function(event, ui) {
 
-          // 'highlighted' refers to highlighted squares (piece_can_move_to)
+          // 'highlighted' should refer to square that accepts dropped piece
           var highlighted = $(this);
 
           // center the piece inside the highlighted square
-          var selected_piece = ui.draggable
+          var selected_piece = ui.draggable;
           selected_piece.position({
             my: "center",
             at: "center",
@@ -259,41 +260,26 @@ pieceSelectRef.on('value', function(snapshot) {
             dataType: 'json',
             data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
             success: function(data) {
-              console.log(data.id);
-              console.log(data.y_position);
-              console.log(data.x_position);
+              console.log(piece_update.id);
+              console.log(piece_update.y_position);
+              console.log(piece_update.x_position);
 
-              $('.highlighted').css('border', 'none');
-              $('.selected').css('border', 'none');
+              highlighted.empty();
+              // $('.highlighted').css('border', 'none');
+              // $('.selected').css('border', 'none');
 
+              // switch class on squares for piece movement
               $('.highlighted').removeClass('highlighted ui-droppable');
-              $('.selected').off("click")
+              $('.selected').off("click");
               $('.selected').switchClass('selected', 'empty');
 
+              // switch class on pieces for piece movement
               $('.selected_piece').draggable().draggable("disable");
               $('.selected_piece').removeClass('ui-draggable ui-draggable-handle ui-draggable-disabled');
-              $('.selected_piece').switchClass('selected_piece', 'not_selectable');
+              $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
 
-              highlighted.removeClass('empty');
-
-              // var piece_update = {
-              //   id: selected_piece.data('piece-id'),
-              //   y_position: highlighted.data('y-position'),
-              //   x_position: highlighted.data('x-position'),
-              // }
-
-              // // deselect the piece
-              // $.ajax({
-              //   type: 'PUT',
-              //   url: '/pieces/' + piece_update.id + '/select/',
-              //   dataType: 'json',
-              //   data: { id: piece_update.id },
-              //   success: function(data) {
-              //       console.log(piece_update.id);
-              //   }
-              //     });
-
-
+              // switch class on square that piece was dropped to
+              highlighted.switchClass('empty', 'selectable');
 
               // location.reload();
             }
@@ -334,18 +320,19 @@ pieceSelectRef.on('value', function(snapshot) {
           $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
 
           // switch class for droppable squares
-          $('.highlighted').addClass('empty');
-          $('.highlighted').removeClass('highlighted ui-droppable');
+          $('.highlighted').droppable().droppable("disable");
+          // $('.highlighted').addClass('empty');
+          $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-disabled');
 
           $(event.target).switchClass('selectable_piece', 'selected_piece');
           makeDraggable($(event.target));
 
           $.each(data.final_spots, function(index, spot) {
             console.log(spot);
-            $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted');
+            $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted').attr('data-y-position', spot[0]).attr('data-x-position', spot[1]);
           });
 
-          makeDroppable();
+          makeDroppable($('.highlighted'));
         }
       })
     }
