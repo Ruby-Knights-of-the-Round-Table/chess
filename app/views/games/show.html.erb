@@ -174,52 +174,6 @@ pieceSelectRef.on('value', function(snapshot) {
 
   $(function() {
 
-    // // make draggable element (selected piece)
-    // $('.selected_piece').draggable({
-    //   revert: 'invalid',
-    //   containment: 'table',
-    //   scroll: false,
-    //   });
-    //
-    // // make droppable elements (highlighted squares)
-    // $('.highlighted').droppable({
-    //   accept: '.selected_piece',
-    //   drop: function(event, ui) {
-    //
-    //     // 'highlighted' refers to highlighted squares (piece_can_move_to)
-    //     var highlighted = $(this);
-    //
-    //     // center the piece inside the highlighted square
-    //     var selected_piece = ui.draggable
-    //     selected_piece.position({
-    //       my: "center",
-    //       at: "center",
-    //       of: highlighted,
-    //       });
-    //
-    //     // get data to update piece position
-    //     var piece_update = {
-    //       id: selected_piece.data('piece-id'),
-    //       y_position: highlighted.data('y-position'),
-    //       x_position: highlighted.data('x-position'),
-    //     }
-    //
-    //     $.ajax({
-    //       type: "PUT",
-    //       url: '/pieces/' + piece_update.id,
-    //       dataType: 'json',
-    //       data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
-    //       success: function(data) {
-    //         highlighted.empty();
-    //         $('.highlighted').css('border', 'none');
-    //         $('.selected').css('border', 'none');
-    //         location.reload();
-    //       }
-    //     });
-    //
-    //   }
-    // });
-
     function makeDraggable(e) {
     e.draggable().draggable("enable");
     e.draggable({
@@ -260,13 +214,8 @@ pieceSelectRef.on('value', function(snapshot) {
             dataType: 'json',
             data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
             success: function(data) {
-              console.log(piece_update.id);
-              console.log(piece_update.y_position);
-              console.log(piece_update.x_position);
 
               highlighted.empty();
-              // $('.highlighted').css('border', 'none');
-              // $('.selected').css('border', 'none');
 
               // switch class on squares for piece movement
               $('.highlighted').removeClass('highlighted ui-droppable');
@@ -308,7 +257,6 @@ pieceSelectRef.on('value', function(snapshot) {
         dataType: 'json',
         data: { id: piece_select.id },
         success: function(data) {
-          console.log(data);
           // switch class for selected square
           $('.selected').off("click").click(makeClickable);
           $('.selected').switchClass('selected', 'selectable');
@@ -328,7 +276,6 @@ pieceSelectRef.on('value', function(snapshot) {
           makeDraggable($(event.target));
 
           $.each(data.final_spots, function(index, spot) {
-            console.log(spot);
             $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted').attr('data-y-position', spot[0]).attr('data-x-position', spot[1]);
           });
 
