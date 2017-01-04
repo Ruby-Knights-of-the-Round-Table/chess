@@ -19,6 +19,12 @@ class Piece < ActiveRecord::Base
       pieces.onboard.where(y_position: y, x_position: x).any?
   end
 
+  def white_player?
+      game.white_player_id == player_id
+  end
+  def black_player?
+      game.black_player_id == player_id
+  end
 
   def move_to!(new_y, new_x)
       if occupied_space?(new_y,new_x) == true
@@ -112,11 +118,11 @@ class Piece < ActiveRecord::Base
 
     current_piece = self
     current_piece_moves_avail =  current_piece.piece_can_move_to(board)
-    enemy_piece = attacking_pieces[0] # since only one piece is attacking, we should rename this 
+    enemy_piece = attacking_pieces[0] # since only one piece is attacking, we should rename this
     current_piece_moves_avail = current_piece_moves_avail & enemy_piece.piece_can_move_to(board) # finding the squares these pieces can both move to
 
     prevent_check_moves = []
-    
+
     current_piece_moves_avail.each do |square|
       y = square[0]
       x = square[1]
