@@ -180,6 +180,11 @@ pieceSelectRef.on('value', function(snapshot) {
       $('.selected_piece').switchClass('selected_piece', 'selectable_piece');
     }
 
+    function disableDroppable() {
+      $('.highlighted').droppable().droppable("disable");
+      $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-disabled');
+    }
+
     function makeDraggable(e) {
     e.draggable().draggable("enable");
     e.draggable({
@@ -221,16 +226,16 @@ pieceSelectRef.on('value', function(snapshot) {
             data: { id: piece_update.id, y_position: piece_update.y_position, x_position: piece_update.x_position },
             success: function(data) {
 
-              highlighted.empty();
-
-              // remove classes on highlighted and selected pieces
-              $('.highlighted').removeClass('highlighted ui-droppable');
+              // deselect squares
               $('.selected').off("click");
               $('.selected').switchClass('selected', 'empty');
+              disableDroppable();
 
+              // deselect piece
               deselectPiece();
 
-              // switch class on square that piece was dropped to
+              // clear out square that piece was dropped to and switch class
+              highlighted.empty();
               highlighted.switchClass('empty', 'selectable');
 
               // location.reload();
@@ -261,25 +266,28 @@ pieceSelectRef.on('value', function(snapshot) {
         data: { id: piece_select.id },
         success: function(data) {
 
-          // switch class for selected square
+          // deselect square
           $('.selected').off("click").click(makeClickable);
           $('.selected').switchClass('selected', 'selectable');
+          disableDroppable();
+
+          // select new square
           selectable.switchClass('selectable', 'selected');
 
+          // deselect piece
           deselectPiece();
 
-          // disable droppable on highlighted squares
-          $('.highlighted').droppable().droppable("disable");
-          $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-disabled');
-
+          // select new piece
           $(event.target).switchClass('selectable_piece', 'selected_piece');
           makeDraggable($(event.target));
 
+          // highlight new final spots
           $.each(data.final_spots, function(index, spot) {
             $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted').attr('data-y-position', spot[0]).attr('data-x-position', spot[1]);
           });
 
           makeDroppable($('.highlighted'));
+
         }
       })
     }
