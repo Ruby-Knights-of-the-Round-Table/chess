@@ -17,8 +17,10 @@ class PiecesController < ApplicationController
       final_spots = @piece.piece_can_move_to(@board)
       render json: {piece: @piece, final_spots: final_spots}
 
-      # update_firebase(pieceId: @piece.id,
-      #                 timeStamp: Time.now)
+      @game = @piece.game
+
+      update_firebase(pieceId: @piece.id,
+                      timeStamp: Time.now.to_s)
     end
 
     # redirect_to game_path(@piece.game_id)
@@ -30,6 +32,8 @@ class PiecesController < ApplicationController
     cell = params[:x_position]
     @board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
+
+    @game = @piece.game
 
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
@@ -45,10 +49,10 @@ class PiecesController < ApplicationController
                   white_player_email: white_player_email,
                   black_player_email: black_player_email }
 
-    # update_firebase(pieceId: @piece.id,
-    #                 y_position: row,
-    #                 x_position: cell,
-    #                 timeStamp: Time.now)
+    update_firebase(pieceId: @piece.id,
+                    y_position: row,
+                    x_position: cell,
+                    timeStamp: Time.now.to_s)
 
     # redirect_to game_path(@piece.game_id)
   end
@@ -60,11 +64,11 @@ class PiecesController < ApplicationController
     params.require(:piece).permit(:selected, :x_position, :y_position, :captured_piece)
   end
 
-  # def update_firebase(data)
-  #   base_uri = 'https://ruby-knights.firebaseio.com'
-  #   firebase = Firebase::Client.new(base_uri)
-  #   response = firebase.set("#{@piece.id}", data)
-  #   # response = firebase.ref('pieces/' + @piece.id).set("#{@piece.id}", data)
-  # end
+  def update_firebase(data)
+    base_uri = 'https://ruby-knights.firebaseio.com'
+    firebase = Firebase::Client.new(base_uri)
+    response = firebase.set("game#{@game.id}", data)
+    # response = firebase.ref('pieces/').set("#{@piece.id}", data)
+  end
 
 end
