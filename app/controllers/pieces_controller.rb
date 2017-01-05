@@ -30,7 +30,21 @@ class PiecesController < ApplicationController
     cell = params[:x_position]
     @board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
-    render json: @piece
+
+    turn = @piece.game.turn
+    white_player_id = @piece.game.white_player_id
+    black_player_id = @piece.game.black_player_id
+    white_player_email = @piece.game.white_player.email
+    black_player_email = @piece.game.black_player.email
+
+    # render json: @piece
+    render json: { piece: @piece,
+                  turn: turn,
+                  white_player_id: white_player_id,
+                  black_player_id: black_player_id,
+                  white_player_email: white_player_email,
+                  black_player_email: black_player_email }
+
     # update_firebase(pieceId: @piece.id,
     #                 y_position: row,
     #                 x_position: cell,

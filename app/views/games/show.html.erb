@@ -4,11 +4,15 @@
 
 <div class="text-center">
   <% if @game.turn == @game.white_player.id  %>
-    <h4>white player's turn:</h4>
-    <h5><%= @game.white_player.email %></h5>
+    <div class="white-players-turn">
+      <h4>white player's turn:</h4>
+      <h5><%= @game.white_player.email %></h5>
+    </div>
   <% elsif @game.black_player != nil && @game.turn == @game.black_player.id %>
-    <h4>black player's turn:</h4>
-    <h5><%= @game.black_player.email %></h5>
+    <div class="black-players-turn">
+      <h4>black player's turn:</h4>
+      <h5><%= @game.black_player.email %></h5>
+    </div>
   <% elsif @game.black_player == nil %>
       <h4>Waiting for second player to join ... </h4>
   <% end %>
@@ -237,6 +241,18 @@ pieceSelectRef.on('value', function(snapshot) {
               // clear out square that piece was dropped to and switch class
               highlighted.empty();
               highlighted.switchClass('empty', 'selectable');
+
+              // change DOM for players turn
+              if (data.turn == data.white_player_id) {
+                $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
+                $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
+                $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
+              }
+              else if (data.turn == data.black_player_id) {
+                $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
+                $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
+                $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
+              }
 
               // location.reload();
             }
