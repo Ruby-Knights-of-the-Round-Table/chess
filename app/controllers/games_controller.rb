@@ -6,7 +6,7 @@ class GamesController < ApplicationController
     # prevent_check_moves ( TODO )
     #    from the possible moves, see if this move can undo the check
     #    if if_check? is null, then end this program
-    #    
+    #
     # if_checkmate
     #    changes database value of 'winner_id' if there is a checkmate, or if none of current_player pieces can undo check.
     def index

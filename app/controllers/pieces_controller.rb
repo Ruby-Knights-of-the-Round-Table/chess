@@ -12,10 +12,13 @@ class PiecesController < ApplicationController
         old_selected_piece.update_attributes(selected: old_selected_piece.selected)
       end
       @piece.update_attributes(selected: @piece.selected)
-      render json: @piece
 
-      update_firebase(pieceId: @piece.id,
-                      timeStamp: Time.now)
+      @board = @piece.game.pieces_as_array
+      final_spots = @piece.piece_can_move_to(@board)
+      render json: {piece: @piece, final_spots: final_spots}
+
+      # update_firebase(pieceId: @piece.id,
+      #                 timeStamp: Time.now)
     end
 
     # redirect_to game_path(@piece.game_id)
@@ -27,11 +30,25 @@ class PiecesController < ApplicationController
     cell = params[:x_position]
     @board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
-    render json: @piece
-    update_firebase(pieceId: @piece.id,
-                    y_position: row,
-                    x_position: cell,
-                    timeStamp: Time.now) 
+
+    turn = @piece.game.turn
+    white_player_id = @piece.game.white_player_id
+    black_player_id = @piece.game.black_player_id
+    white_player_email = @piece.game.white_player.email
+    black_player_email = @piece.game.black_player.email
+
+    # render json: @piece
+    render json: { piece: @piece,
+                  turn: turn,
+                  white_player_id: white_player_id,
+                  black_player_id: black_player_id,
+                  white_player_email: white_player_email,
+                  black_player_email: black_player_email }
+
+    # update_firebase(pieceId: @piece.id,
+    #                 y_position: row,
+    #                 x_position: cell,
+    #                 timeStamp: Time.now)
 
     # redirect_to game_path(@piece.game_id)
   end
@@ -43,14 +60,11 @@ class PiecesController < ApplicationController
     params.require(:piece).permit(:selected, :x_position, :y_position, :captured_piece)
   end
 
-  def update_firebase(data)
-    base_uri = 'https://ruby-knights.firebaseio.com'
-    firebase = Firebase::Client.new(base_uri)
-    response = firebase.set("#{@piece.id}", data)
-  end
+  # def update_firebase(data)
+  #   base_uri = 'https://ruby-knights.firebaseio.com'
+  #   firebase = Firebase::Client.new(base_uri)
+  #   response = firebase.set("#{@piece.id}", data)
+  #   # response = firebase.ref('pieces/' + @piece.id).set("#{@piece.id}", data)
+  # end
 
 end
-
-# base_uri = 'https://ruby-knights.firebaseio.com'
-# firebase = Firebase::Client.new(base_uri)
-# response = firebase.set("#{@piece.id}", :created => Firebase::ServerValue::TIMESTAMP)

@@ -96,7 +96,6 @@ class Piece < ActiveRecord::Base
         end
       end
     end
-    p "#{final_spots}"
     return final_spots
   end
 
@@ -135,7 +134,6 @@ class Piece < ActiveRecord::Base
 
 
   end
-
 
   # def capturing_move(y, x)
   #   captured_piece = piece.not_obstructed(board, final_spots)
