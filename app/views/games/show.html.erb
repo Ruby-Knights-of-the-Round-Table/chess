@@ -38,7 +38,7 @@
                   <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
                   <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                  <div class="selected_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
+                  <div class="selected_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                   <!-- <% end %> -->
@@ -65,7 +65,7 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= link_to select_piece_path(piece.id), method: :put do %>
-                <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
+                <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                   <%= "#{piece.symbol}".html_safe %>
                 </div>
                 <% end %>
@@ -83,7 +83,7 @@
                 <% piece_trace += 1 %>
 
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                  <div class="selectable_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
+                  <div class="selectable_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                 <!-- <% end %> -->
@@ -123,7 +123,7 @@
                 <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
                   <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
-                  <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
+                  <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                   <!-- <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
@@ -133,7 +133,7 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
+                <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                   <%= "#{piece.symbol}".html_safe %>
                 </div>
                 <!-- <% end %> -->
@@ -149,7 +149,7 @@
                 <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
                   <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                  <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
+                  <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                   <!-- <% end %> -->
@@ -175,6 +175,9 @@
   };
   firebase.initializeApp(config);
 
+
+  $(function() {
+
     var gameID = "game"+ $('.game-board').data('game-id');
     var loadTimeStamp = $('.game-board').data('time-stamp');
 
@@ -186,11 +189,6 @@
       var updatedTimeStamp = data.timeStamp
       console.log(updatedTimeStamp);
       console.log(loadTimeStamp);
-      // console.log(data.pieceId);
-      // console.log(data.y_select);
-      // console.log(data.x_select);
-      // console.log(data.y_update);
-      // console.log(data.x_update);
 
       // get piece from origin square
       var piece = $("#square-" + data.y_select + "-" + data.x_select).text();
@@ -202,8 +200,16 @@
       // clear destination square (piece capture)
         square.empty();
 
+        // set piece color for moved piece (if it's black player's turn then the last piece moved was a white piece, and vice versa)
+        if (data.turn == data.black_player_id) {
+          var color = "white"
+        }
+        else if (data.turn == data.white_player_id) {
+          var color = "black"
+        }
+
         // append piece to destination square
-        square.append("<div class='piece' data-piece-id='" + data.pieceId + "'>" + piece + "</div>");
+        square.append("<div class='piece' data-piece-id='" + data.pieceId + "' data-piece-color='" + color + "'>" + piece + "</div>");
         square.switchClass('empty', 'not-selectable');
 
         // clear square that piece came from
@@ -214,6 +220,7 @@
           $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
           $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
           $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
+
         }
         else if (data.turn == data.black_player_id) {
           $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
@@ -221,6 +228,7 @@
           $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
         }
 
+        // make all pieces not selectable after turn changes
         $('.selectable_piece').each(function() {
           $(this).switchClass('selectable_piece', 'piece');
         });
@@ -228,11 +236,35 @@
           $(this).switchClass('selectable', 'not-selectable');
         });
 
+        // make pieces selectable if it's player's turn
+        if (data.turn == data.white_player_id) {
+          console.log(data.turn);
+          console.log(data.white_player_id);
+          $('.piece[data-piece-color="white"]').each(function() {
+            $(this).switchClass('piece', 'selectable_piece');
+          })
+
+          $('.not-selectable').each(function() {
+            $(this).switchClass('not-selectable', 'selectable');
+          });
+        }
+
+        else if (data.turn == data.black_player_id) {
+          console.log(data.turn);
+          console.log(data.black_player_id);
+          $('.piece[data-piece-color="black"]').each(function() {
+            $(this).switchClass('piece', 'selectable_piece');
+          });
+          $('.not-selectable').each(function() {
+            $(this).switchClass('not-selectable', 'selectable');
+          });
+        }
+
+        $('.selectable').click(makeClickable);
+
       }
 
     });
-
-  $(function() {
 
     function deselectPiece() {
       $('.selected_piece').draggable().draggable("disable");
@@ -294,23 +326,6 @@
               // deselect piece
               deselectPiece();
 
-              // clear out square that piece was dropped to and switch class
-              // highlighted.empty();
-              // highlighted.switchClass('empty', 'selectable');
-
-              // // change DOM for players turn
-              // if (data.turn == data.white_player_id) {
-              //   $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
-              //   $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
-              //   $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
-              // }
-              // else if (data.turn == data.black_player_id) {
-              //   $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
-              //   $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
-              //   $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
-              // }
-
-              // location.reload();
             }
           });
 
