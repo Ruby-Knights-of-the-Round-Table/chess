@@ -37,19 +37,25 @@ class PiecesController < ApplicationController
 
     @game = @piece.game
 
-    render json: { piece: @piece,
-                  turn: @piece.game.turn,
-                  white_player_id: @piece.game.white_player_id,
-                  black_player_id: @piece.game.black_player_id,
-                  white_player_email: @piece.game.white_player.email,
-                  black_player_email: @piece.game.black_player.email }
+    render json: { piece: @piece }
+                  # turn: @piece.game.turn,
+                  # white_player_id: @piece.game.white_player_id,
+                  # black_player_id: @piece.game.black_player_id,
+                  # white_player_email: @piece.game.white_player.email,
+                  # black_player_email: @piece.game.black_player.email }
 
     update_firebase(pieceId: @piece.id,
                     y_select: old_row,
                     x_select: old_cell,
                     y_update: row,
                     x_update: cell,
-                    timeStamp: Time.now.to_s)
+                    timeStamp: Time.now.to_s,
+
+                    turn: @piece.game.turn,
+                    white_player_id: @piece.game.white_player_id,
+                    black_player_id: @piece.game.black_player_id,
+                    white_player_email: @piece.game.white_player.email,
+                    black_player_email: @piece.game.black_player.email )
   end
 
 

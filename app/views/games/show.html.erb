@@ -198,17 +198,30 @@
       // get destination square
       var square = $("#square-" + data.y_update + "-" + data.x_update);
 
-      // clear destination square (piece capture)
       if (updatedTimeStamp > loadTimeStamp) {
+      // clear destination square (piece capture)
         square.empty();
+
+        // append piece to destination square
+        square.append("<div class='piece' data-piece-id='" + data.pieceId + "'>" + piece + "</div>");
+        square.removeClass('empty');
+
+        // clear square that piece came from
+        $("#square-" + data.y_select + "-" + data.x_select).empty();
+
+        // change DOM for players turn
+        if (data.turn == data.white_player_id) {
+          $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
+          $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
+          $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
+        }
+        else if (data.turn == data.black_player_id) {
+          $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
+          $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
+          $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
+        }
+
       }
-
-      // append piece to destination square
-      square.append("<div class='piece' data-piece-id='" + data.pieceId + "'>" + piece + "</div>");
-      square.removeClass('empty');
-
-      // clear square that piece came from
-      $("#square-" + data.y_select + "-" + data.x_select).empty();
 
     });
 
@@ -278,17 +291,17 @@
               // highlighted.empty();
               // highlighted.switchClass('empty', 'selectable');
 
-              // change DOM for players turn
-              if (data.turn == data.white_player_id) {
-                $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
-                $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
-                $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
-              }
-              else if (data.turn == data.black_player_id) {
-                $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
-                $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
-                $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
-              }
+              // // change DOM for players turn
+              // if (data.turn == data.white_player_id) {
+              //   $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
+              //   $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
+              //   $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
+              // }
+              // else if (data.turn == data.black_player_id) {
+              //   $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
+              //   $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
+              //   $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
+              // }
 
               // location.reload();
             }
