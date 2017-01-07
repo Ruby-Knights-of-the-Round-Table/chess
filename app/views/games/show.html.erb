@@ -175,8 +175,6 @@
   };
   firebase.initializeApp(config);
 
-  $(function() {
-
     var gameID = "game"+ $('.game-board').data('game-id');
     var loadTimeStamp = $('.game-board').data('time-stamp');
 
@@ -199,16 +197,18 @@
       var square = $("#square-" + data.y_update + "-" + data.x_update);
 
       // clear destination square
-      square.empty();
+      // square.empty();
 
       // append piece to destination square
-      square.append("<div class='piece'>" + piece + "</div>");
-      square.switchClass('empty', 'not_selectable');
+      square.append("<div class='piece' data-piece-id='" + data.pieceId + "'>" + piece + "</div>");
+      square.removeClass('empty');
 
       // clear square that piece came from
       $("#square-" + data.y_select + "-" + data.x_select).empty();
 
     });
+
+  $(function() {
 
     function deselectPiece() {
       $('.selected_piece').draggable().draggable("disable");
