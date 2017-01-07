@@ -38,7 +38,7 @@
                   <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
                   <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                  <div class="selected_piece" data-piece-id="<%=piece.id%>">
+                  <div class="selected_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                   <!-- <% end %> -->
@@ -65,7 +65,7 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= link_to select_piece_path(piece.id), method: :put do %>
-                <div class="piece" data-piece-id="<%=piece.id%>">
+                <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
                   <%= "#{piece.symbol}".html_safe %>
                 </div>
                 <% end %>
@@ -83,7 +83,7 @@
                 <% piece_trace += 1 %>
 
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                  <div class="selectable_piece" data-piece-id="<%=piece.id%>">
+                  <div class="selectable_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                 <!-- <% end %> -->
@@ -123,7 +123,7 @@
                 <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
                   <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
-                  <div class="piece" data-piece-id="<%=piece.id%>">
+                  <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                   <!-- <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
@@ -133,7 +133,7 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                <div class="piece" data-piece-id="<%=piece.id%>">
+                <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
                   <%= "#{piece.symbol}".html_safe %>
                 </div>
                 <!-- <% end %> -->
@@ -149,7 +149,7 @@
                 <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
                   <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
-                  <div class="piece" data-piece-id="<%=piece.id%>">
+                  <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= @game.turn == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
                   <!-- <% end %> -->
@@ -204,12 +204,12 @@
 
         // append piece to destination square
         square.append("<div class='piece' data-piece-id='" + data.pieceId + "'>" + piece + "</div>");
-        square.removeClass('empty');
+        square.switchClass('empty', 'not-selectable');
 
         // clear square that piece came from
         $("#square-" + data.y_select + "-" + data.x_select).empty();
 
-        // change DOM for players turn
+        // change turn
         if (data.turn == data.white_player_id) {
           $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
           $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
@@ -220,6 +220,13 @@
           $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
           $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
         }
+
+        $('.selectable_piece').each(function() {
+          $(this).switchClass('selectable_piece', 'piece');
+        });
+        $('.selectable').each(function() {
+          $(this).switchClass('selectable', 'not-selectable');
+        });
 
       }
 
