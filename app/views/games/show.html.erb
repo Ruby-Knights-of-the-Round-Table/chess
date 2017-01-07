@@ -18,7 +18,7 @@
   <% end %>
 </div>
 
-<div class="game-board" data-game-id="<%= @game.id %>">
+<div class="game-board" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
 
   <% pieces_attacking_king = current_king.if_check?(@board) %>
@@ -65,7 +65,9 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <%= link_to select_piece_path(piece.id), method: :put do %>
+                <div class="piece" data-piece-id="<%=piece.id%>">
                   <%= "#{piece.symbol}".html_safe %>
+                </div>
                 <% end %>
 
               </td>
@@ -121,7 +123,9 @@
                 <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
                   <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
-                  <%= "#{piece.symbol}".html_safe %>
+                  <div class="piece" data-piece-id="<%=piece.id%>">
+                    <%= "#{piece.symbol}".html_safe %>
+                  </div>
                   <!-- <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
                 </td>
               <% else %>
@@ -129,7 +133,9 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
                 <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+                <div class="piece" data-piece-id="<%=piece.id%>">
                   <%= "#{piece.symbol}".html_safe %>
+                </div>
                 <!-- <% end %> -->
 
               </td>
@@ -143,7 +149,9 @@
                 <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
                   <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+                  <div class="piece" data-piece-id="<%=piece.id%>">
                     <%= "#{piece.symbol}".html_safe %>
+                  </div>
                   <!-- <% end %> -->
                   <% next %>
                 </td>
@@ -167,19 +175,40 @@
   };
   firebase.initializeApp(config);
 
-var gameID = "game"+ $('.game-board').data('game-id');
-var rootRef = firebase.database().ref();
-var pieceUpdateRef = rootRef.child(gameID);
-
-pieceUpdateRef.on('value', function(snapshot) {
-  var data = snapshot.val();
-  console.log(data);
-  console.log(data.pieceId);
-  console.log(data.timeStamp);
-});
-
-
   $(function() {
+
+    var gameID = "game"+ $('.game-board').data('game-id');
+    var loadTimeStamp = $('.game-board').data('time-stamp');
+
+    var rootRef = firebase.database().ref();
+    var pieceUpdateRef = rootRef.child(gameID);
+
+    pieceUpdateRef.on('value', function(snapshot) {
+      var data = snapshot.val();
+      var updatedTimeStamp = data.timeStamp
+      console.log(data.pieceId);
+      console.log(data.y_select);
+      console.log(data.x_select);
+      console.log(data.y_update);
+      console.log(data.x_update);
+
+      // get piece from origin square
+      var piece = $("#square-" + data.y_select + "-" + data.x_select).text();
+
+      // get destination square
+      var square = $("#square-" + data.y_update + "-" + data.x_update);
+
+      // clear destination square
+      square.empty();
+
+      // append piece to destination square
+      square.append("<div class='piece'>" + piece + "</div>");
+      square.switchClass('empty', 'not_selectable');
+
+      // clear square that piece came from
+      $("#square-" + data.y_select + "-" + data.x_select).empty();
+
+    });
 
     function deselectPiece() {
       $('.selected_piece').draggable().draggable("disable");
@@ -242,8 +271,8 @@ pieceUpdateRef.on('value', function(snapshot) {
               deselectPiece();
 
               // clear out square that piece was dropped to and switch class
-              highlighted.empty();
-              highlighted.switchClass('empty', 'selectable');
+              // highlighted.empty();
+              // highlighted.switchClass('empty', 'selectable');
 
               // change DOM for players turn
               if (data.turn == data.white_player_id) {
@@ -273,8 +302,8 @@ pieceUpdateRef.on('value', function(snapshot) {
       // get id for selectable piece
       var piece_select = {
         id: $(event.target).data('piece-id'),
-        // y_position: selectable.data('y-position'),
-        // x_position: selectable.data('x-position'),
+        y_position: selectable.data('y-position'),
+        x_position: selectable.data('x-position'),
       }
 
       // select the piece, using ajax request
@@ -282,7 +311,7 @@ pieceUpdateRef.on('value', function(snapshot) {
         type: 'PUT',
         url: '/pieces/' + piece_select.id + '/select/',
         dataType: 'json',
-        data: { id: piece_select.id },
+        data: { id: piece_select.id, y_position: piece_select.y_position, x_position: piece_select.x_position },
         success: function(data) {
 
           // deselect squares
@@ -314,6 +343,7 @@ pieceUpdateRef.on('value', function(snapshot) {
 
     // selectable squares can be selected on click
     $('.selectable').click(makeClickable);
+
 
   });
 

@@ -3,6 +3,7 @@ class PiecesController < ApplicationController
 
   def select
     @piece = Piece.find(params[:id])
+
     if @piece.player_id == current_player.id && @piece.player_id == @piece.game.turn
       if @piece.selected != true then @piece.selected = true else @piece.selected = false end
 
@@ -28,30 +29,28 @@ class PiecesController < ApplicationController
 
   def update
     @piece = Piece.find(params[:id])
+    old_row = @piece.y_position
+    old_cell = @piece.x_position
     row = params[:y_position]
     cell = params[:x_position]
+
     @board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
 
     @game = @piece.game
 
-    turn = @piece.game.turn
-    white_player_id = @piece.game.white_player_id
-    black_player_id = @piece.game.black_player_id
-    white_player_email = @piece.game.white_player.email
-    black_player_email = @piece.game.black_player.email
-
-    # render json: @piece
     render json: { piece: @piece,
-                  turn: turn,
-                  white_player_id: white_player_id,
-                  black_player_id: black_player_id,
-                  white_player_email: white_player_email,
-                  black_player_email: black_player_email }
+                  turn: @piece.game.turn,
+                  white_player_id: @piece.game.white_player_id,
+                  black_player_id: @piece.game.black_player_id,
+                  white_player_email: @piece.game.white_player.email,
+                  black_player_email: @piece.game.black_player.email }
 
     update_firebase(pieceId: @piece.id,
-                    y_position: row,
-                    x_position: cell,
+                    y_select: old_row,
+                    x_select: old_cell,
+                    y_update: row,
+                    x_update: cell,
                     timeStamp: Time.now.to_s)
 
     # redirect_to game_path(@piece.game_id)
