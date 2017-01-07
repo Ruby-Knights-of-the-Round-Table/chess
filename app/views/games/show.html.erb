@@ -184,11 +184,13 @@
     pieceUpdateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       var updatedTimeStamp = data.timeStamp
-      console.log(data.pieceId);
-      console.log(data.y_select);
-      console.log(data.x_select);
-      console.log(data.y_update);
-      console.log(data.x_update);
+      console.log(updatedTimeStamp);
+      console.log(loadTimeStamp);
+      // console.log(data.pieceId);
+      // console.log(data.y_select);
+      // console.log(data.x_select);
+      // console.log(data.y_update);
+      // console.log(data.x_update);
 
       // get piece from origin square
       var piece = $("#square-" + data.y_select + "-" + data.x_select).text();
@@ -196,8 +198,10 @@
       // get destination square
       var square = $("#square-" + data.y_update + "-" + data.x_update);
 
-      // clear destination square
-      // square.empty();
+      // clear destination square (piece capture)
+      if (updatedTimeStamp > loadTimeStamp) {
+        square.empty();
+      }
 
       // append piece to destination square
       square.append("<div class='piece' data-piece-id='" + data.pieceId + "'>" + piece + "</div>");

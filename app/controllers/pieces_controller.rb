@@ -20,11 +20,9 @@ class PiecesController < ApplicationController
 
       @game = @piece.game
 
-      update_firebase(pieceId: @piece.id,
-                      timeStamp: Time.now.to_s)
+      # update_firebase(pieceId: @piece.id,
+      #                 timeStamp: Time.now.to_s)
     end
-
-    # redirect_to game_path(@piece.game_id)
   end
 
   def update
@@ -52,8 +50,6 @@ class PiecesController < ApplicationController
                     y_update: row,
                     x_update: cell,
                     timeStamp: Time.now.to_s)
-
-    # redirect_to game_path(@piece.game_id)
   end
 
 
@@ -67,7 +63,6 @@ class PiecesController < ApplicationController
     base_uri = 'https://ruby-knights.firebaseio.com'
     firebase = Firebase::Client.new(base_uri)
     response = firebase.set("game#{@game.id}", data)
-    # response = firebase.ref('pieces/').set("#{@piece.id}", data)
   end
 
 end
