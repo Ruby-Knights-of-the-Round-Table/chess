@@ -20,6 +20,8 @@ class PiecesController < ApplicationController
 
       @game = @piece.game
 
+    else
+      render json: 'failure'
     end
   end
 
@@ -53,7 +55,6 @@ class PiecesController < ApplicationController
                     white_player_email: @piece.game.white_player.email,
                     black_player_email: @piece.game.black_player.email )
   end
-
 
   private
 

@@ -187,8 +187,6 @@
     pieceUpdateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       var updatedTimeStamp = data.timeStamp
-      console.log(updatedTimeStamp);
-      console.log(loadTimeStamp);
 
       // get piece from origin square
       var piece = $("#square-" + data.y_select + "-" + data.x_select).text();
@@ -217,13 +215,13 @@
 
         // change turn
         if (data.turn == data.white_player_id) {
-          $('.black-players-turn h4').replaceWith("<h4>white player's turn</h4>");
+          $('.black-players-turn h4').replaceWith("<h4>white player's turn:</h4>");
           $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
           $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
 
         }
         else if (data.turn == data.black_player_id) {
-          $('.white-players-turn h4').replaceWith("<h4>black player's turn</h4>");
+          $('.white-players-turn h4').replaceWith("<h4>black player's turn:</h4>");
           $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
           $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
         }
@@ -238,24 +236,20 @@
 
         // make pieces selectable if it's player's turn
         if (data.turn == data.white_player_id) {
-          console.log(data.turn);
-          console.log(data.white_player_id);
           $('.piece[data-piece-color="white"]').each(function() {
             $(this).switchClass('piece', 'selectable_piece');
           })
 
-          $('.not-selectable').each(function() {
+          $('.piece[data-piece-color="white"]').parent().each(function() {
             $(this).switchClass('not-selectable', 'selectable');
           });
         }
 
         else if (data.turn == data.black_player_id) {
-          console.log(data.turn);
-          console.log(data.black_player_id);
           $('.piece[data-piece-color="black"]').each(function() {
             $(this).switchClass('piece', 'selectable_piece');
           });
-          $('.not-selectable').each(function() {
+          $('.piece[data-piece-color="black"]').parent().each(function() {
             $(this).switchClass('not-selectable', 'selectable');
           });
         }
