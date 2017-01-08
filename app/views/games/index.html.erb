@@ -1,17 +1,15 @@
 <div align="center">
-<h1 class="dashtitle">Dashboard</h1>
-<h3 class="playeremail"><%= current_player.email %></h3>
-<hr>
-<table>
+  <h1 class="dashtitle">Dashboard</h1>
+  <h3 class="playeremail"><%= current_player.email %></h3>
+  <hr>
 
+  <table>
   <thead>
     <tr>
       <th> <h2 class="gamesTitle"> My Games (MY TURN)</h2></th>
       <th colspan="3"></th>
     </tr>
   </thead>
-
-  
 
     <% @games.each do |game| %>
       <tr>
@@ -23,12 +21,11 @@
 </table>
 
 <br />
-<%= link_to 'New Game', new_game_path %>
-<br/>
-<%= link_to 'Back', :back %>
+<button class="dashButton"><%= link_to 'New Game', new_game_path %></button>
+<br/><br>
+<button class="dashButton"><%= link_to 'Back', :back %></button>
 
 <h1> Open Games (OPPONENT'S TURN)</h1>
-
     <% @all_games.available.each do |game| %>
       <% if game.white_player_id != current_player.id %>
         <tr>
