@@ -50,7 +50,7 @@
             <!-- empty square can't be moved to because king is in check -->
             <% if pieces_attacking_king != [] && selected_piece_id != 0 && @board[row][cell] == 0%>
               <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
-                <td id="empty" id="square-<%=row%>-<%=cell%>">
+                <td class="empty" id="square-<%=row%>-<%=cell%>">
 
                 </td>
                 <% next %>
