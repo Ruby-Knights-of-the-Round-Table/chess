@@ -189,11 +189,24 @@ $(function() {
     joinGameRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
+        // show that it's white player's turn when second player joins
         $('.waiting h4').replaceWith("<h4>white player's turn:</h4>");
+        $('.waiting').append("<h5>" + data.first_player_email + "</h5>");
         $('.waiting').switchClass('waiting', 'white-players-turn');
+
+        // change squares to selectable
+        $('.piece[data-piece-color="white"]').each(function() {
+          $(this).switchClass('piece', 'selectable_piece');
+        })
+
+        $('.piece[data-piece-color="white"]').parent().each(function() {
+          $(this).switchClass('not-selectable', 'selectable');
+        });
+
+        $('.selectable').click(makeClickable);
+
       }
     });
-
 
     pieceUpdateRef.on('value', function(snapshot) {
       var data = snapshot.val();

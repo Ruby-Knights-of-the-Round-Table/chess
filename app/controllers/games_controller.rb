@@ -44,7 +44,10 @@ class GamesController < ApplicationController
           @game.turn = @game.white_player_id
           @game.save
           @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
-          update_firebase(gameId: @game.id)
+
+          update_firebase(gameId: @game.id,
+                          first_player_email: @game.white_player.email)
+
           redirect_to(game_path(@game))
         end
     end
