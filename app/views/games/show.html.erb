@@ -14,7 +14,9 @@
       <h5><%= @game.black_player.email %></h5>
     </div>
   <% elsif @game.black_player == nil %>
+    <div class="waiting">
       <h4>Waiting for second player to join ... </h4>
+    </div>
   <% end %>
 </div>
 
@@ -181,8 +183,18 @@ $(function() {
     var loadTimeStamp = $('.game-board').data('time-stamp');
 
     var rootRef = firebase.database().ref();
+    var joinGameRef = rootRef.child(gameID);
     var pieceUpdateRef = rootRef.child(gameID);
-    
+
+    joinGameRef.on('value', function(snapshot) {
+      var data = snapshot.val();
+      if (data) {
+        $('.waiting h4').replaceWith("<h4>white player's turn:</h4>");
+        $('.waiting').switchClass('waiting', 'white-players-turn');
+      }
+    });
+
+
     pieceUpdateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
