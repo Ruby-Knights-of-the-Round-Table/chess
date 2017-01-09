@@ -169,7 +169,7 @@ $(function() {
 
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyBtB_3FCuqPVKmJkB_EuDkXq0gvE9DX2DM",
+    apiKey: "AIzaSyBtB_3FCuqPVKmJkB_EuDkXq0gvE9DX2DM",    // save in environment
     authDomain: "ruby-knights.firebaseapp.com",
     databaseURL: "https://ruby-knights.firebaseio.com",
     storageBucket: "ruby-knights.appspot.com",
@@ -182,7 +182,7 @@ $(function() {
 
     var rootRef = firebase.database().ref();
     var pieceUpdateRef = rootRef.child(gameID);
-
+    
     pieceUpdateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
