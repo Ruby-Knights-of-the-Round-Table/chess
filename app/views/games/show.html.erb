@@ -194,17 +194,8 @@ $(function() {
         $('.waiting').append("<h5>" + data.first_player_email + "</h5>");
         $('.waiting').switchClass('waiting', 'white-players-turn');
 
-        // change squares to selectable
-        $('.piece[data-piece-color="white"]').each(function() {
-          $(this).switchClass('piece', 'selectable_piece');
-        })
-
-        $('.piece[data-piece-color="white"]').parent().each(function() {
-          $(this).switchClass('not-selectable', 'selectable');
-        });
-
+        makeWhitePiecesSelectable();
         $('.selectable').click(makeClickable);
-
       }
     });
 
@@ -220,7 +211,7 @@ $(function() {
         var square = $("#square-" + data.y_update + "-" + data.x_update);
 
         if (updatedTimeStamp > loadTimeStamp) {
-        // clear destination square (piece capture)
+          // clear destination square (piece capture)
           square.empty();
 
           // set piece color for moved piece (if it's black player's turn then the last piece moved was a white piece, and vice versa)
@@ -239,51 +230,75 @@ $(function() {
           $("#square-" + data.y_select + "-" + data.x_select).empty();
 
           // change turn
-          if (data.turn == data.white_player_id) {
-            $('.black-players-turn h4').replaceWith("<h4>white player's turn:</h4>");
-            $('.black-players-turn h5').replaceWith("<h5>" + data.white_player_email + "</h5>");
-            $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
+          changeTurn (data.turn, data.white_player_id, data.black_player_id, data.white_player_email, data.black_player_email);
 
-          }
-          else if (data.turn == data.black_player_id) {
-            $('.white-players-turn h4').replaceWith("<h4>black player's turn:</h4>");
-            $('.white-players-turn h5').replaceWith("<h5>" + data.black_player_email + "</h5>");
-            $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
-          }
-
-          // make all pieces not selectable after turn changes
-          $('.selectable_piece').each(function() {
-            $(this).switchClass('selectable_piece', 'piece');
-          });
-          $('.selectable').each(function() {
-            $(this).switchClass('selectable', 'not-selectable');
-          });
+          // clear out selectable class on all pieces/squares
+          deselectAll();
 
           // make pieces selectable if it's player's turn
-          if (data.turn == data.white_player_id) {
-            $('.piece[data-piece-color="white"]').each(function() {
-              $(this).switchClass('piece', 'selectable_piece');
-            })
-
-            $('.piece[data-piece-color="white"]').parent().each(function() {
-              $(this).switchClass('not-selectable', 'selectable');
-            });
-          }
-
-          else if (data.turn == data.black_player_id) {
-            $('.piece[data-piece-color="black"]').each(function() {
-              $(this).switchClass('piece', 'selectable_piece');
-            });
-            $('.piece[data-piece-color="black"]').parent().each(function() {
-              $(this).switchClass('not-selectable', 'selectable');
-            });
-          }
+          makeSelectable(data.turn, data.white_player_id, data.black_player_id);
 
           $('.selectable').click(makeClickable);
         }
       }
 
     });
+
+    function makeWhitePiecesSelectable() {
+      $('.piece[data-piece-color="white"]').each(function() {
+        $(this).switchClass('piece', 'selectable_piece');
+      })
+
+      $('.piece[data-piece-color="white"]').parent().each(function() {
+        $(this).switchClass('not-selectable', 'selectable');
+      });
+    }
+
+    function makeSelectable(turn, white_player_id, black_player_id) {
+      // make pieces selectable if it's player's turn
+      if (turn == white_player_id) {
+        $('.piece[data-piece-color="white"]').each(function() {
+          $(this).switchClass('piece', 'selectable_piece');
+        })
+
+        $('.piece[data-piece-color="white"]').parent().each(function() {
+          $(this).switchClass('not-selectable', 'selectable');
+        });
+      }
+
+      else if (turn == black_player_id) {
+        $('.piece[data-piece-color="black"]').each(function() {
+          $(this).switchClass('piece', 'selectable_piece');
+        });
+        $('.piece[data-piece-color="black"]').parent().each(function() {
+          $(this).switchClass('not-selectable', 'selectable');
+        });
+      }
+    }
+
+    function deselectAll() {
+      // clear out selectable class on all pieces/squares
+      $('.selectable_piece').each(function() {
+        $(this).switchClass('selectable_piece', 'piece');
+      });
+      $('.selectable').each(function() {
+        $(this).switchClass('selectable', 'not-selectable');
+      });
+    }
+
+    function changeTurn(turn, white_player_id, black_player_id, white_player_email, black_player_email) {
+      if (turn == white_player_id) {
+        $('.black-players-turn h4').replaceWith("<h4>white player's turn:</h4>");
+        $('.black-players-turn h5').replaceWith("<h5>" + white_player_email + "</h5>");
+        $('.black-players-turn').switchClass('black-players-turn', 'white-players-turn');
+
+      }
+      else if (turn == black_player_id) {
+        $('.white-players-turn h4').replaceWith("<h4>black player's turn:</h4>");
+        $('.white-players-turn h5').replaceWith("<h5>" + black_player_email + "</h5>");
+        $('.white-players-turn').switchClass('white-players-turn', 'black-players-turn');
+      }
+    }
 
     function deselectPiece() {
       $('.selected_piece').draggable().draggable("disable");
