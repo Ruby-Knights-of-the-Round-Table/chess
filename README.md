@@ -6,7 +6,7 @@ The team is composed of the following members:
 
 * [Chase Bristow](https://github.com/CBristow26)
 
-* [Chiyingleung](https://github.com/chiyingleung1)
+* [Chi-Ying Leung](https://github.com/chiyingleung1)
 
 * [Lulu Li](https://github.com/lalalilu)
 
