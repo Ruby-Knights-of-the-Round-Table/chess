@@ -1,11 +1,19 @@
-# chess
+#**Ruby-Knights-of-the-Round-Table**
 
-first commit!
-test first commit - LL
+This is a chess app built in Ruby on Rails for [The firehoseproject](http://www.thefirehoseproject.com/)
 
-testing patrick
+The team is composed of the following members:
 
-test first commit - DZ - third try
-heroku test
+* [Chase Bristow](https://github.com/CBristow26)
 
-abc
+* [Chiyingleung](https://github.com/chiyingleung1)
+
+* [Lulu Li](https://github.com/lalalilu)
+
+* [Patrick Hagmann](https://github.com/phagmann)
+
+* [Dan Zuba](https://github.com/Zube41)
+
+The team is lead by [Kevin Guran](https://github.com/gruzzlymug)
+
+visit Ruby-Knights-of-the-Round-Table @ [Ruby Knights](https://ruby-knights.herokuapp.com/)
