@@ -61,14 +61,14 @@
             <% if pieces_attacking_king != [] && selected_piece_id != 0 && @board[row][cell] != 0%>
 
               <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
-                <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
+                <td class="selectable" id="square-<%=row%>-<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-                <%= link_to select_piece_path(piece.id), method: :put do %>
+
                 <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                   <%= "#{piece.symbol}".html_safe %>
                 </div>
-                <% end %>
+
 
               </td>
                 <% next %>
@@ -82,11 +82,11 @@
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
 
-                <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+
                   <div class="selectable_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
-                <!-- <% end %> -->
+
 
                 <% next %>
               </td>
@@ -107,7 +107,7 @@
 
               <% else %>
               <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
-                  <!-- <%= button_to '', piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
+
               </td>
               <% end %>
               <% next %>
@@ -126,17 +126,17 @@
                   <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
-                  <!-- <%= button_to "#{piece.symbol}".html_safe, piece_path(selected_piece_id, y_position: row, x_position: cell), method: :put, class: "button_to" %> -->
+
                 </td>
               <% else %>
                 <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-                <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+
                 <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                   <%= "#{piece.symbol}".html_safe %>
                 </div>
-                <!-- <% end %> -->
+
 
               </td>
               <% end %>
@@ -148,11 +148,11 @@
                 <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
                 <% piece = all_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
-                  <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+
                   <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
-                  <!-- <% end %> -->
+
                   <% next %>
                 </td>
             <% end %>
@@ -376,7 +376,7 @@ $(function() {
 
     // selectable squares can be selected on click
     $('.selectable').click(makeClickable);
-
+    $('.selected').click(makeClickable);
 
   });
 
