@@ -40,7 +40,7 @@ class Piece < ActiveRecord::Base
         self.x_position = new_x
         self.y_position = new_y
         self.selected = false
-        self.game.pieces_as_array        
+        self.game.pieces_as_array
         self.save
       end
       game.change_turn
@@ -106,7 +106,7 @@ class Piece < ActiveRecord::Base
 
   def checkmoves(king, attacking_pieces, board )
     if self == king
-      enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id)
+      enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
       king_moves = king.piece_can_move_to(board)
       enemy_pieces.each do |enemy_piece|
         king_moves -= enemy_piece.piece_can_move_to(board)

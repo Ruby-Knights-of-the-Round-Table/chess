@@ -21,7 +21,7 @@ class King < Piece
 
     def if_check?(board)
         king = self
-        enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id)
+        enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
         pieces_checking_king = []
         enemy_pieces.each do |current_piece|
             pieces_checking_king << current_piece if current_piece.piece_can_move_to(board).include?([king.y_position,king.x_position])
