@@ -23,7 +23,7 @@ class King < Piece
 
     def if_check?(board)
         king = self
-        enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id)
+        enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
         pieces_checking_king = []
         enemy_pieces.each do |current_piece|
             next if board[current_piece.y_position][current_piece.x_position] != current_piece.player_id
