@@ -16,6 +16,12 @@ class PiecesController < ApplicationController
 
       @board = @piece.game.pieces_as_array
       final_spots = @piece.piece_can_move_to(@board)
+
+      current_king = @piece.game.pieces.find_by(player_id: current_player.id, type: "King" )
+      pieces_attacking_king = current_king.if_check?(@board)
+      if pieces_attacking_king.length > 0
+          final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
+      end
       render json: {piece: @piece, final_spots: final_spots}
 
       @game = @piece.game

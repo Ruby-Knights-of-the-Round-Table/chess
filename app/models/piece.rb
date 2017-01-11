@@ -128,6 +128,11 @@ class Piece < ActiveRecord::Base
       play_board = Marshal.load(Marshal.dump(board))
       play_board[self.y_position][x_position] = 0
       play_board[y][x] = self.player_id
+      # enemy piece should have x,y such that board[y][x] should equal to enemy player.id
+      if play_board[enemy_piece.y_position][enemy_piece.x_position] != enemy_piece.player_id
+        prevent_check_moves << square
+        next
+      end
       prevent_check_moves << square if !enemy_piece.piece_can_move_to(play_board).include?([king.y_position,king.x_position])
     end
     return prevent_check_moves
