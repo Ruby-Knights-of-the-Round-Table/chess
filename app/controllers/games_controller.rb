@@ -44,6 +44,10 @@ class GamesController < ApplicationController
           @game.turn = @game.white_player_id
           @game.save
           @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
+
+          update_firebase(gameId: @game.id,
+                          first_player_email: @game.white_player.email)
+
           redirect_to(game_path(@game))
         end
     end
@@ -54,4 +58,11 @@ class GamesController < ApplicationController
     def game_params
       params.require(:game).permit(:game_name, :white_player_id, :black_player_id, :winner_id, :turn  )
     end
+
+    def update_firebase(data)
+      base_uri = 'https://ruby-knights.firebaseio.com'
+      firebase = Firebase::Client.new(base_uri)
+      response = firebase.set("game#{@game.id}", data)
+    end
+
 end

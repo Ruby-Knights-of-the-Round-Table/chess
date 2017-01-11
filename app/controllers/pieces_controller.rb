@@ -65,7 +65,7 @@ class PiecesController < ApplicationController
   def update_firebase(data)
     base_uri = 'https://ruby-knights.firebaseio.com'
     firebase = Firebase::Client.new(base_uri)
-    response = firebase.set("game#{@game.id}", data)
+    response = firebase.update("game#{@game.id}", data)
   end
 
 end
