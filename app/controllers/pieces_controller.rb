@@ -16,6 +16,7 @@ class PiecesController < ApplicationController
 
       @board = @piece.game.pieces_as_array
       final_spots = @piece.piece_can_move_to(@board)
+      @game = @piece.game
 
       current_king = @piece.game.pieces.find_by(player_id: current_player.id, type: "King" )
       pieces_attacking_king = current_king.if_check?(@board)
@@ -27,9 +28,6 @@ class PiecesController < ApplicationController
           final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
       end
       render json: {piece: @piece, final_spots: final_spots}
-
-      @game = @piece.game
-
     else
       render json: 'failure'
     end
@@ -39,17 +37,16 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     old_row = @piece.y_position
     old_cell = @piece.x_position
-    row = params[:y_position]
-    cell = params[:x_position]
+    row = params[:y_position].to_i
+    cell = params[:x_position].to_i
 
-    @board = @piece.game.pieces_as_array
-    @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
-
-    @game = @piece.game
+    board = @piece.game.pieces_as_array
+    @piece.move_to!(row, cell) if @piece.piece_can_move_to(board).include?([row.to_i, cell.to_i])
 
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
     black_player_id = @piece.game.black_player_id
+    @game = @piece.game
 
     render json: { piece: @piece, turn: turn, white_player_id: white_player_id, black_player_id: black_player_id }
 
