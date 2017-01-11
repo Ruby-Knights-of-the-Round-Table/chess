@@ -118,7 +118,7 @@ class Piece < ActiveRecord::Base
     current_piece = self
     current_piece_moves_avail =  current_piece.piece_can_move_to(board)
     enemy_piece = attacking_pieces[0] # since only one piece is attacking, we should rename this
-    current_piece_moves_avail = current_piece_moves_avail & enemy_piece.piece_can_move_to(board) # finding the squares these pieces can both move to
+    current_piece_moves_avail = current_piece_moves_avail & (enemy_piece.piece_can_move_to(board) + [[enemy_piece.y_position,enemy_piece.x_position]])# finding the squares these pieces can both move to
 
     prevent_check_moves = []
 
@@ -129,7 +129,7 @@ class Piece < ActiveRecord::Base
       play_board[self.y_position][x_position] = 0
       play_board[y][x] = self.player_id
       # enemy piece should have x,y such that board[y][x] should equal to enemy player.id
-      if play_board[enemy_piece.y_position][enemy_piece.x_position] != enemy_piece.player_id
+      if play_board[enemy_piece.y_position][enemy_piece.x_position] == self.player_id
         prevent_check_moves << square
         next
       end
