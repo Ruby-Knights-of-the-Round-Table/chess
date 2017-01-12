@@ -126,7 +126,7 @@ class Piece < ActiveRecord::Base
       y = square[0]
       x = square[1]
       play_board = Marshal.load(Marshal.dump(board))
-      play_board[self.y_position][x_position] = 0
+      play_board[self.y_position][self.x_position] = 0
       play_board[y][x] = self.player_id
       # enemy piece should have x,y such that board[y][x] should equal to enemy player.id
       if play_board[enemy_piece.y_position][enemy_piece.x_position] == self.player_id
