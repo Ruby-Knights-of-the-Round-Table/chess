@@ -164,17 +164,18 @@
   </table>
 </div>
 
+<br />
 <div class="captured">
     <% captured_white_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).order(y_position: :asc, x_position: :asc) %>
     <% captured_black_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).order(y_position: :asc, x_position: :asc) %>
 
-    <div class="captured-white">
+    <div class="captured-white col-xs-offset-2 col-xs-4">
       <% captured_white_pieces.each do |piece| %>
         <%= "#{piece.symbol}".html_safe %>
       <% end %>
     </div>
 
-    <div class="captured-black">
+    <div class="captured-black col-xs-4">
       <% captured_black_pieces.each do |piece| %>
         <%= "#{piece.symbol}".html_safe %>
       <% end %>
