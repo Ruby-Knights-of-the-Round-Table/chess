@@ -2,7 +2,7 @@
 
 <!-- checkmoves(king, attacking_pieces, board ) -->
 
-<div class="turn text-center">
+<div class="turn text-center col-xs-12">
   <% if @game.turn == @game.white_player.id  %>
     <div class="white-players-turn">
       <h4>white player's turn:</h4>
@@ -20,7 +20,7 @@
   <% end %>
 </div>
 
-<div class="game-board" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
+<div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
 
   <% pieces_attacking_king = current_king.if_check?(@board) %>
@@ -164,23 +164,20 @@
   </table>
 </div>
 
-<br />
-<div class="captured">
+<div class="captured col-xs-12">
+  <br />
     <% captured_white_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).order(y_position: :asc, x_position: :asc) %>
-    <% captured_black_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).order(y_position: :asc, x_position: :asc) %>
-
-    <div class="captured-white col-xs-offset-2 col-xs-4">
+    <div class="captured-white col-xs-offset-2 col-xs-4 col-sm-offset-3 col-sm-3">
       <% captured_white_pieces.each do |piece| %>
         <%= "#{piece.symbol}".html_safe %>
       <% end %>
     </div>
-
-    <div class="captured-black col-xs-4">
+    <% captured_black_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).order(y_position: :asc, x_position: :asc) %>
+    <div class="captured-black col-xs-offset-1 col-xs-4 col-sm-offset-1 col-sm-3">
       <% captured_black_pieces.each do |piece| %>
         <%= "#{piece.symbol}".html_safe %>
       <% end %>
     </div>
-
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
