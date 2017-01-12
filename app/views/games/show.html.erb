@@ -165,10 +165,21 @@
 </div>
 
 <div class="captured">
-    <% captured_pieces = @game.pieces.where(captured_piece: true).order(y_position: :asc, x_position: :asc) %>
-    <% captured_pieces.each do |piece| %>
-      <%= "#{piece.symbol}".html_safe %>
-    <% end %>
+    <% captured_white_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).order(y_position: :asc, x_position: :asc) %>
+    <% captured_black_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).order(y_position: :asc, x_position: :asc) %>
+
+    <div class="captured-white">
+      <% captured_white_pieces.each do |piece| %>
+        <%= "#{piece.symbol}".html_safe %>
+      <% end %>
+    </div>
+
+    <div class="captured-black">
+      <% captured_black_pieces.each do |piece| %>
+        <%= "#{piece.symbol}".html_safe %>
+      <% end %>
+    </div>
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
