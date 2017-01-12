@@ -2,7 +2,7 @@
 
 <!-- checkmoves(king, attacking_pieces, board ) -->
 
-<div class="text-center">
+<div class="turn text-center">
   <% if @game.turn == @game.white_player.id  %>
     <div class="white-players-turn">
       <h4>white player's turn:</h4>
@@ -164,7 +164,7 @@
   </table>
 </div>
 
-<div>
+<div class="captured">
     <% captured_pieces = @game.pieces.where(captured_piece: true).order(y_position: :asc, x_position: :asc) %>
     <% captured_pieces.each do |piece| %>
       <%= "#{piece.symbol}".html_safe %>
