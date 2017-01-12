@@ -42,7 +42,7 @@ class PiecesController < ApplicationController
 
     @game = @piece.game
     if @piece.occupied_space?(row, cell) == true
-      captured_piece = @game.pieces.find_by(y_position: row, x_position: cell, captured_piece: false)
+      captured_piece = @game.pieces.where(y_position: row, x_position: cell, captured_piece: false).last
     end
 
     board = @piece.game.pieces_as_array
