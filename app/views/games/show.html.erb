@@ -222,13 +222,19 @@ $(function() {
       if (data) {
         var updatedTimeStamp = data.timeStamp
 
-        // get piece from origin square
         var piece = $("#square-" + data.y_select + "-" + data.x_select).text();
-
-        // get destination square
         var square = $("#square-" + data.y_update + "-" + data.x_update);
+        var capturedPiece = $("#square-" + data.y_captured + "-" + data.x_captured).text();
 
         if (updatedTimeStamp > loadTimeStamp) {
+
+          if (data.turn == data.white_player_id) {
+            $(".captured-white").append(capturedPiece);
+          }
+          else if (data.turn == data.black_player_id) {
+            $(".captured-black").append(capturedPiece);
+          }
+
           // clear destination square (piece capture)
           square.empty();
 
