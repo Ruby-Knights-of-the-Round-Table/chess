@@ -43,6 +43,8 @@ class PiecesController < ApplicationController
     @game = @piece.game
     if @piece.occupied_space?(row, cell) == true
       captured_piece = @game.pieces.where(y_position: row, x_position: cell, captured_piece: false).last
+      y_captured = captured_piece.y_position
+      x_captured = captured_piece.x_position
     end
 
     board = @piece.game.pieces_as_array
@@ -65,7 +67,8 @@ class PiecesController < ApplicationController
                     black_player_id: black_player_id,
                     white_player_email: @piece.game.white_player.email,
                     black_player_email: @piece.game.black_player.email,
-                    captured_piece: captured_piece)
+                    y_captured: y_captured,
+                    x_captured: x_captured)
   end
 
   private
