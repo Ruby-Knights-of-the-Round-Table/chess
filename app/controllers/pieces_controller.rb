@@ -19,6 +19,10 @@ class PiecesController < ApplicationController
 
       current_king = @piece.game.pieces.find_by(player_id: current_player.id, type: "King" )
       pieces_attacking_king = current_king.if_check?(@board)
+
+      # see if avail spaces can be moved to without there being a check
+
+      final_spots = dont_be_in_check(final_spots,current_king)
       if pieces_attacking_king.length > 0
           final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
       end
@@ -63,6 +67,24 @@ class PiecesController < ApplicationController
   end
 
   private
+
+  # see if avail spaces can be moved to without there being a check
+  def dont_be_in_check(final_spots,current_king)
+      invalid = []
+      final_spots.each do |spot|
+         y = spot[0]
+         x = spot[1]
+         play_board = Marshal.load(Marshal.dump(@board))
+         play_board[@piece.y_position][@piece.x_position] = 0
+         play_board[y][x] = @piece.player_id
+         if @piece.type == "King"
+             invalid << spot if current_king.if_king_move_in_check?(play_board,y,x).length > 0
+         else
+             invalid << spot if current_king.if_check?(play_board).length > 0
+         end
+      end
+      return final_spots - invalid
+  end
 
   def piece_params
     params.require(:piece).permit(:selected, :x_position, :y_position, :captured_piece)
