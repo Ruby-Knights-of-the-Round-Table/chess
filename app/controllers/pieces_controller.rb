@@ -40,13 +40,17 @@ class PiecesController < ApplicationController
     row = params[:y_position].to_i
     cell = params[:x_position].to_i
 
+    @game = @piece.game
+    if @piece.occupied_space?(row, cell) == true
+      captured_piece = @game.pieces.find_by(y_position: row, x_position: cell, captured_piece: false)
+    end
+
     board = @piece.game.pieces_as_array
     @piece.move_to!(row, cell) if @piece.piece_can_move_to(board).include?([row.to_i, cell.to_i])
 
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
     black_player_id = @piece.game.black_player_id
-    @game = @piece.game
 
     render json: { piece: @piece, turn: turn, white_player_id: white_player_id, black_player_id: black_player_id }
 
@@ -60,7 +64,8 @@ class PiecesController < ApplicationController
                     white_player_id: white_player_id,
                     black_player_id: black_player_id,
                     white_player_email: @piece.game.white_player.email,
-                    black_player_email: @piece.game.black_player.email )
+                    black_player_email: @piece.game.black_player.email,
+                    captured_piece: captured_piece)
   end
 
   private
