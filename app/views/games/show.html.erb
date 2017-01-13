@@ -2,7 +2,7 @@
 
 <!-- checkmoves(king, attacking_pieces, board ) -->
 
-<div class="text-center">
+<div class="turn text-center col-xs-12">
   <% if @game.turn == @game.white_player.id  %>
     <div class="white-players-turn">
       <h4>white player's turn:</h4>
@@ -20,12 +20,12 @@
   <% end %>
 </div>
 
-<div class="game-board" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
+<div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
 
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
-  <% all_pieces = @game.pieces.all.order(y_position: :asc, x_position: :asc) %>
+  <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
   <% piece_trace = 0%>
   <% selected_piece_id = @game.pieces.find_by(selected: true) || 0 %>
   <table id='board'>
@@ -37,13 +37,13 @@
             <% if @board[row][cell] != 0 && selected_piece_id != 0 %>
               <% if (selected_piece_id.x_position == cell && selected_piece_id.y_position == row) %>
                 <td class="selected" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
-                  <% piece = all_pieces[piece_trace] %>
+                  <% piece = active_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
-                  <!-- <%= link_to select_piece_path(piece.id), method: :put do %> -->
+
                   <div class="selected_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
                   </div>
-                  <!-- <% end %> -->
+
                   <% next %>
                 </td>
               <% end %>
@@ -64,7 +64,7 @@
 
               <% if !selected_piece_id.checkmoves(current_king, pieces_attacking_king, @board ).include?([row,cell]) %>
                 <td class="selectable" id="square-<%=row%>-<%=cell%>">
-                <% piece = all_pieces[piece_trace] %>
+                <% piece = active_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
 
                 <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
@@ -81,9 +81,8 @@
             <!-- Note: s -->
             <% if @board[row][cell] != 0 && @board[row][cell] == @game.turn && current_player.id == @game.turn %>
               <td class="selectable" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
-                <% piece = all_pieces[piece_trace] %>
+                <% piece = active_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
-
 
                   <div class="selectable_piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
@@ -123,7 +122,7 @@
 
               <% if selected_piece_id.piece_can_move_to(@board).include?([row,cell]) %>
                 <td class="highlighted" data-y-position="<%=row%>" data-x-position="<%=cell%>" id="square-<%=row%>-<%=cell%>">
-                  <% piece = all_pieces[piece_trace] %>
+                  <% piece = active_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
                   <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
                     <%= "#{piece.symbol}".html_safe %>
@@ -132,7 +131,7 @@
                 </td>
               <% else %>
                 <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
-                <% piece = all_pieces[piece_trace] %>
+                <% piece = active_pieces[piece_trace] %>
                 <% piece_trace += 1 %>
 
                 <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
@@ -148,7 +147,7 @@
             <!-- square has a piece but it's not signed-in player's turn (can't hover over piece) or theres a check -->
             <% if @board[row][cell] != 0 %>
                 <td class="not-selectable" id="square-<%=row%>-<%=cell%>">
-                <% piece = all_pieces[piece_trace] %>
+                <% piece = active_pieces[piece_trace] %>
                   <% piece_trace += 1 %>
 
                   <div class="piece" data-piece-id="<%=piece.id%>" data-piece-color="<%= piece.player_id == @game.white_player_id ? "white" : "black" %>">
@@ -163,6 +162,28 @@
       <%= '</tr>'.html_safe %>
     <% end %>
   </table>
+</div>
+
+<div class="captured col-xs-12">
+  <br />
+    <% captured_white_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).order(y_position: :asc, x_position: :asc) %>
+    <div class="captured-white col-xs-offset-2 col-xs-4 col-sm-offset-4 col-sm-3">
+      <% if @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).any? %>
+        <h5>captured white pieces:</h5>
+      <% end %>
+      <% captured_white_pieces.each do |piece| %>
+        <%= "#{piece.symbol}".html_safe %>
+      <% end %>
+    </div>
+    <% captured_black_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).order(y_position: :asc, x_position: :asc) %>
+    <div class="captured-black col-xs-offset-1 col-xs-4 col-sm-offset-0 col-sm-3">
+    <% if @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).any? %>
+      <h5>captured black pieces:</h5>
+    <% end %>
+      <% captured_black_pieces.each do |piece| %>
+        <%= "#{piece.symbol}".html_safe %>
+      <% end %>
+    </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
@@ -204,13 +225,26 @@ $(function() {
       if (data) {
         var updatedTimeStamp = data.timeStamp
 
-        // get piece from origin square
         var piece = $("#square-" + data.y_select + "-" + data.x_select).text();
-
-        // get destination square
         var square = $("#square-" + data.y_update + "-" + data.x_update);
+        var capturedPiece = $("#square-" + data.y_captured + "-" + data.x_captured).text();
 
         if (updatedTimeStamp > loadTimeStamp) {
+
+          if (data.turn == data.white_player_id) {
+            if ($('.captured-white').children().length === 0 && data.y_captured && data.x_captured) {
+              $('.captured-white').append("<h5>captured white pieces:</h5>");
+            }
+            $('.captured-white').append(capturedPiece);
+          }
+          else if (data.turn == data.black_player_id) {
+            if ($('.captured-black').children().length === 0  && data.y_captured && data.x_captured) {
+              $('.captured-black').append("<h5>captured black pieces:</h5>");
+            }
+            $('.captured-black').append(capturedPiece);
+          }
+
+
           // clear destination square (piece capture)
           square.empty();
 

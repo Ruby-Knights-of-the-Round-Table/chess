@@ -4,15 +4,15 @@ class Piece < ActiveRecord::Base
   scope :selected, -> { where(selected: true) }
   scope :onboard, -> { where(captured_piece: false) }
 
-  def captured!
-    self.update(captured_piece: true)
-    self.delete
-  end
-
-  def capture_piece(y, x)
-    return false unless game.occupied_space?(y, x)
-    self.onboard.where(y_position: y, x_position: x).first.captured!
-  end
+  # def captured!
+  #   self.update(captured_piece: true)
+  #   self.delete
+  # end
+  #
+  # def capture_piece(y, x)
+  #   return false unless game.occupied_space?(y, x)
+  #   self.onboard.where(y_position: y, x_position: x).first.captured!
+  # end
 
   def occupied_space?(y, x)
       pieces = self.game.pieces
@@ -28,21 +28,22 @@ class Piece < ActiveRecord::Base
 
   def move_to!(new_y, new_x)
       if occupied_space?(new_y,new_x) == true
-        piece = self.game.pieces.find_by( y_position: new_y, x_position: new_x)
-        piece.delete
-
+        piece = self.game.pieces.find_by(y_position: new_y, x_position: new_x, captured_piece: false)
+        # piece.delete
+        piece.transaction do
+          piece.captured_piece = true
+          piece.game.pieces_as_array
+          piece.save
+        end
+      end
+      Piece.transaction do
         self.x_position = new_x
         self.y_position = new_y
         self.selected = false
+        self.game.pieces_as_array
         self.save
-        game.change_turn
-      else
-        self.x_position = new_x
-        self.y_position = new_y
-        self.selected = false
-        self.save
-        game.change_turn
-     end
+      end
+      game.change_turn
   end
 
   def not_obstructed(board,final_spots)
@@ -105,7 +106,7 @@ class Piece < ActiveRecord::Base
 
   def checkmoves(king, attacking_pieces, board )
     if self == king
-      enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id)
+      enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
       king_moves = king.piece_can_move_to(board)
       enemy_pieces.each do |enemy_piece|
         king_moves -= enemy_piece.piece_can_move_to(board)
