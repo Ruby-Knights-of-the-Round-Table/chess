@@ -43,8 +43,13 @@ class PiecesController < ApplicationController
     cell = params[:x_position]
 
     @board = @piece.game.pieces_as_array
-    @piece.move_to!(row, cell) if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
+    # updates piece on board AND records moment in Move database
+    if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
+      @piece.move_to!(row, cell) 
+      Move.create(piece_id: @piece.id, x: cell, y: row, turn: @piece.game.turn + 1)
+    end
 
+    
     @game = @piece.game
 
     turn = @piece.game.turn
