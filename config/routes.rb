@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root "static_pages#index"
 
-
+  resources :moves, only: [:index, :show]
   resources :games, only: [:index, :new, :create, :show, :destroy] do
     member do
       patch:join
