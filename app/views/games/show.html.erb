@@ -365,6 +365,7 @@ $(function() {
       revert: 'invalid',
       containment: 'table',
       scroll: false,
+      cursor: "crosshair",
       });
     }
 
@@ -373,6 +374,7 @@ $(function() {
       e.droppable().droppable("enable");
       e.droppable({
         accept: '.selected_piece',
+        tolerance: "touch",
         drop: function(event, ui) {
 
           // 'highlighted' should refer to square that accepts dropped piece
