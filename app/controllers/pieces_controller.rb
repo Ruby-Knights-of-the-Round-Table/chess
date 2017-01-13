@@ -23,7 +23,7 @@ class PiecesController < ApplicationController
 
       # see if avail spaces can be moved to without there being a check
 
-      
+
       if pieces_attacking_king.length > 0
           final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
       end
@@ -43,15 +43,13 @@ class PiecesController < ApplicationController
     row = params[:y_position]
     cell = params[:x_position]
 
-    @board = @piece.game.pieces_as_array
+    # @board = @piece.game.pieces_as_array
     # updates piece on board AND records moment in Move database
-    if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
-      @piece.move_to!(row, cell) 
-      Move.create(piece_id: @piece.id, x: cell, y: row, turn: @piece.game.turn + 1)
-    end
+    # if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
+    #   @piece.move_to!(row, cell)
+    #   Move.create(piece_id: @piece.id, x: cell, y: row, turn: @piece.game.turn + 1)
+    # end
 
-
-    
     @game = @piece.game
     if @piece.occupied_space?(row, cell) == true
       captured_piece = @game.pieces.where(y_position: row, x_position: cell, captured_piece: false).last
@@ -60,8 +58,13 @@ class PiecesController < ApplicationController
     end
 
     board = @piece.game.pieces_as_array
-    @piece.move_to!(row, cell) if @piece.piece_can_move_to(board).include?([row.to_i, cell.to_i])
 
+    if @piece.piece_can_move_to(board).include?([row.to_i, cell.to_i])
+      @piece.move_to!(row, cell)
+      Move.create(piece_id: @piece.id, x: cell, y: row, turn: @piece.game.turn + 1)
+    end
+
+    board = @piece.game.pieces_as_array
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
     black_player_id = @piece.game.black_player_id
@@ -97,12 +100,12 @@ class PiecesController < ApplicationController
          play_board[y][x] = @piece.player_id
 
          if @piece.type == "King"
-             invalid << spot if current_king.if_king_move_in_check?(play_board,y,x).length > 0 
+             invalid << spot if current_king.if_king_move_in_check?(play_board,y,x).length > 0
          else
              invalid << spot if current_king.if_check?(play_board).length > 0
          end
       end
-      p "===========", final_spots, invalid  
+      p "===========", final_spots, invalid
       return final_spots - invalid
   end
 
