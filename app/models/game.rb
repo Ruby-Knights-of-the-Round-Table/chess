@@ -19,40 +19,71 @@ class Game < ActiveRecord::Base
   def place_pieces_in_database(white_player, black_player)
 
     #white backrow pieces
-    Rook.create(game_id: id, player_id: white_player_id, x_position: 0, y_position: 0)
-    Rook.create(game_id: id, player_id: white_player_id, x_position: 7, y_position: 0)
+    piece = Rook.create(game_id: id, player_id: white_player_id, x_position: 0, y_position: 0)
+    Move.create(piece_id: piece.id, x: 0, y: 0, turn: 0 )
+    piece = Rook.create(game_id: id, player_id: white_player_id, x_position: 7, y_position: 0)
+    Move.create(piece_id: piece.id, x: 7, y: 0, turn: 0 )
 
-    Knight.create(game_id: id, player_id: white_player_id, x_position: 1, y_position: 0)
-    Knight.create(game_id: id, player_id: white_player_id, x_position: 6, y_position: 0)
+    piece = Knight.create(game_id: id, player_id: white_player_id, x_position: 1, y_position: 0)
+    Move.create(piece_id: piece.id, x: 1, y: 0, turn: 0 )
+    piece = Knight.create(game_id: id, player_id: white_player_id, x_position: 6, y_position: 0)
+    Move.create(piece_id: piece.id, x: 6, y: 0, turn: 0 )
 
-    Bishop.create(game_id: id, player_id: white_player_id, x_position: 2, y_position: 0)
-    Bishop.create(game_id: id, player_id: white_player_id, x_position: 5, y_position: 0)
+    piece = Bishop.create(game_id: id, player_id: white_player_id, x_position: 2, y_position: 0)
+    Move.create(piece_id: piece.id, x: 2, y: 0, turn: 0 )
+    piece = Bishop.create(game_id: id, player_id: white_player_id, x_position: 5, y_position: 0)
+    Move.create(piece_id: piece.id, x: 5, y: 0, turn: 0 )
 
-    Queen.create(game_id: id, player_id: white_player_id, x_position: 3, y_position: 0)
-    King.create(game_id: id, player_id: white_player_id, x_position: 4, y_position: 0)
+    piece = Queen.create(game_id: id, player_id: white_player_id, x_position: 3, y_position: 0)
+    Move.create(piece_id: piece.id, x: 3, y: 0, turn: 0 )
+    piece = King.create(game_id: id, player_id: white_player_id, x_position: 4, y_position: 0)
+    Move.create(piece_id: piece.id, x: 4, y: 0, turn: 0 )
 
     #black backrow pieces
-    Rook.create(game_id: id, player_id: black_player_id, x_position: 0, y_position: 7)
-    Rook.create(game_id: id, player_id: black_player_id, x_position: 7, y_position: 7)
+    piece = Rook.create(game_id: id, player_id: black_player_id, x_position: 0, y_position: 7)
+    Move.create(piece_id: piece.id, x: 0, y: 7, turn: 0 )
+    piece = Rook.create(game_id: id, player_id: black_player_id, x_position: 7, y_position: 7)
+    Move.create(piece_id: piece.id, x: 7, y: 7, turn: 0 )
 
-    Knight.create(game_id: id, player_id: black_player_id, x_position: 1, y_position: 7)
-    Knight.create(game_id: id, player_id: black_player_id, x_position: 6, y_position: 7)
+    piece = Knight.create(game_id: id, player_id: black_player_id, x_position: 1, y_position: 7)
+    Move.create(piece_id: piece.id, x: 1, y: 7, turn: 0 )
+    piece = Knight.create(game_id: id, player_id: black_player_id, x_position: 6, y_position: 7)
+    Move.create(piece_id: piece.id, x: 6, y: 7, turn: 0 )
 
-    Bishop.create(game_id: id, player_id: black_player_id, x_position: 2, y_position: 7)
-    Bishop.create(game_id: id, player_id: black_player_id, x_position: 5, y_position: 7)
+    piece = Bishop.create(game_id: id, player_id: black_player_id, x_position: 2, y_position: 7)
+    Move.create(piece_id: piece.id, x: 2, y: 7, turn: 0 )
+    piece = Bishop.create(game_id: id, player_id: black_player_id, x_position: 5, y_position: 7)
+    Move.create(piece_id: piece.id, x: 5, y: 7, turn: 0 )
 
-    Queen.create(game_id: id, player_id: black_player_id, x_position: 3, y_position: 7)
-    King.create(game_id: id, player_id: black_player_id, x_position: 4, y_position: 7)
+    piece = Queen.create(game_id: id, player_id: black_player_id, x_position: 3, y_position: 7)
+    Move.create(piece_id: piece.id, x: 3, y: 7, turn: 0 )
+    piece = King.create(game_id: id, player_id: black_player_id, x_position: 4, y_position: 7)
+    Move.create(piece_id: piece.id, x: 4, y: 7, turn: 0 )
 
     #white pawns
     (0..7).each do |i|
-      Pawn.create(game_id: id, player_id: white_player_id, x_position: i, y_position: 1)
+      piece = Pawn.create(game_id: id, player_id: white_player_id, x_position: i, y_position: 1)
+      Move.create(piece_id: piece.id, x: i, y: 1, turn: 0 )
     end
 
     #black pawns
     (0..7).each do |i|
-      Pawn.create(game_id: id, player_id: black_player_id, x_position: i, y_position: 6)
+      piece = Pawn.create(game_id: id, player_id: black_player_id, x_position: i, y_position: 6)
+      Move.create(piece_id: piece.id, x: i, y: 6, turn: 0 )
     end
+
+
+    
+
+  end
+
+  def moves
+    # q = "select p.email, c.type, m.turn from players p, pieces c, moves m  where m.piece_id = c.id and c.player_id = p.id"
+    # r = ActiveRecord::Base.connection.execute(q)
+    # r.values
+    query = "SELECT players.email, pieces.type, moves.turn, pieces.game_id FROM players, pieces, moves WHERE moves.piece_id = pieces.id AND pieces.player_id = players.id AND pieces.game_id = #{self.id} "
+    results = ActiveRecord::Base.connection.execute(query)
+    results.values  # [["phagmann1@gmail.com", "Rook", "0"], ["phagmann1@gmail.com", "Rook", "0"],...
 
   end
 
