@@ -26,7 +26,7 @@ class King < Piece
         enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
         pieces_checking_king = []
         enemy_pieces.each do |current_piece|
-            next if board[current_piece.y_position][current_piece.x_position] != current_piece.player_id
+            next if board[current_piece.y_position][current_piece.x_position] != current_piece.player_id # safe if board not equal to enemy id
             pieces_checking_king << current_piece if current_piece.piece_can_move_to(board).include?([king.y_position,king.x_position])
         end
         return pieces_checking_king
@@ -34,12 +34,24 @@ class King < Piece
 
     def if_king_move_in_check?(board,y,x)
         king = self
-        enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id)
+        enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
         pieces_checking_king = []
         enemy_pieces.each do |current_piece|
-            next if board[current_piece.y_position][current_piece.x_position] != current_piece.player_id
+            if current_piece.type == "Pawn"
+                next if current_piece.x_position == x
+                pawn_test_spots = []
+                if current_piece.game.black_player_id == current_piece.player_id
+                    pawn_test_spots = [[current_piece.y_position - 1,current_piece.x_position - 1],[current_piece.y_position - 1,current_piece.x_position + 1]]
+
+                elsif current_piece.game.white_player_id == current_piece.player_id
+                    pawn_test_spots = [[current_piece.y_position + 1,current_piece.x_position - 1],[current_piece.y_position + 1,current_piece.x_position + 1]]
+                end
+                pieces_checking_king << current_piece if pawn_test_spots.include?([y,x])
+                next
+            end
             pieces_checking_king << current_piece if current_piece.piece_can_move_to(board).include?([y,x])
         end
+        p "+++++++", pieces_checking_king
         return pieces_checking_king
     end
 

@@ -109,6 +109,17 @@ class Piece < ActiveRecord::Base
       enemy_pieces = self.game.pieces.where('player_id != ?', king.player_id).where(captured_piece: false)
       king_moves = king.piece_can_move_to(board)
       enemy_pieces.each do |enemy_piece|
+        if enemy_piece.type == "Pawn" #testing for if pawn is attacking square king could move to. wierd case since pawn cant move to this square unless an enemy piece is there to capture (take diagonal)
+            pawn_test_spots = []
+            if enemy_piece.game.black_player_id == enemy_piece.player_id
+                pawn_test_spots = [[enemy_piece.y_position - 1,enemy_piece.x_position - 1],[enemy_piece.y_position - 1,enemy_piece.x_position + 1]]
+
+            elsif enemy_piece.game.white_player_id == enemy_piece.player_id
+                pawn_test_spots = [[enemy_piece.y_position + 1,enemy_piece.x_position - 1],[enemy_piece.y_position + 1,enemy_piece.x_position + 1]]
+            end
+            king_moves -= pawn_test_spots
+            next
+        end
         king_moves -= enemy_piece.piece_can_move_to(board)
       end
       return king_moves
