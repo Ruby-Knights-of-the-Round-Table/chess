@@ -167,7 +167,7 @@
 <div class="captured col-xs-12">
   <br />
     <% captured_white_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).order(y_position: :asc, x_position: :asc) %>
-    <div class="captured-white col-xs-offset-2 col-xs-4 col-sm-offset-3 col-sm-3">
+    <div class="captured-white col-xs-offset-2 col-xs-4 col-sm-offset-4 col-sm-3">
       <% if @game.pieces.where(captured_piece: true).where('player_id = ?', @game.white_player_id).any? %>
         <h5>captured white pieces:</h5>
       <% end %>
@@ -176,7 +176,7 @@
       <% end %>
     </div>
     <% captured_black_pieces = @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).order(y_position: :asc, x_position: :asc) %>
-    <div class="captured-black col-xs-offset-1 col-xs-4 col-sm-offset-1 col-sm-3">
+    <div class="captured-black col-xs-offset-1 col-xs-4 col-sm-offset-0 col-sm-3">
     <% if @game.pieces.where(captured_piece: true).where('player_id = ?', @game.black_player_id).any? %>
       <h5>captured black pieces:</h5>
     <% end %>
