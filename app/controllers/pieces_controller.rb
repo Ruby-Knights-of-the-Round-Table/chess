@@ -16,6 +16,7 @@ class PiecesController < ApplicationController
 
       @board = @piece.game.pieces_as_array
       final_spots = @piece.piece_can_move_to(@board)
+      @game = @piece.game
 
       current_king = @piece.game.pieces.find_by(player_id: current_player.id, type: "King" )
       pieces_attacking_king = current_king.if_check?(@board)
@@ -27,9 +28,6 @@ class PiecesController < ApplicationController
           final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
       end
       render json: {piece: @piece, final_spots: final_spots}
-
-      @game = @piece.game
-
     else
       render json: 'failure'
     end
@@ -39,6 +37,7 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     old_row = @piece.y_position
     old_cell = @piece.x_position
+
     row = params[:y_position]
     cell = params[:x_position]
 
@@ -49,8 +48,17 @@ class PiecesController < ApplicationController
       Move.create(piece_id: @piece.id, x: cell, y: row, turn: @piece.game.turn + 1)
     end
 
+
     
     @game = @piece.game
+    if @piece.occupied_space?(row, cell) == true
+      captured_piece = @game.pieces.where(y_position: row, x_position: cell, captured_piece: false).last
+      y_captured = captured_piece.y_position
+      x_captured = captured_piece.x_position
+    end
+
+    board = @piece.game.pieces_as_array
+    @piece.move_to!(row, cell) if @piece.piece_can_move_to(board).include?([row.to_i, cell.to_i])
 
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
@@ -68,7 +76,9 @@ class PiecesController < ApplicationController
                     white_player_id: white_player_id,
                     black_player_id: black_player_id,
                     white_player_email: @piece.game.white_player.email,
-                    black_player_email: @piece.game.black_player.email )
+                    black_player_email: @piece.game.black_player.email,
+                    y_captured: y_captured,
+                    x_captured: x_captured)
   end
 
   private

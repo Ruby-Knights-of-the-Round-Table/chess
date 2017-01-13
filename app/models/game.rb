@@ -89,7 +89,7 @@ class Game < ActiveRecord::Base
 
   #down the road, we will need a mcuh faster way to easily access piece data thats not through the database
   def pieces_as_array
-    pieces = self.pieces
+    pieces = self.pieces.where(captured_piece: false)
     piece_array = [
                     [0,0,0,0,0,0,0,0],
                     [0,0,0,0,0,0,0,0],
