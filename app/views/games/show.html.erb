@@ -232,11 +232,18 @@ $(function() {
         if (updatedTimeStamp > loadTimeStamp) {
 
           if (data.turn == data.white_player_id) {
-            $(".captured-white").append(capturedPiece);
+            if ($('.captured-white').children().length === 0 && data.y_captured && data.x_captured) {
+              $('.captured-white').append("<h5>captured white pieces:</h5>");
+            }
+            $('.captured-white').append(capturedPiece);
           }
           else if (data.turn == data.black_player_id) {
-            $(".captured-black").append(capturedPiece);
+            if ($('.captured-black').children().length === 0  && data.y_captured && data.x_captured) {
+              $('.captured-black').append("<h5>captured black pieces:</h5>");
+            }
+            $('.captured-black').append(capturedPiece);
           }
+
 
           // clear destination square (piece capture)
           square.empty();
