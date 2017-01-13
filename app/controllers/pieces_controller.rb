@@ -23,10 +23,12 @@ class PiecesController < ApplicationController
 
       # see if avail spaces can be moved to without there being a check
 
-      final_spots = dont_be_in_check(final_spots,current_king)
+      
       if pieces_attacking_king.length > 0
           final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
       end
+      p "xxxxxxx", final_spots
+      final_spots = dont_be_in_check(final_spots,current_king)
       render json: {piece: @piece, final_spots: final_spots}
     else
       render json: 'failure'
@@ -89,15 +91,18 @@ class PiecesController < ApplicationController
       final_spots.each do |spot|
          y = spot[0]
          x = spot[1]
+
          play_board = Marshal.load(Marshal.dump(@board))
          play_board[@piece.y_position][@piece.x_position] = 0
          play_board[y][x] = @piece.player_id
+
          if @piece.type == "King"
-             invalid << spot if current_king.if_king_move_in_check?(play_board,y,x).length > 0
+             invalid << spot if current_king.if_king_move_in_check?(play_board,y,x).length > 0 
          else
              invalid << spot if current_king.if_check?(play_board).length > 0
          end
       end
+      p "===========", final_spots, invalid  
       return final_spots - invalid
   end
 
