@@ -37,9 +37,19 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     old_row = @piece.y_position
     old_cell = @piece.x_position
-    row = params[:y_position].to_i
-    cell = params[:x_position].to_i
 
+    row = params[:y_position]
+    cell = params[:x_position]
+
+    @board = @piece.game.pieces_as_array
+    # updates piece on board AND records moment in Move database
+    if @piece.piece_can_move_to(@board).include?([row.to_i, cell.to_i])
+      @piece.move_to!(row, cell) 
+      Move.create(piece_id: @piece.id, x: cell, y: row, turn: @piece.game.turn + 1)
+    end
+
+
+    
     @game = @piece.game
     if @piece.occupied_space?(row, cell) == true
       captured_piece = @game.pieces.where(y_position: row, x_position: cell, captured_piece: false).last
