@@ -14,11 +14,10 @@ class King < Piece
             possible_y = curr_y + y
             possible_x = curr_x + x
 
-
             final_spots << [possible_y,possible_x] if (possible_x >= 0 && possible_y >= 0 && possible_x <= 7 && possible_y <= 7 ) && board[possible_y][possible_x] != self.player_id
             # figure out if position is in bounds of board AND no pieces are there
         end
-        return not_obstructed(board,final_spots) 
+        return not_obstructed(board,final_spots)
     end
 
     def if_check?(board)
@@ -51,7 +50,6 @@ class King < Piece
             end
             pieces_checking_king << current_piece if current_piece.piece_can_move_to(board).include?([y,x])
         end
-        p "+++++++", pieces_checking_king
         return pieces_checking_king
     end
 
