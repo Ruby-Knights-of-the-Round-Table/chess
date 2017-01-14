@@ -139,6 +139,26 @@ class Piece < ActiveRecord::Base
     return prevent_check_moves
 
   end
+ 
+  def dont_be_in_check(final_spots, current_king ,board)
+      invalid = []
+      final_spots.each do |spot|
+         y = spot[0]
+         x = spot[1]
+
+         play_board = Marshal.load(Marshal.dump(board))
+         play_board[self.y_position][self.x_position] = 0
+         play_board[y][x] = self.player_id
+
+         if self.type == "King"
+             invalid << spot if current_king.if_king_move_in_check?(play_board,y,x).length > 0
+         else
+             invalid << spot if current_king.if_check?(play_board).length > 0
+         end
+      end
+      return final_spots - invalid
+
+  end
 
 
 end

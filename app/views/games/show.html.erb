@@ -1,5 +1,6 @@
 <h2><%= @game.game_name %></h2>
 
+
 <div class="turn text-center col-xs-12">
   <% if @game.turn == @game.white_player.id  %>
     <div class="white-players-turn">
@@ -19,8 +20,11 @@
 </div>
 
 <div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
-  <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
 
+  <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
+    <% if current_king.if_checkmate?(@board) == true%>
+      <h2> Player <%= current_player.id %> is a loser!!! </h2>
+    <% end %>
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
   <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
