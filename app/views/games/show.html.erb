@@ -331,6 +331,11 @@ $(function() {
       });
       $('.selectable').each(function() {
         $(this).switchClass('selectable', 'not-selectable');
+        $(this).removeClass('ui-droppable ui-droppable-active ui-droppable-hover ui-droppable-disabled');
+      });
+      // clear out ui-droppable classes on empty squares
+      $('.empty').each(function() {
+        $(this).removeClass('ui-droppable ui-droppable-active ui-droppable-hover ui-droppable-disabled');
       });
     }
 
@@ -356,7 +361,7 @@ $(function() {
 
     function disableDroppable() {
       $('.highlighted').droppable().droppable("disable");
-      $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-hover ui-droppable-disabled');
+      $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-active ui-droppable-hover ui-droppable-disabled');
     }
 
     function makeDraggable(e) {
