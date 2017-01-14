@@ -4,16 +4,6 @@ class Piece < ActiveRecord::Base
   scope :selected, -> { where(selected: true) }
   scope :onboard, -> { where(captured_piece: false) }
 
-  # def captured!
-  #   self.update(captured_piece: true)
-  #   self.delete
-  # end
-  #
-  # def capture_piece(y, x)
-  #   return false unless game.occupied_space?(y, x)
-  #   self.onboard.where(y_position: y, x_position: x).first.captured!
-  # end
-
   def occupied_space?(y, x)
       pieces = self.game.pieces
       pieces.onboard.where(y_position: y, x_position: x).any?
@@ -29,7 +19,6 @@ class Piece < ActiveRecord::Base
   def move_to!(new_y, new_x)
       if occupied_space?(new_y,new_x) == true
         piece = self.game.pieces.find_by(y_position: new_y, x_position: new_x, captured_piece: false)
-        # piece.delete
         piece.transaction do
           piece.captured_piece = true
           piece.game.pieces_as_array
@@ -149,19 +138,7 @@ class Piece < ActiveRecord::Base
     end
     return prevent_check_moves
 
-
   end
-
-  # def capturing_move(y, x)
-  #   captured_piece = piece.not_obstructed(board, final_spots)
-  #   captured_piece && captured_piece.player_id != player_id
-  # end
-  #
-  # def capture(piece, new_y, new_x)
-  #   if piece.player_id != player_id
-  #     piece.move_to!(new_y, new_x)
-  #   end
-  # end
 
 
 end

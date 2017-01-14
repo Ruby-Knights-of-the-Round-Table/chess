@@ -27,7 +27,6 @@ class PiecesController < ApplicationController
       if pieces_attacking_king.length > 0
           final_spots = @piece.checkmoves(current_king, pieces_attacking_king, @board)
       end
-      p "xxxxxxx", final_spots
       final_spots = dont_be_in_check(final_spots,current_king)
       render json: {piece: @piece, final_spots: final_spots}
     else
@@ -99,7 +98,6 @@ class PiecesController < ApplicationController
              invalid << spot if current_king.if_check?(play_board).length > 0
          end
       end
-      p "===========", final_spots, invalid
       return final_spots - invalid
   end
 
