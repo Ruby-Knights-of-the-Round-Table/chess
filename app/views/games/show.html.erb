@@ -374,7 +374,6 @@ $(function() {
       e.droppable({
         accept: '.selected_piece',
         drop: function(event, ui) {
-          $('.highlighted').removeClass('ui-droppable-hover');
 
           // 'highlighted' should refer to square that accepts dropped piece
           var highlighted = $(this);
@@ -453,7 +452,7 @@ $(function() {
 
           // highlight new final spots
           $.each(data.final_spots, function(index, spot) {
-            $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted').attr('data-y-position', spot[0]).attr('data-x-position', spot[1]);
+            $("#square-" + spot[0] + "-" + spot[1]).addClass('highlighted').removeClass('ui-droppable ui-droppable-hover ui-droppable-active').attr('data-y-position', spot[0]).attr('data-x-position', spot[1]);
           });
 
           // make new final spots droppable
