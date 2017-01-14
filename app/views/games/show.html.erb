@@ -245,14 +245,14 @@ $(function() {
 
         if (updatedTimeStamp > loadTimeStamp) {
 
-          if (data.turn == data.white_player_id) {
-            if ($('.captured-white').children().length === 0 && data.y_captured && data.x_captured) {
+          if (data.turn == data.white_player_id && data.y_captured && data.x_captured) {
+            if ($('.captured-white').children().length === 0) {
               $('.captured-white').append("<h5>captured white pieces:</h5>");
             }
             $('.captured-white').append(capturedPiece);
           }
-          else if (data.turn == data.black_player_id) {
-            if ($('.captured-black').children().length === 0  && data.y_captured && data.x_captured) {
+          else if (data.turn == data.black_player_id && data.y_captured && data.x_captured) {
+            if ($('.captured-black').children().length === 0) {
               $('.captured-black').append("<h5>captured black pieces:</h5>");
             }
             $('.captured-black').append(capturedPiece);
@@ -356,7 +356,7 @@ $(function() {
 
     function disableDroppable() {
       $('.highlighted').droppable().droppable("disable");
-      $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-disabled');
+      $('.highlighted').removeClass('highlighted ui-droppable ui-droppable-hover ui-droppable-disabled');
     }
 
     function makeDraggable(e) {
@@ -365,7 +365,6 @@ $(function() {
       revert: 'invalid',
       containment: 'table',
       scroll: false,
-      cursor: "crosshair",
       });
     }
 
@@ -374,8 +373,8 @@ $(function() {
       e.droppable().droppable("enable");
       e.droppable({
         accept: '.selected_piece',
-        tolerance: "touch",
         drop: function(event, ui) {
+          $('.highlighted').removeClass('ui-droppable-hover');
 
           // 'highlighted' should refer to square that accepts dropped piece
           var highlighted = $(this);
