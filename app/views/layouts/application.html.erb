@@ -51,6 +51,23 @@
     <p class='alert alert-danger'><%= alert %></p>
   <% end %>
 
+  <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+  <script>
+    $(function() {
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBtB_3FCuqPVKmJkB_EuDkXq0gvE9DX2DM",    // save in environment
+        authDomain: "ruby-knights.firebaseapp.com",
+        databaseURL: "https://ruby-knights.firebaseio.com",
+        storageBucket: "ruby-knights.appspot.com",
+        messagingSenderId: "349996601563"
+      };
+      firebase.initializeApp(config);
+    });
+  </script>
+
+
+
   <%= yield %>
 
 </body>
