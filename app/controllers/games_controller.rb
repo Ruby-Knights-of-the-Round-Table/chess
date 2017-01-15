@@ -28,12 +28,19 @@ class GamesController < ApplicationController
         @game.white_player_id = current_player.id
         @game.save
         @game.place_pieces_in_database(current_player.id, nil)
+
+        set_firebase(gameId: @game.id)
+
         redirect_to( game_path(@game) )
     end
 
     def destroy
         @game = Game.find(params[:id])
         @game.destroy
+
+        # delete_firebase(gameId: @game.id,
+        #                 first_player_email: @game.white_player.email)
+
         redirect_to(games_path)
     end
 
@@ -45,8 +52,7 @@ class GamesController < ApplicationController
           @game.save
           @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
 
-          update_firebase(gameId: @game.id,
-                          first_player_email: @game.white_player.email)
+          update_firebase(first_player_email: @game.white_player.email)
 
           redirect_to(game_path(@game))
         end
@@ -59,10 +65,22 @@ class GamesController < ApplicationController
       params.require(:game).permit(:game_name, :white_player_id, :black_player_id, :winner_id, :turn  )
     end
 
-    def update_firebase(data)
+    def set_firebase(data)
       base_uri = 'https://ruby-knights.firebaseio.com'
       firebase = Firebase::Client.new(base_uri)
       response = firebase.set("game#{@game.id}", data)
+    end
+
+    # def delete_firebase(data)
+    #   base_uri = 'https://ruby-knights.firebaseio.com'
+    #   firebase = Firebase::Client.new(base_uri)
+    #   response = firebase.remove("game#{@game.id}", data)
+    # end
+
+    def update_firebase(data)
+      base_uri = 'https://ruby-knights.firebaseio.com'
+      firebase = Firebase::Client.new(base_uri)
+      response = firebase.update("game#{@game.id}", data)
     end
 
 end

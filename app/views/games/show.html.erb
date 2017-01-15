@@ -251,7 +251,7 @@ $(function() {
 
     joinGameRef.on('value', function(snapshot) {
       var data = snapshot.val();
-      if (data) {
+      if (data.first_player_email) {
         // show that it's white player's turn when second player joins
         $('.waiting h4').replaceWith("<h4>white player's turn:</h4>");
         $('.waiting').append("<h5>" + data.first_player_email + "</h5>");
