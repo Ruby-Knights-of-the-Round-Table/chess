@@ -19,17 +19,17 @@
   <% end %>
 </div>
 
-<div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
-    <div id="supercheck">
-        <% if @game.winner_id == 0 %>
-          <h2></h2>
-        <% elsif @game.winner_id == @game.black_player.id %>
-          <h2> Winner is  <%= @game.black_player.email %> </h2>
-        <% elsif @game.winner_id == @game.white_player.id %>
-          <h2> Winner is  <%= @game.white_player.email %> </h2>
-        <% end %>
-    </div>
+<div id="supercheck">
+    <% if @game.winner_id == 0 %>
+      <h6></h6>
+    <% elsif @game.winner_id == @game.black_player.id %>
+      <h2> Winner is  <%= @game.black_player.email %> </h2>
+    <% elsif @game.winner_id == @game.white_player.id %>
+      <h2> Winner is  <%= @game.white_player.email %> </h2>
+    <% end %>
+</div>
 
+<div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
@@ -228,11 +228,13 @@ $(function() {
     mateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
-          if (data.winner_id == data.black_player_id) {
-              $('.supercheck').append("<h2> Winner is " + data.black_player_email + "</h2>");
+          if (data.winner_id && data.winner_id == data.black_player_id) {
+              $('#supercheck').empty();
+              $('#supercheck').append("<h2> Winner is " + data.black_player_email + "</h2>");
           }
-          else if (data.winner_id == data.white_player_id) {
-              $('.supercheck').append("<h2> Winner is " + data.white_player_email + "</h2>");
+          else if (data.winner_id && data.winner_id == data.white_player_id) {
+              $('#supercheck').empty();
+              $('#supercheck').append("<h2> Winner is " + data.white_player_email + "</h2>");
           }
       }
     });
