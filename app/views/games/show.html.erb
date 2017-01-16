@@ -26,13 +26,14 @@
 
   <% kings.each do |curr_king| %>
     <% if curr_king.if_checkmate?(@board) == true%>
-      <% if @game.black_player != curr_king.player_id %>
+      <% if @game.black_player_id != curr_king.player_id %>
          <h2> <%= @game.black_player.email %> is a winner!! </h2>
       <% else %>
          <h2> <%= @game.white_player.email %> is a winner!! </h2>
       <% end %>
     <% end %> 
   <% end %> 
+
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
   <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
