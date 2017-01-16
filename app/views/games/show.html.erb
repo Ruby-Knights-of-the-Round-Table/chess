@@ -22,7 +22,7 @@
 <div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
 
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
-  <% kings = @game.pieces.find_by( type: "King" ) %>
+  <% kings = @game.pieces.where( type: "King" ) %>
 
   <% kings.each do |curr_king| %>
     <% if curr_king.if_checkmate?(@board) == true%>
