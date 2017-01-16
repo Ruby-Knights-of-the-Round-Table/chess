@@ -243,10 +243,10 @@ $(function() {
         var updatedTimeStamp = data.timeStamp
         if (updatedTimeStamp > loadTimeStamp) {
           if (data.move_turn % 2 == 1) {
-              $('#log').prepend("<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+              $('#log p:first-child').after("<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
           }
           else if (data.move_turn % 2 == 0) {
-              $('#log').prepend("<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+              $('#log p:first-child').after("<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
           }
         }
       }
