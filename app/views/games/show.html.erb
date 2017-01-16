@@ -20,13 +20,16 @@
 </div>
 
 <div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
-  <div id="supercheck">
-    <% if @game.winner_id == @game.black_player_id %>
-      <h2> Winner is  <%= @game.black_player.email %> </h2>
-    <% elsif @game.winner_id == @game.white_player_id %>
-      <h2> Winner is  <%= @game.white_player.email %> </h2>
-    <% end %> 
-  </div>
+    <div id="supercheck">
+        <% if @game.winner_id == 0 %>
+          <h2></h2>
+        <% elsif @game.winner_id == @game.black_player.id %>
+          <h2> Winner is  <%= @game.black_player.email %> </h2>
+        <% elsif @game.winner_id == @game.white_player.id %>
+          <h2> Winner is  <%= @game.white_player.email %> </h2>
+        <% end %>
+    </div>
+
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
@@ -192,20 +195,13 @@
 </div>
 
 <div class="col-xs-10" id="log" style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-<script >
-  moveLog(<%= current_king.id %>)
-</script>
-
+  <script >
+    moveLog(<%= current_king.id %>)
+  </script>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
 <script>
-// set up moves log with json
-
-
-
-
-
 
 $(function() {
 
@@ -230,34 +226,28 @@ $(function() {
 
     mateRef.on('value', function(snapshot) {
       var data = snapshot.val();
-      var div = document.getElementById("supercheck"); 
+      if (data) {
+          if (data.winner_id == data.black_player_id) {
+              $('.supercheck').append("<h2> Winner is " + data.black_player_email + "</h2>");
+          }
+          else if (data.winner_id == data.white_player_id) {
+              $('.supercheck').append("<h2> Winner is " + data.white_player_email + "</h2>");
+          }
+      }
+    });
 
-        if( data.winner_id == data.black_player_id){
-            div.innerHTML = "<h2> Winner is " + data.black_player_email + "</h2>";
-        }
-        else if( data.winner_id == data.white_player_id){
-            div.innerHTML = "<h2> Winner is " + data.white_player_email + "</h2>";
-        }
-
-    })
     moveRef.on('value', function(snapshot) {
       var data = snapshot.val();
-      var div = document.getElementById("log");
-      if( data.move_turn ){
+      if (data) {
+        if (data.move_turn % 2 == 1) {
+            $('#log').prepend("<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+        }
+        else if (data.move_turn % 2 == 0) {
+            $('#log').prepend("<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+        }
+      }
+    });
 
-      if (data.move_turn % 2 == 1){
-          div.innerHTML += "<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>";
-      }
-      else{
-          div.innerHTML += "<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>";
-      }
-     
-    
-      }
-      
-       
-
-    })
     joinGameRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
