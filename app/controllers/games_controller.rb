@@ -29,7 +29,8 @@ class GamesController < ApplicationController
         @game.save
         @game.place_pieces_in_database(current_player.id, nil)
 
-        set_firebase(gameName: @game.game_name)
+        set_firebase(gameID: @game.id,
+                    gameName: @game.game_name)
 
         redirect_to( game_path(@game) )
     end

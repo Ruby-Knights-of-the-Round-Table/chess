@@ -1,4 +1,4 @@
-<div align="center">
+<div class="dashboard" align="center">
   <h1 class="dashtitle">Dashboard</h1>
   <h3 class="playeremail"><%= current_player.email %></h3>
   <hr>
@@ -27,29 +27,28 @@
 <br/><br>
 <button class="dashButton"><%= link_to 'Back', :back %></button>
 
-<h1> Open Games (OPPONENT'S TURN)</h1>
-
-      <% @all_games.available.each do |game| %>
-      <div class="available-game">
-        <% if game.white_player_id != current_player.id %>
-          <tr>
-            <td><h3><%= game.game_name %></h3></td>
-            <td><button class="dashButton"><%= link_to 'Join game', join_game_path(game), method: :patch %></button></td>
-          </tr>
+    <h1> Open Games (OPPONENT'S TURN)</h1>
+        <% @all_games.available.each do |game| %>
+          <% if game.white_player_id != current_player.id %>
+            <tr>
+              <td><h3><%= game.game_name %></h3></td>
+              <td><button class="dashButton"><%= link_to 'Join game', join_game_path(game), method: :patch %></button></td>
+            </tr>
+          <% end %>
         <% end %>
-      </div>  
-      <% end %>
 
 </div>
 
 <script>
 $(function() {
-  var createGameRef = rootRef.child(gameID);
+  var rootRef = firebase.database().ref();
+  var gameID = "game"+ data.gameID;
+  var createGameRef = rootRef;
 
-  createGameRef.on('value', function(snapshot)) {
+  createGameRef.on('value', function(snapshot) {
     var data = snapshot.val();
-    if (data.gameName) {
-      $('.available-games tr').prepend("<td><h3>" + data.gameName + "</h3></td>");
+    if (data.gameID) {
+      $('.dashboard').append("<h3>" + data.gameName + "</h3>");
     }
   });
 

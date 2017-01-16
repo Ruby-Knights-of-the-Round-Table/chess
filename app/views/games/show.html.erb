@@ -214,6 +214,7 @@ $(function() {
     var gameID = "game"+ $('.game-board').data('game-id');
     var loadTimeStamp = $('.game-board').data('time-stamp');
 
+    var rootRef = firebase.database().ref();
     var joinGameRef = rootRef.child(gameID);
     var pieceUpdateRef = rootRef.child(gameID);
     var moveRef = rootRef.child(gameID);
