@@ -4,5 +4,8 @@ class MovesController < ApplicationController
 
     def show
       render json: Game.find(Piece.find(params[:id]).game_id).moves
+
     end
+
+
 end

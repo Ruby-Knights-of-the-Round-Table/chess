@@ -76,7 +76,10 @@ class PiecesController < ApplicationController
                     white_player_email: @piece.game.white_player.email,
                     black_player_email: @piece.game.black_player.email,
                     y_captured: y_captured,
-                    x_captured: x_captured)
+                    x_captured: x_captured,
+                    move_turn: Move.last.turn,
+                    type: @piece.type
+                    )
   end
 
   private

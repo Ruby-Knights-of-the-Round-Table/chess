@@ -83,7 +83,7 @@ class Game < ActiveRecord::Base
     # r.values
     query = "SELECT pieces.type, moves.turn, pieces.game_id, moves.x, moves.y FROM players, pieces, moves WHERE moves.piece_id = pieces.id AND pieces.player_id = players.id AND pieces.game_id = #{self.id} AND moves.x = moves.x AND moves.y = moves.y"
     results = ActiveRecord::Base.connection.execute(query)
-    results.values  # [["phagmann1@gmail.com", "Rook", "0"], ["phagmann1@gmail.com", "Rook", "0"],...
+    results.values  # [["Rook", "0"], ["phagmann1@gmail.com", "Rook", "0"],... [ [ type, turn#, y, x, piece_id]]
 
   end
 
