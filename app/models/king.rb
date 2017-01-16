@@ -53,4 +53,27 @@ class King < Piece
         return pieces_checking_king
     end
 
+
+    def if_checkmate?(board)
+        current_king = self
+        pieces_attacking_king = current_king.if_check?(board)
+        return false if pieces_attacking_king.length == 0
+        
+
+        current_king.game.pieces.where(player_id: current_king.player_id, captured_piece: false ).each do |piece|
+          final_spots = piece.piece_can_move_to(board)
+          # see if avail spaces can be moved to without there being a check
+
+          if pieces_attacking_king.length > 0
+              final_spots = piece.checkmoves(current_king, pieces_attacking_king, board)
+          end
+          final_spots = piece.dont_be_in_check(final_spots,current_king, board)
+          return false if final_spots.length > 0
+        end
+
+        return true
+    end
+
+
+
 end
