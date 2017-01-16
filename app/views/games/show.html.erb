@@ -31,8 +31,8 @@
       <% else %>
          <h2> <%= @game.white_player.email %> is a winner!! </h2>
       <% end %>
+    <% end %> 
   <% end %> 
-
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
   <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
