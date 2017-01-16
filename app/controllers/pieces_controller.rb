@@ -64,9 +64,9 @@ class PiecesController < ApplicationController
     kings = @piece.game.pieces.where( type: "King" )
     kings.each do |curr_king|
       if curr_king.if_checkmate?(board) == true
-        if @piece.game.winner_id != curr_king.player_id
+        if @piece.game.white_player_id != curr_king.player_id
            @piece.game.winner_id = @piece.game.white_player_id
-         else 
+        else 
            @piece.game.winner_id = @piece.game.black_player_id
         end 
           @piece.game.save
