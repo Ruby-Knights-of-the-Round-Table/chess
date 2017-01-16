@@ -22,9 +22,17 @@
 <div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
 
   <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
-    <% if current_king.if_checkmate?(@board) == true%>
-      <h2> Player <%= current_player.id %> is a loser!!! </h2>
-    <% end %>
+  <% kings = @game.pieces.find_by( type: "King" ) %>
+
+  <% kings.each do |curr_king| %>
+    <% if curr_king.if_checkmate?(@board) == true%>
+      <% if @game.black_player != curr_king.player_id %>
+         <h2> <%= @game.black_player.email %> is a winner!! </h2>
+      <% else %>
+         <h2> <%= @game.white_player.email %> is a winner!! </h2>
+      <% end %>
+  <% end %> 
+
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
   <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
@@ -189,10 +197,10 @@
 </div>
 
 <div class="col-xs-10" id="log" style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-<p> Moves List: </p>
-<script>
+<script >
   moveLog(<%= current_king.id %>)
 </script>
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
@@ -222,7 +230,29 @@ $(function() {
     var rootRef = firebase.database().ref();
     var joinGameRef = rootRef.child(gameID);
     var pieceUpdateRef = rootRef.child(gameID);
+    var moveRef = rootRef.child(gameID);
 
+    moveRef.on('value', function(snapshot) {
+      var data = snapshot.val();
+      if( data.move_turn ){
+
+
+
+      var div = document.getElementById("log");
+        
+      if (data.move_turn % 2 == 1){
+          div.innerHTML += "<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>";
+      }
+      else{
+          div.innerHTML += "<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>";
+      }
+     
+    
+      }
+      
+       
+
+    })
     joinGameRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
@@ -293,6 +323,9 @@ $(function() {
       }
 
     });
+
+
+
 
     function makeWhitePiecesSelectable() {
       $('.piece[data-piece-color="white"]').each(function() {
