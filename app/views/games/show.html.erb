@@ -20,20 +20,15 @@
 </div>
 
 <div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
-
-  <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
-  <% kings = @game.pieces.where( type: "King" ) %>
-
-  <% kings.each do |curr_king| %>
-    <% if curr_king.if_checkmate?(@board) == true%>
-      <% if @game.black_player_id != curr_king.player_id %>
-         <h2> <%= @game.black_player.email %> is a winner!! </h2>
-      <% else %>
-         <h2> <%= @game.white_player.email %> is a winner!! </h2>
-      <% end %>
+  <div id="supercheck">
+    <%= @game.winner_id %>
+    <% if @game.winner_id == @game.black_player_id %>
+      <h2> Winner is  <%= @game.black_player.email %> </h2>
+    <% elsif @game.winner_id == @game.white_player_id %>
+      <h2> Winner is  <%= @game.white_player.email %> </h2>
     <% end %> 
-  <% end %> 
-
+  </div>
+  <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
   <% pieces_attacking_king = current_king.if_check?(@board) %>
 
   <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
@@ -232,15 +227,25 @@ $(function() {
     var joinGameRef = rootRef.child(gameID);
     var pieceUpdateRef = rootRef.child(gameID);
     var moveRef = rootRef.child(gameID);
+    var mateRef = rootRef.child(gameID);
 
+    mateRef.on('value', function(snapshot) {
+      var data = snapshot.val();
+      var div = document.getElementById("supercheck"); 
+
+        if( data.winner_id == data.black_player_id){
+            div.innerHTML = "<h2> Winner is " + data.black_player_email + "</h2>";
+        }
+        else if( data.winner_id == data.white_player_id){
+            div.innerHTML = "<h2> Winner is " + data.white_player_email + "</h2>";
+        }
+
+    })
     moveRef.on('value', function(snapshot) {
       var data = snapshot.val();
+      var div = document.getElementById("log");
       if( data.move_turn ){
 
-
-
-      var div = document.getElementById("log");
-        
       if (data.move_turn % 2 == 1){
           div.innerHTML += "<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>";
       }
