@@ -25,7 +25,7 @@ function moveLog(pieceID) {
       // console.log(infomation)
       var div = document.getElementById("log");
       // div.innerHTML = "<p> Moves List: </p>"
-      for( var i = 0; i < infomation.length; i++){
+      for( var i = infomation.length-1; i>0; i--){
         currentMove = infomation[i]
         if( parseInt(currentMove[1]) == 0 ){
             continue
