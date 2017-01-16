@@ -24,7 +24,7 @@ function moveLog(pieceID) {
       $.get( '/moves/' + pieceID.toString()).success (function(infomation)  {
       // console.log(infomation)
       var div = document.getElementById("log");
-      div.innerHTML = "<p> Moves List: </p>"
+      // div.innerHTML = "<p> Moves List: </p>"
       for( var i = 0; i < infomation.length; i++){
         currentMove = infomation[i]
         if( parseInt(currentMove[1]) == 0 ){

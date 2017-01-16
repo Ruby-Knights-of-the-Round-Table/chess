@@ -195,6 +195,7 @@
 </div>
 
 <div class="col-xs-10" id="log" style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+  <p>Moves List:</p>
   <script >
     moveLog(<%= current_king.id %>)
   </script>
@@ -239,11 +240,14 @@ $(function() {
     moveRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
-        if (data.move_turn % 2 == 1) {
-            $('#log').prepend("<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
-        }
-        else if (data.move_turn % 2 == 0) {
-            $('#log').prepend("<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+        var updatedTimeStamp = data.timeStamp
+        if (updatedTimeStamp > loadTimeStamp) {
+          if (data.move_turn % 2 == 1) {
+              $('#log').prepend("<p> Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+          }
+          else if (data.move_turn % 2 == 0) {
+              $('#log').prepend("<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
+          }
         }
       }
     });
