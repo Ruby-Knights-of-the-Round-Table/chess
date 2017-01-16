@@ -214,7 +214,6 @@ $(function() {
     var gameID = "game"+ $('.game-board').data('game-id');
     var loadTimeStamp = $('.game-board').data('time-stamp');
 
-    var rootRef = firebase.database().ref();
     var joinGameRef = rootRef.child(gameID);
     var pieceUpdateRef = rootRef.child(gameID);
     var moveRef = rootRef.child(gameID);
@@ -249,10 +248,9 @@ $(function() {
 =======
     });
 
+
     moveRef.on('value', function(snapshot) {
       var data = snapshot.val();
-      var div = document.getElementById("log");
-
       if (data.move_turn) {
         if (data.move_turn % 2 == 1) {
           $('#log').prepend("<p>" + "Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update + "</p>");
@@ -266,7 +264,7 @@ $(function() {
 
     joinGameRef.on('value', function(snapshot) {
       var data = snapshot.val();
-      if (data) {
+      if (data.first_player_email) {
         // show that it's white player's turn when second player joins
         $('.waiting h4').replaceWith("<h4>white player's turn:</h4>");
         $('.waiting').append("<h5>" + data.first_player_email + "</h5>");

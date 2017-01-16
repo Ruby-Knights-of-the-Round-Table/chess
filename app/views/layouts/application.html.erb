@@ -63,10 +63,11 @@
         messagingSenderId: "349996601563"
       };
       firebase.initializeApp(config);
+      
+      var rootRef = firebase.database().ref();
+
     });
   </script>
-
-
 
   <%= yield %>
 
