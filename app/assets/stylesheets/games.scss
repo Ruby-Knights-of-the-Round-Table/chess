@@ -6,18 +6,39 @@
   margin: auto;
   border: 4px solid #593c20;
   background: #ffbf70;
+  -webkit-box-shadow: 10px 0 5px -2px #888;
+        box-shadow: 10px 0 5px -2px #888;
 }
 
 #board td {
   width: 60px;
   height: 60px;
-  // border: 0.5px solid black;
   text-align: center; // Aligns unicode chess pieces properly
-  font-size: 30px; // Unicode character size can be adjusted here
+  font-size: 35px; // Unicode character size can be adjusted here
 }
 
 #board tr:nth-child(odd) td:nth-child(even), #board tr:nth-child(even) td:nth-child(odd) {
   background: #bf7930; //Darker color (bottom left corner)
+}
+
+#supercheck {
+  float: none;
+  margin: 0 auto;
+}
+
+#log {
+  height:240px;
+  width:300px;
+  border:1px solid #ccc;
+  font:16px/26px Georgia, Garamond, Serif;
+  overflow:auto;
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  clear: both;
+  border: 1px solid #593c20;
+  -webkit-box-shadow: 10px 0 5px -2px #888;
+        box-shadow: 10px 0 5px -2px #888;
 }
 
 .selected {
@@ -51,11 +72,16 @@
   cursor: "crosshair";
 }
 
-.captured div {
-  font-size: 30px;
-
+.captured {
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
 }
 
+.captured div {
+  font-size: 35px;
+  text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+}
 
 // .button_to {
 //   width: 100%;
