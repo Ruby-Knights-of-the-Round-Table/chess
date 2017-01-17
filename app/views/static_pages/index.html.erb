@@ -7,64 +7,73 @@
 
 <!-- About Section -->
 <div class="about col-lg-4 col-md-5 col-xs-12 col-lg-offset-4 col-md-offset-4 col-xs-offset-">
-	<h3 class="abouttitle" align="center">Multiplayer Chess Application</h3>
-	<p class="aboutdescription">Ruby Knights Chess is a multiplayer chess game built using Ruby on Rails and JavaScript. This chess game allows you to play chess online with friends, or even play against other strangers to see who is the better chess players! This multiplayer game functions just like a real chess game.</p>
+	<!-- <h3 class="abouttitle" align="center"></h3> -->
+	<p class="aboutdescription">Ruby Knights is an open-source application built using Ruby on Rails and Javascript. We created Ruby Knights as our capstone for the Firehose Project. Our goals were to enhance our development skills while creating a dynamic and easy-to-play app. Each team member worked collaboratively on our agile team to build every element of our app from the ground up.</p>
 </div>
+
 
 <!-- CODE -->
 <div class="code col-lg-12 col-md-12 col-xs-12">
-	<h1 align="center" class="abouttitle">CODE</h1>
-	<p align="center" class="aboutdescription breakdown">Breakdown of our application</p>
+	<h1 align="center" class="abouttitle">CODE & FEATURES</h1>
+	<!-- <p align="center" class="aboutdescription breakdown">Breakdown of our application</p> -->
 	<br>
 </div>
 
+<!-- SNIPPET -->
+	<div class="codesnippet5 col-lg-7 col-md-7 col-xs-12">
+		<img src="assets/chessboard2.png" class="img-responsive" style="height: 680px;">
+	</div>
 
-<!-- SNIPPET Section 1 -->
+	<div class="codesnippet4 col-lg-5 col-md-5 col-xs-12">
+		<h3 class="snippettitle">Selecting & moving pieces</h3>
+		<p class="snippetdescription">Our chess app uses algorithms that we wrote on the Rails backend to show the player what their possible moves are, following standard chess logic. Players can drag and drop pieces with a click of a mouse.</p>
+		<br>
+		<h3 class="snippettitle">Real-time Updates</h3>
+		<p class="snippetdescription">When a player moves or captures a piece, opponents can see these updates in real-time, due to our app's integration with Firebase's real-time database.</p>
+	</div>
+
+  <!-- SNIPPET -->
+  <div class="codesnippet2 col-lg-6 col-md-6 col-xs-12">
+		<h3 class="snippettitle">Moves</h3>
+		<p class="snippetdescription">We log the list of moves next to the chessboard for each game, keeping track of the piece coordinates and game's turn. This log updates live and in real-time for both players.</p>
+		<br><br>
+		<h3 class="snippettitle">Captured pieces</h3>
+		<p class="snippetdescription">
+		  We also display captured pieces in real-time, separated by piece color.
+		</p>
+	</div>
+
+	<div class="codesnippet2 col-lg-6 col-md-6 col-xs-12">
+		<img src="assets/movesLog.png" class="img-responsive" style="height: 680px;">
+	</div>
+
+<!-- SNIPPET -->
 	<div class="codesnippet col-lg-7 col-md-7 col-xs-12">
 		<img src="assets/ifchecksplash.png" style="height: 375px;" class="img-responsive">
 	</div>
 
 	<div class="codesnippetright col-lg-5 col-md-5 col-xs-12">
 
-		<h3 class="snippettitle">def if_check?(board)</h3>
-		<p class="snippetdescription">About the code snippet goes right here. About the code snippet goes right here. About the code snippet goes right here. About the code snippet goes right here.</p>
+		<h3 class="snippettitle">Check!</h3>
+		<p class="snippetdescription">Check and checkmate are an integral part of any chess game, and our app recognizes this dynamic. </p>
+    <p class="snippetdescription">Our code loops through all opponent's pieces to determine if any piece can move to the king's position. Our back-end logic ensures that players can not move themselves into check and that other pieces must move to prevent check.</p>
 	</div>
 
 
 
-<!-- SNIPPET Section 2 -->
+<!-- SNIPPET -->
 	<div class="codesnippet2 col-lg-6 col-md-6 col-xs-12">
-		<h3 class="snippettitle">About Code Snippet</h3>
-		<p class="snippetdescription">About the code snippet goes right here. About the code snippet goes right here. About the code snippet goes right here. About the code snippet goes right here.</p>
+		<h3 class="snippettitle">Javascript & jQuery</h3>
+		<p class="snippetdescription">After writing Ruby code for basic features like moving pieces, we restructured our code in order to perform Ajax requests to the server. This enabled us to create a more dynamic client-side experience. </p>
 		<br><br>
-		<h3 class="snippettitle">SubHeader</h3>
 		<p class="snippetdescription">
-		More content goes here. More content goes here. More content goes here.
+		  We made extensive use of front-end libraries to build key features in our app.
 		</p>
 	</div>
 
 	<div class="codesnippet3 col-lg-6 col-md-6 col-xs-12">
 		<img src="assets/jssplash.png" class="img-responsive" style="height: 680px;">
 	</div>
-
-
-
-<!-- SNIPPET Section 3 -->
-	<div class="codesnippet5 col-lg-7 col-md-7 col-xs-12">
-		<img src="assets/chessboard.png" class="img-responsive" style="height: 680px;">
-	</div>
-
-	<div class="codesnippet4 col-lg-5 col-md-5 col-xs-12">
-		<h3 class="snippettitle">Movement</h3>
-		<p class="snippetdescription">About the code snippet goes right here. About the code snippet goes right here. About the code snippet goes right here. About the code snippet goes right here.</p>
-		<br><br>
-		<h3 class="snippettitle">SubHeader</h3>
-		<p class="snippetdescription">
-		More content goes here. More content goes here. More content goes here.
-		</p>
-	</div>
-
-
 
 
 <!-- Skills Used -->
@@ -100,13 +109,8 @@
 <!-- Tools Used -->
 <div class="toolssection col-lg-12 col-md-12 col-xs-12" align="center">
 <hr>
-	<h1 class="skills abouttitle">Our Valuable Toolset</h1>
+	<h1 class="skills abouttitle">Our Valuable Toolkit</h1>
 <br><br>
-
-
-	<div class="col-lg-1 col-md-1 col-xs-1">
-	</div>
-
 
 	<div class="skills col-lg-2 col-md-2 col-xs-2">
 		<img src="assets/codeshiplogo.png" style="width: 160px; height: 160px;">
@@ -125,6 +129,10 @@
 		<h3>HEROKU</h3>
 	</div>
 
+  <div class="skills col-lg-2 col-md-2 col-xs-2">
+    <img src="assets/firebaselogo.png" style="width: 160px; height: 160px;">
+    <h3>FIREBASE</h3>
+  </div>
 
 	<div class="skills col-lg-2 col-md-2 col-xs-2">
 		<img src="assets/trellologo.png" style="width: 160px; height: 160px;">
@@ -135,10 +143,6 @@
 	<div class="skills col-lg-2 col-md-2 col-xs-2">
 		<img src="assets/slacklogo.png" style="width: 160px; height: 160px;">
 		<h3>SLACK</h3>
-	</div>
-
-
-	<div class="col-lg-1 col-md-1 col-xs-1">
 	</div>
 
 </div>
