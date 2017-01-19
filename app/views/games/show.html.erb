@@ -234,7 +234,6 @@ $(function() {
       }
     });
 
-<<<<<<< HEAD
     moveRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
@@ -246,19 +245,7 @@ $(function() {
           else if (data.move_turn % 2 == 0) {
               $('#log p:first-child').after("<p> Turn " + data.move_turn+  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update +"</p>");
           }
-=======
-    });
 
-
-    moveRef.on('value', function(snapshot) {
-      var data = snapshot.val();
-      if (data.move_turn) {
-        if (data.move_turn % 2 == 1) {
-          $('#log').prepend("<p>" + "Turn " + data.move_turn +  ": White " + data.type + " to y: " + data.y_update + ", x: " + data.x_update + "</p>");
-          }
-        else {
-          $('#log').prepend("<p>" + "Turn " + data.move_turn +  ": Black " + data.type  + " to y: " + data.y_update + ", x: " + data.x_update + "</p>");
->>>>>>> Fix merge conflicts
         }
       }
     });
