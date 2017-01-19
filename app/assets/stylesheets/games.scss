@@ -29,16 +29,16 @@
 #log {
   height:240px;
   width:300px;
-  border:1px solid #ccc;
   font:16px/26px Georgia, Garamond, Serif;
   overflow:auto;
   float: none;
   margin-left: auto;
   margin-right: auto;
   clear: both;
-  border: 1px solid #593c20;
+  border: 2px solid #B1E2F2;
   -webkit-box-shadow: 10px 0 5px -2px #888;
         box-shadow: 10px 0 5px -2px #888;
+  background-image: url('ice_age.png');
 }
 
 .selected {
