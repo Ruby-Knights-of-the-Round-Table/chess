@@ -11,15 +11,17 @@
     </tr>
   </thead>
 
-    <div class="current-games">
-      <% @games.each do |game| %>
-        <tr>
-          <td><h3><%= game.game_name %></h3></td>
-          <td><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></td>
-          <td><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
-        </tr>
-      <% end %>
+  <% if @all_games.available.last != nil %>
+    <div class="games" data-game-id="<%= @all_games.available.last.id %>">
+        <% @games.each do |game| %>
+          <tr>
+            <td><h3><%= game.game_name %></h3></td>
+            <td><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></td>
+            <td><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
+          </tr>
+        <% end %>
     </div>
+  <% end %>
 </table>
 
 <br />
@@ -28,6 +30,7 @@
 <button class="dashButton"><%= link_to 'Back', :back %></button>
 
     <h1> Open Games (OPPONENT'S TURN)</h1>
+      <div class="open-games">
         <% @all_games.available.each do |game| %>
           <% if game.white_player_id != current_player.id %>
             <tr>
@@ -36,19 +39,23 @@
             </tr>
           <% end %>
         <% end %>
+      </div>
 
 </div>
 
 <script>
 $(function() {
   var rootRef = firebase.database().ref();
-  var gameID = "game"+ data.gameID;
-  var createGameRef = rootRef;
+  var gameID = "game"+ $('.games').data('game-id');
+  var createGameRef = rootRef.child(gameID);
 
   createGameRef.on('value', function(snapshot) {
     var data = snapshot.val();
-    if (data.gameID) {
-      $('.dashboard').append("<h3>" + data.gameName + "</h3>");
+    if (data) {
+      console.log(data.gameName);
+      console.log(data.gameID);
+      console.log(gameID);
+      $('.open-games').append("<h3>" + data.gameName + "</h3>");
     }
   });
 

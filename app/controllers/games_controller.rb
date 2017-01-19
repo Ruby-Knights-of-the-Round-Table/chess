@@ -32,7 +32,8 @@ class GamesController < ApplicationController
         set_firebase(gameID: @game.id,
                     gameName: @game.game_name)
 
-        redirect_to( game_path(@game) )
+        redirect_to(games_path)
+        # redirect_to( game_path(@game) )
     end
 
     def destroy
