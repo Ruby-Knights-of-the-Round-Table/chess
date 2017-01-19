@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body.show {
+  background-image: url('light_grey.png');
+}
+
 #board {
   margin: auto;
   border: 4px solid #593c20;
@@ -29,16 +33,16 @@
 #log {
   height:240px;
   width:300px;
-  border:1px solid #ccc;
   font:16px/26px Georgia, Garamond, Serif;
   overflow:auto;
   float: none;
   margin-left: auto;
   margin-right: auto;
   clear: both;
-  border: 1px solid #593c20;
+  border: 2px solid #B1E2F2;
   -webkit-box-shadow: 10px 0 5px -2px #888;
         box-shadow: 10px 0 5px -2px #888;
+  background-image: url('ice_age.png');
 }
 
 .selected {
@@ -80,7 +84,7 @@
 
 .captured div {
   font-size: 35px;
-  text-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+  text-shadow: 6px 6px 0px rgba(177,226,242,0.85);
 }
 
 // .button_to {

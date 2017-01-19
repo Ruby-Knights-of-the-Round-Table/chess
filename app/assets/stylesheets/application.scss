@@ -60,27 +60,14 @@
 .breakdown {
   margin-top: -10px;
 }
-/* SNIPPETS SECTION 1*/
+
 .codebox {
   border-width: 5px;
   border-color: black;
   border-style: solid;
   height: 400px;
 }
-.codesnippet {
-  border-width: 10px;
-  border-color: #51d6ff;
-  border-style: solid;
-  height: 480px;
-  background-color: #272822;
-}
-.codesnippetright {
-  border-width: 10px;
-  border-color: #51d6ff;
-  border-style: solid;
-  height: 480px;
-  background-color: #51d6ff;
-}
+
 .snippettitle {
   font-family: arial black;
   font-size: 2em;
@@ -91,7 +78,17 @@
   font-size: 2em;
   color: white;
 }
-/* SNIPPETS SECTION 2*/
+
+/* SNIPPETS SECTION 1 */
+.codesnippet1 {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 700px;
+  background-color: #51d6ff;
+}
+
+/* SNIPPETS SECTION 2 */
 .codebox2 {
   border-width: 5px;
   border-color: black;
@@ -102,32 +99,49 @@
   border-width: 10px;
   border-color: #e24700;
   border-style: solid;
+  height: 550px;
+  background-color: #e24700;
+}
+
+.codesnippet2 img {
+  display:block;
+  margin:auto;
+}
+
+/* SNIPPETS SECTION 3 */
+.codesnippet {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 480px;
+  background-color: #272822;
+}
+
+.codesnippetright {
+  border-width: 10px;
+  border-color: #51d6ff;
+  border-style: solid;
+  height: 480px;
+  background-color: #51d6ff;
+}
+
+/* SNIPPETS SECTION 4 */
+.codesnippet4 {
+  border-width: 10px;
+  border-color: #e24700;
+  border-style: solid;
   height: 700px;
   background-color: #e24700;
 }
 
-.codesnippet3 {
+.codesnippet4a {
   border-width: 10px;
   border-color: #e24700;
   border-style: solid;
   height: 700px;
   background-color: #272822;
 }
-/* SNIPPETS SECTION 3 */
-.codesnippet4 {
-  border-width: 10px;
-  border-color: #51d6ff;
-  border-style: solid;
-  height: 700px;
-  background-color: #51d6ff;
-}
-.codesnippet5 {
-  border-width: 10px;
-  border-color: #51d6ff;
-  border-style: solid;
-  height: 700px;
-  background-color: #51d6ff;
-}
+
 
 /* Tools Section */
 .skills {
