@@ -1,14 +1,6 @@
 class GamesController < ApplicationController
     before_action :authenticate_player!
-    # if_check? ( be in kings model? ) (completed!)
-    #    iterate over each of the enemy pieces and see if their moves possible shares the kings space
-    #    maybe return the pices that do this
-    # prevent_check_moves ( TODO )
-    #    from the possible moves, see if this move can undo the check
-    #    if if_check? is null, then end this program
-    #
-    # if_checkmate
-    #    changes database value of 'winner_id' if there is a checkmate, or if none of current_player pieces can undo check.
+
     def index
         @games = Game.where(white_player_id: current_player.id) + Game.where(black_player_id: current_player.id)
         @all_games = Game.all
@@ -28,12 +20,22 @@ class GamesController < ApplicationController
         @game.white_player_id = current_player.id
         @game.save
         @game.place_pieces_in_database(current_player.id, nil)
-        redirect_to( game_path(@game) )
+
+        set_firebase(gameID: @game.id,
+                    gameName: @game.game_name,
+                    available: true,
+                    gameCreatedAt: Time.now.to_s)
+
+        redirect_to(game_path(@game))
     end
 
     def destroy
         @game = Game.find(params[:id])
         @game.destroy
+
+        set_firebase(deletedGame: true,
+                     gameID: @game.id)
+
         redirect_to(games_path)
     end
 
@@ -45,8 +47,8 @@ class GamesController < ApplicationController
           @game.save
           @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
 
-          update_firebase(gameId: @game.id,
-                          first_player_email: @game.white_player.email)
+          update_firebase(first_player_email: @game.white_player.email,
+                          available: false)
 
           redirect_to(game_path(@game))
         end
@@ -59,10 +61,16 @@ class GamesController < ApplicationController
       params.require(:game).permit(:game_name, :white_player_id, :black_player_id, :winner_id, :turn  )
     end
 
-    def update_firebase(data)
+    def set_firebase(data)
       base_uri = 'https://ruby-knights.firebaseio.com'
       firebase = Firebase::Client.new(base_uri)
       response = firebase.set("game#{@game.id}", data)
+    end
+
+    def update_firebase(data)
+      base_uri = 'https://ruby-knights.firebaseio.com'
+      firebase = Firebase::Client.new(base_uri)
+      response = firebase.update("game#{@game.id}", data)
     end
 
 end

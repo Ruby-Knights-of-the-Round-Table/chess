@@ -1,4 +1,4 @@
-<div align="center">
+<div class="dashboard" align="center">
   <h1 class="dashtitle">Dashboard</h1>
   <h3 class="playeremail"><%= current_player.email %></h3>
   <hr>
@@ -11,13 +11,15 @@
     </tr>
   </thead>
 
+  <div class="games" data-time-stamp="<%= Time.now.to_s %>">
     <% @games.each do |game| %>
       <tr>
-        <td><h3><%= game.game_name %></h3></td>
-        <td><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></td>
-        <td><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
+        <td><div class="game" data-game-id="<%=game.id%>"><h3><%= game.game_name %></h3></div></td>
+        <td><div class="game" data-game-id="<%=game.id%>"><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></div></td>
+        <td><div class="game" data-game-id="<%=game.id%>"><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></div></td>
       </tr>
     <% end %>
+  </div>
 </table>
 
 <br />
@@ -25,13 +27,47 @@
 <br/><br>
 <button class="dashButton"><%= link_to 'Back', :back %></button>
 
-<h1> Open Games (OPPONENT'S TURN)</h1>
-    <% @all_games.available.each do |game| %>
-      <% if game.white_player_id != current_player.id %>
-        <tr>
-          <td><h3><%= game.game_name %></h3></td>
-          <td><button class="dashButton"><%= link_to 'Join game', join_game_path(game), method: :patch %></button></td>
-        </tr>
-      <% end %>
-    <% end %>
+    <h1> Open Games (OPPONENT'S TURN)</h1>
+      <div class="open-games">
+        <% @all_games.available.each do |game| %>
+          <% if game.white_player_id != current_player.id %>
+            <tr>
+              <td><div class="game" data-game-id="<%=game.id%>"><h3><%= game.game_name %></h3></div></td>
+              <td><div class="game" data-game-id="<%=game.id%>"><button class="dashButton"><%= link_to 'Join game', join_game_path(game), method: :patch %></button></div></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </div>
+
 </div>
+
+<script>
+$(function() {
+  var loadTimeStamp = $('.games').data('time-stamp');
+  var rootRef = firebase.database().ref();
+  var createGameRef = rootRef;
+  var deleteGameRef = rootRef;
+
+  createGameRef.on('child_added', function(snapshot) {
+    var data = snapshot.val();
+    var gameCreatedAt = data.gameCreatedAt
+    if (data) {
+      if (data.available && data.gameName && data.gameID && gameCreatedAt > loadTimeStamp ) {
+      $('.open-games').append("<div class='game' data-game-id='" + data.gameID + "'>" + "<h3>" + data.gameName + "</h3></div>");
+      $('.open-games').append("<div class='game' data-game-id='" + data.gameID + "'>" + "<button class='dashButton'>" + " <a data-method='patch' href='/games/" + data.gameID + "/join'" + "rel='nofollow'>Join game</a> </button></div>");
+      }
+    }
+  });
+
+  deleteGameRef.on('child_changed', function(snapshot) {
+    var data = snapshot.val();
+    if (data) {
+      if (data.deletedGame && data.gameID) {
+        $(".game[data-game-id=" + data.gameID + "]").empty();
+        $(".game[data-game-id=" + data.gameID + "]").remove();
+      }
+    }
+  });
+
+});
+</script>
