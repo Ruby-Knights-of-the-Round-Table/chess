@@ -12,13 +12,13 @@
   </thead>
 
   <div class="games" data-time-stamp="<%= Time.now.to_s %>">
-      <% @games.each do |game| %>
-        <tr>
-          <td><h3><%= game.game_name %></h3></td>
-          <td><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></td>
-          <td><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
-        </tr>
-      <% end %>
+    <% @games.each do |game| %>
+      <tr>
+        <td><div class="game" data-game-id="<%=game.id%>"><h3><%= game.game_name %></h3></div></td>
+        <td><div class="game" data-game-id="<%=game.id%>"><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></div></td>
+        <td><div class="game" data-game-id="<%=game.id%>"><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></div></td>
+      </tr>
+    <% end %>
   </div>
 </table>
 
@@ -47,6 +47,9 @@ $(function() {
   var rootRef = firebase.database().ref();
   var createGameRef = rootRef;
 
+  // may need to change ref for deleted games
+  var deleteGameRef = rootRef;
+
   createGameRef.on('child_added', function(snapshot) {
     var data = snapshot.val();
     var gameCreatedAt = data.gameCreatedAt
@@ -54,6 +57,18 @@ $(function() {
       if (data.available && data.gameName && data.gameID && gameCreatedAt > loadTimeStamp ) {
       $('.open-games').append("<h3>" + data.gameName + "</h3>");
       $('.open-games').append("<button class='dashButton'>" + " <a data-method='patch' href='/games/" + data.gameID + "/join'" + "rel='nofollow'>Join Game</a> </button>");
+      }
+    }
+  });
+
+  deleteGameRef.on('child_added', function(snapshot) {
+    var data = snapshot.val();
+    if (data) {
+      if (data.deletedGame && data.gameID) {
+        console.log(data.deletedGame);
+        console.log(data.gameID);
+        $(".game[data-game-id=" + data.gameID + "]").empty();
+        $(".game[data-game-id=" + data.gameID + "]").remove();
       }
     }
   });

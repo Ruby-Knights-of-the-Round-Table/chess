@@ -34,15 +34,15 @@ class GamesController < ApplicationController
                     available: true,
                     gameCreatedAt: Time.now.to_s)
 
-        redirect_to( game_path(@game) )
+        redirect_to(game_path(@game))
     end
 
     def destroy
         @game = Game.find(params[:id])
         @game.destroy
 
-        # delete_firebase(gameId: @game.id,
-        #                 first_player_email: @game.white_player.email)
+        set_firebase(deletedGame: true,
+                     gameID: @game.id)
 
         redirect_to(games_path)
     end
@@ -74,12 +74,6 @@ class GamesController < ApplicationController
       firebase = Firebase::Client.new(base_uri)
       response = firebase.set("game#{@game.id}", data)
     end
-
-    # def delete_firebase(data)
-    #   base_uri = 'https://ruby-knights.firebaseio.com'
-    #   firebase = Firebase::Client.new(base_uri)
-    #   response = firebase.remove("game#{@game.id}", data)
-    # end
 
     def update_firebase(data)
       base_uri = 'https://ruby-knights.firebaseio.com'
