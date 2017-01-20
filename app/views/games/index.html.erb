@@ -11,7 +11,7 @@
     </tr>
   </thead>
 
-  <div class="games">
+  <div class="games" data-time-stamp="<%= Time.now.to_s %>">
       <% @games.each do |game| %>
         <tr>
           <td><h3><%= game.game_name %></h3></td>
@@ -43,17 +43,15 @@
 
 <script>
 $(function() {
+  var loadTimeStamp = $('.games').data('time-stamp');
   var rootRef = firebase.database().ref();
-  // var gameID = "game"+ $('.games').data('game-id');
   var createGameRef = rootRef;
 
   createGameRef.on('child_added', function(snapshot) {
     var data = snapshot.val();
+    var gameCreatedAt = data.gameCreatedAt
     if (data) {
-      if (data.available && data.gameName && data.gameID) {
-      console.log(data.gameID);
-      console.log(data.gameName);
-      console.log(data.available);
+      if (data.available && data.gameName && data.gameID && gameCreatedAt > loadTimeStamp ) {
       $('.open-games').append("<h3>" + data.gameName + "</h3>");
       $('.open-games').append("<button class='dashButton'>" + " <a data-method='patch' href='/games/" + data.gameID + "/join'" + "rel='nofollow'>Join Game</a> </button>");
       }

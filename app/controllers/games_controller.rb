@@ -31,7 +31,8 @@ class GamesController < ApplicationController
 
         set_firebase(gameID: @game.id,
                     gameName: @game.game_name,
-                    available: true)
+                    available: true,
+                    gameCreatedAt: Time.now.to_s)
 
         redirect_to( game_path(@game) )
     end
