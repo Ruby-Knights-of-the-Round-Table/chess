@@ -32,8 +32,8 @@
         <% @all_games.available.each do |game| %>
           <% if game.white_player_id != current_player.id %>
             <tr>
-              <td><h3><%= game.game_name %></h3></td>
-              <td><button class="dashButton"><%= link_to 'Join game', join_game_path(game), method: :patch %></button></td>
+              <td><div class="game" data-game-id="<%=game.id%>"><h3><%= game.game_name %></h3></div></td>
+              <td><div class="game" data-game-id="<%=game.id%>"><button class="dashButton"><%= link_to 'Join game', join_game_path(game), method: :patch %></button></div></td>
             </tr>
           <% end %>
         <% end %>
@@ -53,8 +53,8 @@ $(function() {
     var gameCreatedAt = data.gameCreatedAt
     if (data) {
       if (data.available && data.gameName && data.gameID && gameCreatedAt > loadTimeStamp ) {
-      $('.open-games').append("<h3>" + data.gameName + "</h3>");
-      $('.open-games').append("<button class='dashButton'>" + " <a data-method='patch' href='/games/" + data.gameID + "/join'" + "rel='nofollow'>Join Game</a> </button>");
+      $('.open-games').append("<div class='game' data-game-id='" + data.gameID + "'>" + "<h3>" + data.gameName + "</h3></div>");
+      $('.open-games').append("<div class='game' data-game-id='" + data.gameID + "'>" + "<button class='dashButton'>" + " <a data-method='patch' href='/games/" + data.gameID + "/join'" + "rel='nofollow'>Join game</a> </button></div>");
       }
     }
   });
@@ -63,8 +63,6 @@ $(function() {
     var data = snapshot.val();
     if (data) {
       if (data.deletedGame && data.gameID) {
-        console.log(data.deletedGame);
-        console.log(data.gameID);
         $(".game[data-game-id=" + data.gameID + "]").empty();
         $(".game[data-game-id=" + data.gameID + "]").remove();
       }
