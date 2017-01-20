@@ -30,10 +30,10 @@ class GamesController < ApplicationController
         @game.place_pieces_in_database(current_player.id, nil)
 
         set_firebase(gameID: @game.id,
-                    gameName: @game.game_name)
+                    gameName: @game.game_name,
+                    available: true)
 
-        redirect_to(games_path)
-        # redirect_to( game_path(@game) )
+        redirect_to( game_path(@game) )
     end
 
     def destroy
@@ -54,7 +54,8 @@ class GamesController < ApplicationController
           @game.save
           @game.pieces.where(player_id: nil).update_all(player_id: current_player.id)
 
-          update_firebase(first_player_email: @game.white_player.email)
+          update_firebase(first_player_email: @game.white_player.email,
+                          available: false)
 
           redirect_to(game_path(@game))
         end

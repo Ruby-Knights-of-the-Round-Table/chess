@@ -11,17 +11,15 @@
     </tr>
   </thead>
 
-  <% if @all_games.available.last != nil %>
-    <div class="games" data-game-id="<%= @all_games.available.last.id %>">
-        <% @games.each do |game| %>
-          <tr>
-            <td><h3><%= game.game_name %></h3></td>
-            <td><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></td>
-            <td><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
-          </tr>
-        <% end %>
-    </div>
-  <% end %>
+  <div class="games">
+      <% @games.each do |game| %>
+        <tr>
+          <td><h3><%= game.game_name %></h3></td>
+          <td><button class="dashButton"><%= link_to 'Play', game_path(game) %></button></td>
+          <td><button class="dashButton"><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
+        </tr>
+      <% end %>
+  </div>
 </table>
 
 <br />
@@ -46,16 +44,19 @@
 <script>
 $(function() {
   var rootRef = firebase.database().ref();
-  var gameID = "game"+ $('.games').data('game-id');
-  var createGameRef = rootRef.child(gameID);
+  // var gameID = "game"+ $('.games').data('game-id');
+  var createGameRef = rootRef;
 
-  createGameRef.on('value', function(snapshot) {
+  createGameRef.on('child_added', function(snapshot) {
     var data = snapshot.val();
     if (data) {
-      console.log(data.gameName);
+      if (data.available && data.gameName && data.gameID) {
       console.log(data.gameID);
-      console.log(gameID);
+      console.log(data.gameName);
+      console.log(data.available);
       $('.open-games').append("<h3>" + data.gameName + "</h3>");
+      $('.open-games').append("<button class='dashButton'>" + " <a data-method='patch' href='/games/" + data.gameID + "/join'" + "rel='nofollow'>Join Game</a> </button>");
+      }
     }
   });
 
