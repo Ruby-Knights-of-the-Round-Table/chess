@@ -46,8 +46,6 @@ $(function() {
   var loadTimeStamp = $('.games').data('time-stamp');
   var rootRef = firebase.database().ref();
   var createGameRef = rootRef;
-
-  // may need to change ref for deleted games
   var deleteGameRef = rootRef;
 
   createGameRef.on('child_added', function(snapshot) {
@@ -61,7 +59,7 @@ $(function() {
     }
   });
 
-  deleteGameRef.on('child_added', function(snapshot) {
+  deleteGameRef.on('child_changed', function(snapshot) {
     var data = snapshot.val();
     if (data) {
       if (data.deletedGame && data.gameID) {
