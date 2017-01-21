@@ -38,9 +38,9 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     old_row = @piece.y_position
     old_cell = @piece.x_position
-
     row = params[:y_position].to_i
     cell = params[:x_position].to_i
+    type = @piece.type
 
     if @piece.type == "Pawn"
       pawn_promoted = true if @piece.white_player? && row == 7 || @piece.black_player? && row == 0
@@ -94,7 +94,7 @@ class PiecesController < ApplicationController
                     y_captured: y_captured,
                     x_captured: x_captured,
                     move_turn: Move.last.turn,
-                    type: @piece.type,
+                    type: type,
                     winner_id: @piece.game.winner_id,
                     pawn_promoted: pawn_promoted)
   end
