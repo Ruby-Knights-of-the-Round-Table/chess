@@ -71,17 +71,13 @@ class Game < ActiveRecord::Base
       piece = Pawn.create(game_id: id, player_id: black_player_id, x_position: i, y_position: 6)
       Move.create(piece_id: piece.id, x: i, y: 6, turn: 0 )
     end
-
-
-    
-
   end
 
   def moves
     # q = "select p.email, c.type, m.turn from players p, pieces c, moves m  where m.piece_id = c.id and c.player_id = p.id"
     # r = ActiveRecord::Base.connection.execute(q)
     # r.values
-    query = "SELECT pieces.type, moves.turn, pieces.game_id, moves.x, moves.y FROM players, pieces, moves WHERE moves.piece_id = pieces.id AND pieces.player_id = players.id AND pieces.game_id = #{self.id} AND moves.x = moves.x AND moves.y = moves.y"
+    query = "SELECT pieces.type, moves.turn, pieces.game_id, moves.y, moves.x FROM players, pieces, moves WHERE moves.piece_id = pieces.id AND pieces.player_id = players.id AND pieces.game_id = #{self.id} AND moves.x = moves.x AND moves.y = moves.y"
     results = ActiveRecord::Base.connection.execute(query)
     results.values  # [["Rook", "0"], ["phagmann1@gmail.com", "Rook", "0"],... [ [ type, turn#, y, x, piece_id]]
 
