@@ -61,18 +61,21 @@ class PiecesController < ApplicationController
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
     black_player_id = @piece.game.black_player_id
-    kings = @piece.game.pieces.where( type: "King" )
+    if @piece.type == "Pawn"
+      pawn_promoted = @piece.can_promote?
+    end
+
+    kings = @piece.game.pieces.where(type: "King")
     kings.each do |curr_king|
       if curr_king.if_checkmate?(board) == true
         if @piece.game.white_player_id != curr_king.player_id
            @piece.game.winner_id = @piece.game.white_player_id
-        else 
+        else
            @piece.game.winner_id = @piece.game.black_player_id
-        end 
+        end
           @piece.game.save
-      end 
-     end 
-  
+      end
+    end
 
     render json: { piece: @piece, turn: turn, white_player_id: white_player_id, black_player_id: black_player_id }
 
@@ -91,8 +94,8 @@ class PiecesController < ApplicationController
                     x_captured: x_captured,
                     move_turn: Move.last.turn,
                     type: @piece.type,
-                    winner_id: @piece.game.winner_id
-                    )
+                    winner_id: @piece.game.winner_id,
+                    pawn_promoted: pawn_promoted)
   end
 
   private
