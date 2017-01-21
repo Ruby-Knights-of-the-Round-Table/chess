@@ -38,9 +38,13 @@ class PiecesController < ApplicationController
     @piece = Piece.find(params[:id])
     old_row = @piece.y_position
     old_cell = @piece.x_position
-
     row = params[:y_position].to_i
     cell = params[:x_position].to_i
+    type = @piece.type
+
+    if @piece.type == "Pawn"
+      pawn_promoted = true if @piece.white_player? && row == 7 || @piece.black_player? && row == 0
+    end
 
     @game = @piece.game
     if @piece.occupied_space?(row, cell) == true
@@ -61,18 +65,18 @@ class PiecesController < ApplicationController
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
     black_player_id = @piece.game.black_player_id
-    kings = @piece.game.pieces.where( type: "King" )
+
+    kings = @piece.game.pieces.where(type: "King")
     kings.each do |curr_king|
       if curr_king.if_checkmate?(board) == true
         if @piece.game.white_player_id != curr_king.player_id
            @piece.game.winner_id = @piece.game.white_player_id
-        else 
+        else
            @piece.game.winner_id = @piece.game.black_player_id
-        end 
+        end
           @piece.game.save
-      end 
-     end 
-  
+      end
+    end
 
     render json: { piece: @piece, turn: turn, white_player_id: white_player_id, black_player_id: black_player_id }
 
@@ -90,9 +94,9 @@ class PiecesController < ApplicationController
                     y_captured: y_captured,
                     x_captured: x_captured,
                     move_turn: Move.last.turn,
-                    type: @piece.type,
-                    winner_id: @piece.game.winner_id
-                    )
+                    type: type,
+                    winner_id: @piece.game.winner_id,
+                    pawn_promoted: pawn_promoted)
   end
 
   private
