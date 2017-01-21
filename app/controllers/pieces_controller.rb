@@ -42,6 +42,10 @@ class PiecesController < ApplicationController
     row = params[:y_position].to_i
     cell = params[:x_position].to_i
 
+    if @piece.type == "Pawn"
+      pawn_promoted = true if @piece.white_player? && row == 7 || @piece.black_player? && row == 0
+    end
+
     @game = @piece.game
     if @piece.occupied_space?(row, cell) == true
       captured_piece = @game.pieces.where(y_position: row, x_position: cell, captured_piece: false).last
@@ -61,9 +65,6 @@ class PiecesController < ApplicationController
     turn = @piece.game.turn
     white_player_id = @piece.game.white_player_id
     black_player_id = @piece.game.black_player_id
-    if @piece.type == "Pawn"
-      pawn_promoted = @piece.can_promote?
-    end
 
     kings = @piece.game.pieces.where(type: "King")
     kings.each do |curr_king|

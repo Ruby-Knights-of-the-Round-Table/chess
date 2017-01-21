@@ -190,17 +190,7 @@ $(function() {
     var pieceUpdateRef = rootRef.child(gameID);
     var moveRef = rootRef.child(gameID);
     var mateRef = rootRef.child(gameID);
-    var pawnPromoteRef = rootRef.child(gameID);
-
-    pawnPromoteRef.on('value', function(snapshot) {
-      var data = snapshot.val();
-      if (data) {
-        if (data.pawn_promoted) {
-          var square = $("#square-" + data.y_update + "-" + data.x_update);
-        }
-      }
-    });
-
+    
     mateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
@@ -280,8 +270,21 @@ $(function() {
             var color = "black"
           }
 
+          // check if pawn promoted
           // append piece to destination square
-          square.append("<div class='piece' data-piece-id='" + data.pieceId + "' data-piece-color='" + color + "'>" + piece + "</div>");
+          if (data.pawn_promoted) {
+            if (data.turn == data.black_player_id) {
+                // append white queen (since turn has changed)
+                square.append("<div class='piece' data-piece-id='" + data.pieceId + "' data-piece-color='" + color + "'>" + '\u2655' + "</div>");
+            }
+            if (data.turn == data.white_player_id) {
+                // append black queen (since turn has changed)
+                square.append("<div class='piece' data-piece-id='" + data.pieceId + "' data-piece-color='" + color + "'>" + '\u265B' + "</div>");
+            }
+          } else {
+            square.append("<div class='piece' data-piece-id='" + data.pieceId + "' data-piece-color='" + color + "'>" + piece + "</div>");
+          };
+
           square.switchClass('empty', 'not-selectable');
 
           // clear square that piece came from
