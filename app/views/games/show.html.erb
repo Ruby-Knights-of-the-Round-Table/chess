@@ -30,13 +30,14 @@
       <% end %>
   </div>
 
-  <div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
-    <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
-    <% pieces_attacking_king = current_king.if_check?(@board) %>
+<div class="game-board col-xs-12" data-game-id="<%= @game.id %>" data-time-stamp="<%= Time.now.to_s %>">
+  <% current_king = @game.pieces.find_by(player_id: current_player.id, type: "King" ) %>
+  <% pieces_attacking_king = current_king.if_check?(@board) %>
 
-    <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
-    <% piece_trace = 0%>
-    <% selected_piece_id = @game.pieces.find_by(selected: true) || 0 %>
+  <% active_pieces = @game.pieces.where(captured_piece: false).order(y_position: :asc, x_position: :asc) %>
+  <% piece_trace = 0 %>
+  <% selected_piece_id = @game.pieces.find_by(selected: true) || 0 %>
+
     <table id='board'>
       <% 8.times do |row| %>
         <%= '<tr>'.html_safe %>
@@ -258,7 +259,6 @@ $(function() {
             $('.captured-black').append(capturedPiece);
           }
 
-
           // clear destination square (piece capture)
           square.empty();
 
@@ -305,9 +305,6 @@ $(function() {
       }
 
     });
-
-
-
 
     function makeWhitePiecesSelectable() {
       $('.piece[data-piece-color="white"]').each(function() {
@@ -385,7 +382,7 @@ $(function() {
     e.draggable().draggable("enable");
     e.draggable({
       revert: 'invalid',
-      containment: 'table',
+      containment: $('#board').children('tbody'),
       scroll: false,
       });
     }
