@@ -190,7 +190,7 @@ $(function() {
     var pieceUpdateRef = rootRef.child(gameID);
     var moveRef = rootRef.child(gameID);
     var mateRef = rootRef.child(gameID);
-    
+
     mateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
@@ -387,6 +387,7 @@ $(function() {
       revert: 'invalid',
       containment: 'table',
       scroll: false,
+      grid: [60, 60],
       });
     }
 
@@ -395,6 +396,7 @@ $(function() {
       e.droppable().droppable("enable");
       e.droppable({
         accept: '.selected_piece',
+        tolerance: 'touch',
         drop: function(event, ui) {
 
           // 'highlighted' should refer to square that accepts dropped piece
@@ -402,11 +404,6 @@ $(function() {
 
           // center the piece inside the highlighted square
           var selected_piece = ui.draggable;
-          selected_piece.position({
-            my: "center",
-            at: "center",
-            of: highlighted,
-            });
 
           // get data to update piece position
           var piece_update = {
