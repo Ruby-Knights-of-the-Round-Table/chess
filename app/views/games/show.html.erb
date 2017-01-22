@@ -191,7 +191,7 @@ $(function() {
     var pieceUpdateRef = rootRef.child(gameID);
     var moveRef = rootRef.child(gameID);
     var mateRef = rootRef.child(gameID);
-    
+
     mateRef.on('value', function(snapshot) {
       var data = snapshot.val();
       if (data) {
@@ -384,6 +384,7 @@ $(function() {
       revert: 'invalid',
       containment: $('#board').children('tbody'),
       scroll: false,
+      grid: [60, 60]
       });
     }
 
@@ -399,11 +400,6 @@ $(function() {
 
           // center the piece inside the highlighted square
           var selected_piece = ui.draggable;
-          selected_piece.position({
-            my: "center",
-            at: "center",
-            of: highlighted,
-            });
 
           // get data to update piece position
           var piece_update = {
